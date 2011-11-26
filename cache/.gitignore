@@ -1,0 +1,4 @@
+# This directory is for cache files only, ignore everything
+*
+# keep this file though. 
+!.gitignore
