@@ -274,15 +274,22 @@ class CapAlerts(object):
 
 if __name__ == "__main__":
     # the parser will be separated from interaction with the data in the near future
+    import cProfile
+    import pstats
 
-    if len(sys.argv) > 1:
-        type = sys.argv[1]
-        if type == 'summary':
-            cap = CapAlerts()
-            cap.print_alerts_summary()
-        if type == 'location':
-            cap = CapAlerts(state=sys.argv[3])
-            cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
-        if type == 'state':
-            cap = CapAlerts(state=sys.argv[2])
-            cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
+    cProfile.run("cap=CapAlerts()", 'foo')
+    p = pstats.Stats('foo')
+    p.sort_stats('cumulative').print_stats(10)
+
+
+    #if len(sys.argv) > 1:
+        #type = sys.argv[1]
+        #if type == 'summary':
+            #cap = CapAlerts()
+            #cap.print_alerts_summary()
+        #if type == 'location':
+            #cap = CapAlerts(state=sys.argv[3])
+            #cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
+        #if type == 'state':
+            #cap = CapAlerts(state=sys.argv[2])
+            #cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
