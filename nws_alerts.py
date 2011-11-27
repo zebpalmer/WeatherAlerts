@@ -259,20 +259,30 @@ class CapAlerts(object):
             return location_alerts
 
 
-    #def active_locations():
-        #location_alerts = []
-        #for alert in self._alerts.iterkeys():
-            #for location in  self._alerts[alert]['locations']:
-                #print location
+    def _active_locations(self):
+        warned_areas = {}
+        for alert in self._alerts.iterkeys():
+            for location in self._alerts[alert]['locations']:
+                if location['code'] not in warned_areas.keys():
+                    warned_areas[location['code']] = [alert]
+                else:
+                    warned_areas[location['code']].append(alert)
+        return warned_areas
+    active_areas = property(_active_locations)
+
 
 
 if __name__ == "__main__":
-    cap = CapAlerts()
+    # the parser will be separated from interaction with the data in the near future
+
     if len(sys.argv) > 1:
         type = sys.argv[1]
         if type == 'summary':
+            cap = CapAlerts()
             cap.print_alerts_summary()
         if type == 'location':
+            cap = CapAlerts(state=sys.argv[3])
             cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
         if type == 'state':
+            cap = CapAlerts(state=sys.argv[2])
             cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
