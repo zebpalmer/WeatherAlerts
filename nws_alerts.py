@@ -36,9 +36,40 @@ class CapAlerts(object):
         self.load_alerts()
 
 
-    def load_alerts(self):
-        self._alerts = self.parse_cap(self.cached_raw_alerts(self.state)['content'])
+    def set_state(self, state='US'):
+        self.state = state
+        self.load_alerts()
 
+
+    def _cached_alertobj(self, reload=False):
+        file = './cache/alerts_%s.cache' % (self.state)
+        if os.path.exists(file):
+            now = datetime.now()
+            maxage = now - timedelta(minutes=5)
+            file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
+            if file_ts > maxage:
+                print "Loading alerts from Cache"
+                cache = open(file, 'rb')
+                alerts = pickle.load(cache)
+                cache.close()
+            else:
+                print "Alerts cache is old"
+                alerts = None
+        else:
+            print "No Alerts cache availible"
+            alerts = None
+        return alerts
+
+
+    def load_alerts(self):
+        cached = self._cached_alertobj()
+        if cached == None:
+            print "Reloading from web"
+            self._alerts = self.parse_cap(self._get_nws_feed())
+            print "Done"
+        else:
+            self._alerts = cached
+            print "Loaded alerts from cache"
 
     def get_same_codes(self):
         '''get SAME codes, load into a dict and cache'''
@@ -88,44 +119,12 @@ class CapAlerts(object):
         return same
 
 
-    def get_nws_alerts(self):
+    def _get_nws_feed(self):
             '''get nws alert feed, and cache it'''
-            feed = {}
             url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
             r = requests.get(url)
-            feed['status'] = r.status_code
-            feed['content'] = r.content
-            file = './cache/alertsfeed_%s.cache' % (self.state)
-            cache = open(file, 'wb')
-            pickle.dump(feed, cache)
-            cache.close()
-            return feed
-
-
-    def cached_raw_alerts(self, reload=False):
-        if reload == True:
-            feed = self.get_nws_alerts()
-        else:
-            file = './cache/alertsfeed_%s.cache' % (self.state)
-            if os.path.exists(file):
-                now = datetime.now()
-                maxage = now - timedelta(minutes=3)
-                file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
-                if file_ts > maxage:
-                    print "Loaded raw_alerts from Cache"
-                    cache = open(file, 'rb')
-                    feed = pickle.load(cache)
-                    cache.close()
-
-                else:
-                    print "Alerts cache is old, refreshing from web"
-                    feed = self.get_nws_alerts()
-            else:
-                print "No alerts cache availible, loading from web"
-                feed = self.get_nws_alerts()
-
-        return feed
-
+            self._feedstatus = r.status_code
+            return r.content
 
     def parse_cap(self, xmlstr):
         main_dom = minidom.parseString(xmlstr)
@@ -175,6 +174,10 @@ class CapAlerts(object):
             entry['target_areas'] = target_areas
             alerts[entry_num] = entry
             del entry
+        file = './cache/alerts_%s.cache' % (self.state)
+        cache = open(file, 'wb')
+        pickle.dump(alerts, cache)
+        cache.close()
         return alerts
 
 
@@ -277,9 +280,9 @@ if __name__ == "__main__":
     import cProfile
     import pstats
 
-    cProfile.run("cap=CapAlerts()", 'foo')
-    p = pstats.Stats('foo')
-    p.sort_stats('cumulative').print_stats(10)
+    cProfile.run("cap=CapAlerts()", 'Cap')
+    p = pstats.Stats('Cap')
+    p.sort_stats('cumulative').print_stats(20)
 
 
     #if len(sys.argv) > 1:
