@@ -128,7 +128,6 @@ class CapAlerts(object):
             return None
 
 
-
     def _get_nws_feed(self):
             '''get nws alert feed, and cache it'''
             url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
@@ -284,24 +283,23 @@ class CapAlerts(object):
     active_areas = property(_active_locations)
 
 
-
 if __name__ == "__main__":
-    #if len(sys.argv) > 1:
-        #type = sys.argv[1]
-        #if type == 'summary':
-            #cap = CapAlerts()
-            #cap.print_alerts_summary()
-        #if type == 'location':
-            #cap = CapAlerts(state=sys.argv[3])
-            #cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
-        #if type == 'state':
-            #cap = CapAlerts(state=sys.argv[2])
-            #cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
+    if len(sys.argv) > 1:
+        type = sys.argv[1]
+        if type == 'summary':
+            cap = CapAlerts()
+            cap.print_alerts_summary()
+        if type == 'location':
+            cap = CapAlerts(state=sys.argv[3])
+            cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
+        if type == 'state':
+            cap = CapAlerts(state=sys.argv[2])
+            cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
 
-    import cProfile
-    import pstats
-    cProfile.run("cap=CapAlerts()", 'Cap')
-    p = pstats.Stats('Cap')
-    p.sort_stats('time').print_stats(20)
+    #import cProfile
+    #import pstats
+    #cProfile.run("cap=CapAlerts()", 'Cap')
+    #p = pstats.Stats('Cap')
+    #p.sort_stats('time').print_stats(20)
 
 
