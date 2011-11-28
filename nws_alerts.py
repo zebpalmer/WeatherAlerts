@@ -32,14 +32,18 @@ import cPickle as pickle
 class CapAlerts(object):
     def __init__(self, state='US'):
         self.state = state
-        self._samecodes = self.cached_same()
-        self.load_alerts()
+        self._load_same_codes()
+        self._load_alerts()
 
 
     def set_state(self, state='US'):
         self.state = state
-        self.load_alerts()
+        self._load_alerts()
 
+
+    def reload_alerts(self):
+        print "Reloading Alerts"
+        self._load_alerts(reload=True)
 
     def _cached_alertobj(self, reload=False):
         file = './cache/alerts_%s.cache' % (self.state)
@@ -48,7 +52,6 @@ class CapAlerts(object):
             maxage = now - timedelta(minutes=5)
             file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
             if file_ts > maxage:
-                print "Loading alerts from Cache"
                 cache = open(file, 'rb')
                 alerts = pickle.load(cache)
                 cache.close()
@@ -60,18 +63,21 @@ class CapAlerts(object):
             alerts = None
         return alerts
 
+    def _load_alerts(self, reload=False):
+        if reload == True:
+            self._alerts = self._parse_cap(self._get_nws_feed())
+        elif reload == False:
+            cached = self._cached_alertobj()
+            if cached == None:
+                print "Loading from web"
+                self._alerts = self._parse_cap(self._get_nws_feed())
+                print "Done"
+            else:
+                self._alerts = cached
+                print "Loaded alerts from cache"
 
-    def load_alerts(self):
-        cached = self._cached_alertobj()
-        if cached == None:
-            print "Reloading from web"
-            self._alerts = self.parse_cap(self._get_nws_feed())
-            print "Done"
-        else:
-            self._alerts = cached
-            print "Loaded alerts from cache"
 
-    def get_same_codes(self):
+    def _get_same_codes(self):
         '''get SAME codes, load into a dict and cache'''
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
@@ -87,7 +93,6 @@ class CapAlerts(object):
                 same[code] = location
             except ValueError:
                 pass
-
         file = './cache/samecodes.cache'
         cache = open(file, 'wb')
         pickle.dump(same, cache)
@@ -95,28 +100,33 @@ class CapAlerts(object):
         return same
 
 
-    def cached_same(self, reload=False):
+    def _load_same_codes(self, reload=False):
         if reload == True:
-            same = get_same_codes()
+            self._get_same_codes()
         else:
-            file = './cache/samecodes.cache'
-            if os.path.exists(file):
-                now = datetime.now()
-                maxage = now - timedelta(minutes=4320)
-                file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
-                if file_ts > maxage:
-                    print "Loaded SAME codes from Cache"
-                    cache = open(file, 'rb')
-                    same = pickle.load(cache)
-                    cache.close()
+            cached = self._cached_same_codes()
+            if cached == None:
+                self.same = self._get_same_codes()
 
-                else:
-                    print "SAME codes cache is old, refreshing from web"
-                    same = self.get_same_codes()
+    def _cached_same_codes(self):
+        file = './cache/samecodes.cache'
+        if os.path.exists(file):
+            now = datetime.now()
+            maxage = now - timedelta(minutes=4320)
+            file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
+            if file_ts > maxage:
+                cache = open(file, 'rb')
+                self.same = pickle.load(cache)
+                cache.close()
+                print "Loaded SAME codes from Cache"
+                return True
             else:
-                print "No SAME codes cache availible, loading from web"
-                same = self.get_same_codes()
-        return same
+                print "SAME codes cache is old, refreshing from web"
+                return None
+        else:
+            print "No SAME codes cache availible, loading from web"
+            return None
+
 
 
     def _get_nws_feed(self):
@@ -126,7 +136,7 @@ class CapAlerts(object):
             self._feedstatus = r.status_code
             return r.content
 
-    def parse_cap(self, xmlstr):
+    def _parse_cap(self, xmlstr):
         main_dom = minidom.parseString(xmlstr)
 
         xml_entries = main_dom.getElementsByTagName('entry')
@@ -160,7 +170,7 @@ class CapAlerts(object):
             locations = []
             for geo in entry['geocodes']:
                 try:
-                    location = self._samecodes[geo]
+                    location = self.same[geo]
                 except KeyError:
                     location = { 'code': geo,
                                  'local': geo,
@@ -276,15 +286,6 @@ class CapAlerts(object):
 
 
 if __name__ == "__main__":
-    # the parser will be separated from interaction with the data in the near future
-    import cProfile
-    import pstats
-
-    cProfile.run("cap=CapAlerts()", 'Cap')
-    p = pstats.Stats('Cap')
-    p.sort_stats('cumulative').print_stats(20)
-
-
     #if len(sys.argv) > 1:
         #type = sys.argv[1]
         #if type == 'summary':
@@ -296,3 +297,11 @@ if __name__ == "__main__":
         #if type == 'state':
             #cap = CapAlerts(state=sys.argv[2])
             #cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
+
+    import cProfile
+    import pstats
+    cProfile.run("cap=CapAlerts()", 'Cap')
+    p = pstats.Stats('Cap')
+    p.sort_stats('time').print_stats(20)
+
+
