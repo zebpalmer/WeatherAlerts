@@ -9,6 +9,8 @@ and me on Google Plus http://zebpalmer.com/+
 If you'd like to contribute or want to know what is planned, check out TODO.txt.
 I certainly welcome new features, improvments and of course bug fixes.
 
+
+
 NOTES:
 Currently the performance parsing the entire US alert feed isn't great, but in most use cases this
 won't be needed. When running for a state summary or specific location, we grab and parse the state
