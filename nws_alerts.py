@@ -32,8 +32,12 @@ import cPickle as pickle
 class CapAlerts(object):
     def __init__(self, state='US'):
         self.state = state
+        self.set_maxage(maxage=3)
         self._load_same_codes()
         self._load_alerts()
+
+    def set_maxage(self, maxage=3):
+        self.cachetime = maxage
 
 
     def set_state(self, state='US'):
@@ -49,7 +53,7 @@ class CapAlerts(object):
         file = './cache/alerts_%s.cache' % (self.state)
         if os.path.exists(file):
             now = datetime.now()
-            maxage = now - timedelta(minutes=5)
+            maxage = now - timedelta(minutes=self.cachetime)
             file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
             if file_ts > maxage:
                 cache = open(file, 'rb')
@@ -65,15 +69,15 @@ class CapAlerts(object):
 
     def _load_alerts(self, reload=False):
         if reload == True:
-            self._alerts = self._parse_cap(self._get_nws_feed())
+            self.alerts = self._parse_cap(self._get_nws_feed())
         elif reload == False:
             cached = self._cached_alertobj()
             if cached == None:
                 print "Loading from web"
-                self._alerts = self._parse_cap(self._get_nws_feed())
+                self.alerts = self._parse_cap(self._get_nws_feed())
                 print "Done"
             else:
-                self._alerts = cached
+                self.alerts = cached
                 print "Loaded alerts from cache"
 
 
@@ -89,7 +93,10 @@ class CapAlerts(object):
                 location = {}
                 location['code'] = code
                 location['local'] = local
-                location['state'] = state
+#when I contacted the nws to add a missing same code
+#they added a space before the state in the samecodes file
+#stripping it out
+                location['state'] = state.strip() 
                 same[code] = location
             except ValueError:
                 pass
@@ -192,7 +199,7 @@ class CapAlerts(object):
 
     def _alerts_summary(self):
         alert_summary = {}
-        alert_data = self._alerts
+        alert_data = self.alerts
         for item in alert_data:
             alertareas = alert_data[item]['locations']
             type = alert_data[item]['type']
@@ -255,32 +262,39 @@ class CapAlerts(object):
 
     def alerts_by_county_state(self, county, state):
         location_alerts = []
-        for alert in self._alerts.iterkeys():
-            for location in  self._alerts[alert]['locations']:
-                if location['state'] == state and location['local'] == county:
-                    location_alerts.append(self._alerts[alert])
+        for alert in self.alerts.iterkeys():
+            for location in  self.alerts[alert]['locations']:
+                if location['state'] == str(state) and location['local'] == str(county):
+                    location_alerts.append(self.alerts[alert])
         return location_alerts
 
 
     def alerts_by_state(self, state):
             location_alerts = []
-            for alert in self._alerts.iterkeys():
-                for location in self._alerts[alert]['locations']:
+            for alert in self.alerts.iterkeys():
+                for location in self.alerts[alert]['locations']:
                     if location['state'] == state:
-                        location_alerts.append(self._alerts[alert])
+                        location_alerts.append(self.alerts[alert])
             return location_alerts
 
 
     def _active_locations(self):
         warned_areas = {}
-        for alert in self._alerts.iterkeys():
-            for location in self._alerts[alert]['locations']:
+        for alert in self.alerts.iterkeys():
+            for location in self.alerts[alert]['locations']:
                 if location['code'] not in warned_areas.keys():
                     warned_areas[location['code']] = [alert]
                 else:
                     warned_areas[location['code']].append(alert)
         return warned_areas
     active_areas = property(_active_locations)
+    
+    def alert_type(self, alert):
+        title = alert['title']
+        type = title.split('issued')[0].strip()
+        return type
+        
+        
 
 
 if __name__ == "__main__":
