@@ -12,9 +12,9 @@ I certainly welcome new features, improvments and of course bug fixes.
 
 
 NOTES:
-Currently the performance parsing the entire US alert feed isn't great, but in most use cases this
-won't be needed. When running for a state summary or specific location, we grab and parse the state
-feed, which is much smaller.
+Currently the performance parsing the entire US alert feed isn't great (about a second on decent hardware, 3-4 seconds
+on slower hardware) but in most use cases this won't be needed. When running for a state summary or specific location, 
+we grab and parse the state feed, which is much smaller.
 
 There are three use cases that I am moving to support first. 1) command line usage (or calling from
 another script) 2) Usage via a Nagios (or similar) monitoring script 3) powering a web api that given
