@@ -49,11 +49,11 @@ def check_alerts(location):
             #print "{0} Alerts".format(len(alerts))
             types = []
             for alert in alerts:
-                type = cap.alert_type(alert)
-                if type not in types:
-                    types.append(type)
-            for type in types:
-                print type + ',',
+                alert_type = cap.alert_type(alert)
+                if alert_type not in types:
+                    types.append(alert_type)
+            for alert_type in types:
+                print alert_type + ',',
         exit(1)
         
             

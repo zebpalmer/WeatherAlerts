@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
 '''
+    Project home: git.zebpalmer.com/nws-alerts     
+    For more info, please see the README.txt
 
-    This file is part of pyForecaster, this program is free software:
-    you can redistribute it and/or modify it under the terms of the
-    GNU General Public License as published by the Free Software
-    Foundation, either version 3 of the License, or (at your option)
-    any later version.
+    This file is part of pyForecaster, (to be released shortly)
+    this program is free software you can redistribute it and
+    or modify it under the terms of the GNU General Public License 
+    as published by the Free Software Foundation, either version 
+    3 of the License, or (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,16 +27,17 @@ import sys
 import re
 import requests
 from xml.dom import minidom
-import simplejson
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 import cPickle as pickle
 
 class CapAlerts(object):
     def __init__(self, state='US'):
         self.state = state
-        self.set_maxage(maxage=3)
+        self.same = ''
+        self.cachetime = 3
         self._load_same_codes()
         self._load_alerts()
+        self._feedstatus = ''
 
     def set_maxage(self, maxage=3):
         self.cachetime = maxage
@@ -46,39 +49,39 @@ class CapAlerts(object):
 
 
     def reload_alerts(self):
-        print "Reloading Alerts"
-        self._load_alerts(reload=True)
+        #print "Reloading Alerts"
+        self._load_alerts(refresh=True)
 
-    def _cached_alertobj(self, reload=False):
-        file = './cache/alerts_%s.cache' % (self.state)
-        if os.path.exists(file):
+    def _cached_alertobj(self):
+        f = './cache/alerts_%s.cache' % (self.state)
+        if os.path.exists(f):
             now = datetime.now()
             maxage = now - timedelta(minutes=self.cachetime)
-            file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
+            file_ts = datetime.fromtimestamp(os.stat(f).st_mtime)
             if file_ts > maxage:
-                cache = open(file, 'rb')
+                cache = open(f, 'rb')
                 alerts = pickle.load(cache)
                 cache.close()
             else:
-                print "Alerts cache is old"
+                #print "Alerts cache is old"
                 alerts = None
         else:
-            print "No Alerts cache availible"
+            #print "No Alerts cache availible"
             alerts = None
         return alerts
 
-    def _load_alerts(self, reload=False):
-        if reload == True:
+    def _load_alerts(self, refresh=False):
+        if refresh == True:
             self.alerts = self._parse_cap(self._get_nws_feed())
-        elif reload == False:
+        elif refresh == False:
             cached = self._cached_alertobj()
             if cached == None:
-                print "Loading from web"
+                #print "Loading from web"
                 self.alerts = self._parse_cap(self._get_nws_feed())
-                print "Done"
+                #print "Done"
             else:
                 self.alerts = cached
-                print "Loaded alerts from cache"
+                #print "Loaded alerts from cache"
 
 
     def _get_same_codes(self):
@@ -86,8 +89,8 @@ class CapAlerts(object):
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
         r = requests.get(url)
-        file = r.content.split('\n')
-        for line in file:
+        f = r.content.split('\n')
+        for line in f:
             try:
                 code, local, state = line.split(',')
                 location = {}
@@ -100,15 +103,15 @@ class CapAlerts(object):
                 same[code] = location
             except ValueError:
                 pass
-        file = './cache/samecodes.cache'
-        cache = open(file, 'wb')
+        f = './cache/samecodes.cache'
+        cache = open(f, 'wb')
         pickle.dump(same, cache)
         cache.close()
         return same
 
 
-    def _load_same_codes(self, reload=False):
-        if reload == True:
+    def _load_same_codes(self, refresh=False):
+        if refresh == True:
             self._get_same_codes()
         else:
             cached = self._cached_same_codes()
@@ -116,31 +119,31 @@ class CapAlerts(object):
                 self.same = self._get_same_codes()
 
     def _cached_same_codes(self):
-        file = './cache/samecodes.cache'
-        if os.path.exists(file):
+        f = './cache/samecodes.cache'
+        if os.path.exists(f):
             now = datetime.now()
             maxage = now - timedelta(minutes=4320)
-            file_ts = datetime.fromtimestamp(os.stat(file).st_mtime)
+            file_ts = datetime.fromtimestamp(os.stat(f).st_mtime)
             if file_ts > maxage:
-                cache = open(file, 'rb')
+                cache = open(f, 'rb')
                 self.same = pickle.load(cache)
                 cache.close()
-                print "Loaded SAME codes from Cache"
+                #print "Loaded SAME codes from Cache"
                 return True
             else:
-                print "SAME codes cache is old, refreshing from web"
+                #print "SAME codes cache is old, refreshing from web"
                 return None
         else:
-            print "No SAME codes cache availible, loading from web"
+            #print "No SAME codes cache availible, loading from web"
             return None
 
 
     def _get_nws_feed(self):
-            '''get nws alert feed, and cache it'''
-            url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
-            r = requests.get(url)
-            self._feedstatus = r.status_code
-            return r.content
+        '''get nws alert feed, and cache it'''
+        url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
+        r = requests.get(url)
+        self._feedstatus = r.status_code
+        return r.content
 
     def _parse_cap(self, xmlstr):
         main_dom = minidom.parseString(xmlstr)
@@ -190,8 +193,8 @@ class CapAlerts(object):
             entry['target_areas'] = target_areas
             alerts[entry_num] = entry
             del entry
-        file = './cache/alerts_%s.cache' % (self.state)
-        cache = open(file, 'wb')
+        f = './cache/alerts_%s.cache' % (self.state)
+        cache = open(f, 'wb')
         pickle.dump(alerts, cache)
         cache.close()
         return alerts
@@ -202,11 +205,11 @@ class CapAlerts(object):
         alert_data = self.alerts
         for item in alert_data:
             alertareas = alert_data[item]['locations']
-            type = alert_data[item]['type']
+            a_type = alert_data[item]['type']
             for area in alertareas:
-                if type not in alert_summary:
-                    alert_summary[type] = list()
-                alert_summary[type].append(area)
+                if a_type not in alert_summary:
+                    alert_summary[a_type] = list()
+                alert_summary[a_type].append(area)
         return alert_summary
 
     alert_summary = property(_alerts_summary)
@@ -226,22 +229,22 @@ class CapAlerts(object):
         else:
             for item in alert_data:
                 alertareas = item['locations']
-                type = item['type']
+                a_type = item['type']
                 for area in alertareas:
-                    if type not in alert_summary:
-                        alert_summary[type] = list()
-                    if area not in alert_summary[type]:
-                        alert_summary[type].append(area)
+                    if a_type not in alert_summary:
+                        alert_summary[a_type] = list()
+                    if area not in alert_summary[a_type]:
+                        alert_summary[a_type].append(area)
         return alert_summary
 
 
     def print_summary(self, alerts):
-            if len(alerts) == 0:
-                print "No active alerts for specified area: '%s'" % (sys.argv[2])
-            for key in alerts.iterkeys():
-                print key + ":"
-                for value in alerts[key]:
-                    print '\t%s county, %s' % (value['local'], value['state'])
+        if len(alerts) == 0:
+            print "No active alerts for specified area: '%s'" % (sys.argv[2])
+        for key in alerts.iterkeys():
+            print key + ":"
+            for value in alerts[key]:
+                print '\t%s county, %s' % (value['local'], value['state'])
 
     def print_alertobj(self, alert_data):
         if alert_data == []:
@@ -255,7 +258,6 @@ class CapAlerts(object):
         if alert_data == []:
             print "No Active Alerts"
         for alert in alert_data:
-            print '\n'
             print alert['title']
             print '\t' + alert['summary']
 
@@ -270,12 +272,12 @@ class CapAlerts(object):
 
 
     def alerts_by_state(self, state):
-            location_alerts = []
-            for alert in self.alerts.iterkeys():
-                for location in self.alerts[alert]['locations']:
-                    if location['state'] == state:
-                        location_alerts.append(self.alerts[alert])
-            return location_alerts
+        location_alerts = []
+        for alert in self.alerts.iterkeys():
+            for location in self.alerts[alert]['locations']:
+                if location['state'] == state:
+                    location_alerts.append(self.alerts[alert])
+        return location_alerts
 
 
     def _active_locations(self):
@@ -288,13 +290,13 @@ class CapAlerts(object):
                     warned_areas[location['code']].append(alert)
         return warned_areas
     active_areas = property(_active_locations)
-    
+
     def alert_type(self, alert):
         title = alert['title']
-        type = title.split('issued')[0].strip()
-        return type
-        
-        
+        a_type = title.split('issued')[0].strip()
+        return a_type
+
+
 
 
 if __name__ == "__main__":
@@ -315,5 +317,3 @@ if __name__ == "__main__":
     #cProfile.run("cap=CapAlerts()", 'Cap')
     #p = pstats.Stats('Cap')
     #p.sort_stats('time').print_stats(20)
-
-
