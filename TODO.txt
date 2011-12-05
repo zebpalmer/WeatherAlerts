@@ -1,9 +1,8 @@
 TODO:
 
--Move parser into module separate from interaction with the data
--Caching/persistance for the resulting objects (currently caching the feed)
 -Document and standardize command line options
 -Create web service api/wrapper
 -Improved locations from SAME codes
--Handle alerts with no SAME codes (appears to be common with alaskan alerts)
+-Handle alerts with no SAME codes
 -Support City to SAME code mapping
+-
