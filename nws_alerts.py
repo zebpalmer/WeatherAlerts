@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 '''
-    Project home: git.zebpalmer.com/nws-alerts     
+    Project home: git.zebpalmer.com/nws-alerts
     Original Author: Zeb Palmer   (www.zebpalmer.com)
     For more info, please see the README.txt
 
     This program is free software you can redistribute it and
-    or modify it under the terms of the GNU General Public License 
-    as published by the Free Software Foundation, either version 
+    or modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation, either version
     3 of the License, or (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -36,9 +36,13 @@ class CapAlerts(object):
         self.state = state
         self.same = ''
         self.cachetime = 3
+        self.same_cache_file = './cache/samecodes.cache'
         self._load_same_codes()
         self._load_alerts()
         self._feedstatus = ''
+        self.alerts = ''
+
+
 
     def set_maxage(self, maxage=3):
         self.cachetime = maxage
@@ -54,13 +58,13 @@ class CapAlerts(object):
         self._load_alerts(refresh=True)
 
     def _cached_alertobj(self):
-        f = './cache/alerts_%s.cache' % (self.state)
-        if os.path.exists(f):
+        cache_file = './cache/alerts_%s.cache' % (self.state)
+        if os.path.exists(cache_file):
             now = datetime.now()
             maxage = now - timedelta(minutes=self.cachetime)
-            file_ts = datetime.fromtimestamp(os.stat(f).st_mtime)
+            file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
             if file_ts > maxage:
-                cache = open(f, 'rb')
+                cache = open(cache_file, 'rb')
                 alerts = pickle.load(cache)
                 cache.close()
             else:
@@ -89,23 +93,22 @@ class CapAlerts(object):
         '''get SAME codes, load into a dict and cache'''
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
-        r = requests.get(url)
-        f = r.content.split('\n')
-        for line in f:
+        req = requests.get(url)
+        rows = req.content.split('\n')
+        for row in rows:
             try:
-                code, local, state = line.split(',')
+                code, local, state = row.split(',')
                 location = {}
                 location['code'] = code
                 location['local'] = local
 #when I contacted the nws to add a missing same code
 #they added a space before the state in the samecodes file
 #stripping it out
-                location['state'] = state.strip() 
+                location['state'] = state.strip()
                 same[code] = location
             except ValueError:
                 pass
-        f = './cache/samecodes.cache'
-        cache = open(f, 'wb')
+        cache = open(self.same_cache_file, 'wb')
         pickle.dump(same, cache)
         cache.close()
         return same
@@ -120,13 +123,13 @@ class CapAlerts(object):
                 self.same = self._get_same_codes()
 
     def _cached_same_codes(self):
-        f = './cache/samecodes.cache'
-        if os.path.exists(f):
+        cache_file = './cache/samecodes.cache'
+        if os.path.exists(cache_file):
             now = datetime.now()
             maxage = now - timedelta(minutes=4320)
-            file_ts = datetime.fromtimestamp(os.stat(f).st_mtime)
+            file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
             if file_ts > maxage:
-                cache = open(f, 'rb')
+                cache = open(cache_file, 'rb')
                 self.same = pickle.load(cache)
                 cache.close()
                 #print "Loaded SAME codes from Cache"
@@ -142,9 +145,9 @@ class CapAlerts(object):
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
         url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
-        r = requests.get(url)
-        self._feedstatus = r.status_code
-        return r.content
+        req = requests.get(url)
+        self._feedstatus = req.status_code
+        return req.content
 
     def _parse_cap(self, xmlstr):
         main_dom = minidom.parseString(xmlstr)
@@ -156,7 +159,7 @@ class CapAlerts(object):
 
         entry_num = 0
         alerts = {}
-        p = re.compile('(.*) issued')
+        pat = re.compile('(.*) issued')
         for dom in xml_entries:
             entry_num = entry_num + 1
             entry = {}
@@ -176,7 +179,7 @@ class CapAlerts(object):
                             pass
                 except IndexError:
                     return {}
-            entry['type'] = p.match(entry['title']).group(1)
+            entry['type'] = pat.match(entry['title']).group(1)
             locations = []
             for geo in entry['geocodes']:
                 try:
@@ -194,8 +197,8 @@ class CapAlerts(object):
             entry['target_areas'] = target_areas
             alerts[entry_num] = entry
             del entry
-        f = './cache/alerts_%s.cache' % (self.state)
-        cache = open(f, 'wb')
+        alerts_cache_file = './cache/alerts_%s.cache' % (self.state)
+        cache = open(alerts_cache_file, 'wb')
         pickle.dump(alerts, cache)
         cache.close()
         return alerts
@@ -302,15 +305,15 @@ class CapAlerts(object):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        type = sys.argv[1]
-        if type == 'summary':
+        req_type = sys.argv[1]
+        if req_type == 'summary':
             cap = CapAlerts()
             cap.print_alerts_summary()
-        if type == 'location':
+        if req_type == 'location':
             cap = CapAlerts(state=sys.argv[3])
             cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
-        if type == 'state':
+        if req_type == 'state':
             cap = CapAlerts(state=sys.argv[2])
             cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
     else:
-        print "No arguments supplied" 
+        print "No arguments supplied"
