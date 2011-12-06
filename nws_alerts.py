@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''
     Project home: git.zebpalmer.com/nws-alerts
@@ -26,21 +26,21 @@
 import os
 import sys
 import re
-import requests
+import urllib.request
 from xml.dom import minidom
 from datetime import datetime, timedelta
-import cPickle as pickle
+import pickle as pickle
 
 class CapAlerts(object):
     def __init__(self, state='US'):
         self.state = state
         self.same = ''
+        self.alerts = ''
         self.cachetime = 3
         self.same_cache_file = './cache/samecodes.cache'
         self._load_same_codes()
         self._load_alerts()
         self._feedstatus = ''
-        self.alerts = ''
 
 
 
@@ -93,17 +93,16 @@ class CapAlerts(object):
         '''get SAME codes, load into a dict and cache'''
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
-        req = requests.get(url)
-        rows = req.content.split('\n')
-        for row in rows:
+        codes_file = urllib.request.urlopen(url)
+        for row in codes_file.readlines():
             try:
-                code, local, state = row.split(',')
+                code, local, state = str(row, "utf-8").strip().split(',')
                 location = {}
                 location['code'] = code
                 location['local'] = local
-#when I contacted the nws to add a missing same code
-#they added a space before the state in the samecodes file
-#stripping it out
+                #when I contacted the nws to add a missing same code
+                #they added a space before the state in the samecodes file
+                #stripping it out
                 location['state'] = state.strip()
                 same[code] = location
             except ValueError:
@@ -121,6 +120,7 @@ class CapAlerts(object):
             cached = self._cached_same_codes()
             if cached == None:
                 self.same = self._get_same_codes()
+
 
     def _cached_same_codes(self):
         cache_file = './cache/samecodes.cache'
@@ -145,9 +145,9 @@ class CapAlerts(object):
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
         url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
-        req = requests.get(url)
-        self._feedstatus = req.status_code
-        return req.content
+        feed = urllib.request.urlopen(url)
+        xml = feed.readall()
+        return xml
 
     def _parse_cap(self, xmlstr):
         main_dom = minidom.parseString(xmlstr)
@@ -219,12 +219,12 @@ class CapAlerts(object):
     alert_summary = property(_alerts_summary)
 
     def print_alerts_summary(self):
-        if len(self.alert_summary) == 0:
-            print "No active alerts for specified area: '%s'" % (self.state)
-        for key in self.alert_summary.iterkeys():
-            print key + ":"
+        if len(self.alert_summary.keys()) == 0:
+            print("No active alerts for specified area: '%s'" % (self.state))
+        for key in self.alert_summary.keys():
+            print(key + ":")
             for value in self.alert_summary[key]:
-                print '\t%s county, %s' % (value['local'], value['state'])
+                print('\t%s county, %s' % (value['local'], value['state']))
 
     def summary(self, alert_data):
         alert_summary = {}
@@ -244,15 +244,15 @@ class CapAlerts(object):
 
     def print_summary(self, alerts):
         if len(alerts) == 0:
-            print "No active alerts for specified area: '%s'" % (sys.argv[2])
-        for key in alerts.iterkeys():
-            print key + ":"
+            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
+        for key in alerts.keys():
+            print(key + ":")
             for value in alerts[key]:
-                print '\t%s county, %s' % (value['local'], value['state'])
+                print('\t%s county, %s' % (value['local'], value['state']))
 
     def print_alertobj(self, alert_data):
         if alert_data == []:
-            print "No alerts"
+            print("No alerts")
         else:
             import pprint
             pp = pprint.PrettyPrinter(indent=4)
@@ -260,15 +260,15 @@ class CapAlerts(object):
 
     def print_alerts(self, alert_data):
         if alert_data == []:
-            print "No Active Alerts"
+            print("No Active Alerts")
         for alert in alert_data:
-            print alert['title']
-            print '\t' + alert['summary']
+            print(alert['title'])
+            print('\t' + alert['summary'])
 
 
     def alerts_by_county_state(self, county, state):
         location_alerts = []
-        for alert in self.alerts.iterkeys():
+        for alert in self.alerts.keys():
             for location in  self.alerts[alert]['locations']:
                 if location['state'] == str(state) and location['local'] == str(county):
                     location_alerts.append(self.alerts[alert])
@@ -277,7 +277,7 @@ class CapAlerts(object):
 
     def alerts_by_state(self, state):
         location_alerts = []
-        for alert in self.alerts.iterkeys():
+        for alert in self.alerts.keys():
             for location in self.alerts[alert]['locations']:
                 if location['state'] == state:
                     location_alerts.append(self.alerts[alert])
@@ -286,9 +286,9 @@ class CapAlerts(object):
 
     def _active_locations(self):
         warned_areas = {}
-        for alert in self.alerts.iterkeys():
+        for alert in self.alerts.keys():
             for location in self.alerts[alert]['locations']:
-                if location['code'] not in warned_areas.keys():
+                if location['code'] not in list(warned_areas.keys()):
                     warned_areas[location['code']] = [alert]
                 else:
                     warned_areas[location['code']].append(alert)
@@ -316,4 +316,4 @@ if __name__ == "__main__":
             cap = CapAlerts(state=sys.argv[2])
             cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
     else:
-        print "No arguments supplied"
+        print("No arguments supplied")
