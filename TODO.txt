@@ -1,8 +1,0 @@
-TODO:
-
--Document and standardize command line options
--Create web service api/wrapper
--Improved locations from SAME codes
--Handle alerts with no SAME codes
--Support City to SAME code mapping
--
