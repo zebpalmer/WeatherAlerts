@@ -30,14 +30,17 @@ import urllib.request
 from xml.dom import minidom
 from datetime import datetime, timedelta
 import pickle as pickle
+import tempfile
 
 class CapAlerts(object):
     def __init__(self, state='US'):
         self.state = state
+        self._cachedir = str(tempfile.gettempdir()) + '/'
+        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
+        self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
         self.same = ''
         self.alerts = ''
-        self.cachetime = 3
-        self.same_cache_file = './cache/samecodes.cache'
+        self._cachetime = 3
         self._load_same_codes()
         self._load_alerts()
         self._feedstatus = ''
@@ -45,11 +48,12 @@ class CapAlerts(object):
 
 
     def set_maxage(self, maxage=3):
-        self.cachetime = maxage
+        self._cachetime = maxage
 
 
     def set_state(self, state='US'):
         self.state = state
+        self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
         self._load_alerts()
 
 
@@ -58,13 +62,12 @@ class CapAlerts(object):
         self._load_alerts(refresh=True)
 
     def _cached_alertobj(self):
-        cache_file = './cache/alerts_%s.cache' % (self.state)
-        if os.path.exists(cache_file):
+        if os.path.exists(self._alert_cache_file):
             now = datetime.now()
-            maxage = now - timedelta(minutes=self.cachetime)
-            file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
+            maxage = now - timedelta(minutes=self._cachetime)
+            file_ts = datetime.fromtimestamp(os.stat(self._alert_cache_file).st_mtime)
             if file_ts > maxage:
-                cache = open(cache_file, 'rb')
+                cache = open(self._alert_cache_file, 'rb')
                 alerts = pickle.load(cache)
                 cache.close()
             else:
@@ -107,7 +110,7 @@ class CapAlerts(object):
                 same[code] = location
             except ValueError:
                 pass
-        cache = open(self.same_cache_file, 'wb')
+        cache = open(self._same_cache_file, 'wb')
         pickle.dump(same, cache)
         cache.close()
         return same
@@ -197,8 +200,7 @@ class CapAlerts(object):
             entry['target_areas'] = target_areas
             alerts[entry_num] = entry
             del entry
-        alerts_cache_file = './cache/alerts_%s.cache' % (self.state)
-        cache = open(alerts_cache_file, 'wb')
+        cache = open(self._alert_cache_file, 'wb')
         pickle.dump(alerts, cache)
         cache.close()
         return alerts
