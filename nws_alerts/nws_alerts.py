@@ -32,20 +32,110 @@ from datetime import datetime, timedelta
 import pickle as pickle
 import tempfile
 
+
+
+class SameCodes(object):
+    def __init__(self):
+        self._cachedir = str(tempfile.gettempdir()) + '/'
+        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'        
+        self._load_same_codes()
+    
+    def getcodes(self):
+        return self.samecodes
+    
+    def getstate(self, geosame):
+        state = self.samecodes[geosame]['state']
+        return state
+
+
+    def getfeedscope(self, geocodes):
+        states = self._get_states_from_samecodes(geocodes)
+        if len(states) >= 2:
+            return 'US'
+        else:
+            return states[0]
+        
+        
+    def _get_states_from_samecodes(self, geocodes):
+        states = []
+        for code in geocodes:
+            state = self.samecodes[code]['state']
+            if state not in states:
+                states.append(state)
+        return states
+
+
+
+    def _load_same_codes(self, refresh=False):
+            if refresh == True:
+                self._get_same_codes()
+            else:
+                cached = self._cached_same_codes()
+                if cached == None:
+                    self.samecodes = self._get_same_codes()
+        
+
+    def _get_same_codes(self):
+        '''get SAME codes, load into a dict and cache'''
+        same = {}
+        url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
+        codes_file = urllib.request.urlopen(url)
+        for row in codes_file.readlines():
+            try:
+                code, local, state = str(row, "utf-8").strip().split(',')
+                location = {}
+                location['code'] = code
+                location['local'] = local
+                #when I contacted the nws to add a missing same code
+                #they added a space before the state in the samecodes file
+                #stripping it out
+                location['state'] = state.strip()
+                same[code] = location
+            except ValueError:
+                pass
+        cache = open(self._same_cache_file, 'wb')
+        pickle.dump(same, cache)
+        cache.close()
+        return same
+
+
+    def _cached_same_codes(self):
+        cache_file = self._same_cache_file
+        if os.path.exists(cache_file):
+            now = datetime.now()
+            maxage = now - timedelta(minutes=4320)
+            file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
+            if file_ts > maxage:
+                cache = open(cache_file, 'rb')
+                self.samecodes = pickle.load(cache)
+                cache.close()
+                #print "Loaded SAME codes from Cache"
+                return True
+            else:
+                #print "SAME codes cache is old, refreshing from web"
+                return None
+        else:
+            #print "No SAME codes cache availible, loading from web"
+            return None
+
+
+
 class CapAlerts(object):
-    def __init__(self, state='US'):
+    def __init__(self, state='US', same=None):
         self.state = state
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
-        self.same = ''
+        if same == None:
+            self.same = SameCodes()
+        else:
+            self.same = same
+        self.samecodes = self.same.getcodes()        
         self.alerts = ''
         self._cachetime = 3
-        self._load_same_codes()
         self._load_alerts()
         self._feedstatus = ''
-
-
+        
 
     def set_maxage(self, maxage=3):
         self._cachetime = maxage
@@ -92,57 +182,8 @@ class CapAlerts(object):
                 #print "Loaded alerts from cache"
 
 
-    def _get_same_codes(self):
-        '''get SAME codes, load into a dict and cache'''
-        same = {}
-        url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
-        codes_file = urllib.request.urlopen(url)
-        for row in codes_file.readlines():
-            try:
-                code, local, state = str(row, "utf-8").strip().split(',')
-                location = {}
-                location['code'] = code
-                location['local'] = local
-                #when I contacted the nws to add a missing same code
-                #they added a space before the state in the samecodes file
-                #stripping it out
-                location['state'] = state.strip()
-                same[code] = location
-            except ValueError:
-                pass
-        cache = open(self._same_cache_file, 'wb')
-        pickle.dump(same, cache)
-        cache.close()
-        return same
 
 
-    def _load_same_codes(self, refresh=False):
-        if refresh == True:
-            self._get_same_codes()
-        else:
-            cached = self._cached_same_codes()
-            if cached == None:
-                self.same = self._get_same_codes()
-
-
-    def _cached_same_codes(self):
-        cache_file = './cache/samecodes.cache'
-        if os.path.exists(cache_file):
-            now = datetime.now()
-            maxage = now - timedelta(minutes=4320)
-            file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
-            if file_ts > maxage:
-                cache = open(cache_file, 'rb')
-                self.same = pickle.load(cache)
-                cache.close()
-                #print "Loaded SAME codes from Cache"
-                return True
-            else:
-                #print "SAME codes cache is old, refreshing from web"
-                return None
-        else:
-            #print "No SAME codes cache availible, loading from web"
-            return None
 
 
     def _get_nws_feed(self):
@@ -186,7 +227,7 @@ class CapAlerts(object):
             locations = []
             for geo in entry['geocodes']:
                 try:
-                    location = self.same[geo]
+                    location = self.samecodes[geo]
                 except KeyError:
                     location = { 'code': geo,
                                  'local': geo,
@@ -275,6 +316,16 @@ class CapAlerts(object):
                 if location['state'] == str(state) and location['local'] == str(county):
                     location_alerts.append(self.alerts[alert])
         return location_alerts
+
+
+    def alerts_by_samecodes(self, geocodes):
+        '''returns alerts for a given SAME code'''
+        location_alerts = []
+        for alert in self.alerts.keys():
+            for location in  self.alerts[alert]['locations']:
+                if location['code'] in geocodes:
+                    location_alerts.append(self.alerts[alert])
+        return location_alerts        
 
 
     def alerts_by_state(self, state):
