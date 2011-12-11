@@ -3,7 +3,7 @@
 '''
     Project home: git.zebpalmer.com/nws-alerts
     Original Author: Zeb Palmer   (www.zebpalmer.com)
-    For more info, please see the README.txt
+    For more info, please see the README.rst
 
     This program is free software you can redistribute it and
     or modify it under the terms of the GNU General Public License
@@ -106,11 +106,15 @@ class SameCodes(object):
             maxage = now - timedelta(minutes=4320)
             file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
             if file_ts > maxage:
-                cache = open(cache_file, 'rb')
-                self.samecodes = pickle.load(cache)
-                cache.close()
-                #print "Loaded SAME codes from Cache"
-                return True
+                try:
+                    cache = open(cache_file, 'rb')
+                    self.samecodes = pickle.load(cache)
+                    cache.close()
+                    #print "Loaded SAME codes from Cache"
+                    return True
+                except Exception:
+                    # if any problems opening cache, ignore and move on
+                    return None
             else:
                 #print "SAME codes cache is old, refreshing from web"
                 return None
@@ -157,9 +161,14 @@ class CapAlerts(object):
             maxage = now - timedelta(minutes=self._cachetime)
             file_ts = datetime.fromtimestamp(os.stat(self._alert_cache_file).st_mtime)
             if file_ts > maxage:
-                cache = open(self._alert_cache_file, 'rb')
-                alerts = pickle.load(cache)
-                cache.close()
+                try:
+                    cache = open(self._alert_cache_file, 'rb')
+                    alerts = pickle.load(cache)
+                    cache.close()
+                except Exception:
+                    # if any problems loading cache file, ignore and move on
+                    # (this is here to prevent issues switching between python2 and python3)
+                    alerts = None
             else:
                 #print "Alerts cache is old"
                 alerts = None
