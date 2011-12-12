@@ -26,60 +26,82 @@
 import os
 import sys
 import re
-import urllib.request
+from urllib import request
 from xml.dom import minidom
 from datetime import datetime, timedelta
 import pickle as pickle
 import tempfile
+import json
 
 
 
 class SameCodes(object):
+    '''SameCodes Class downloads/caches the samecodes list into an object''' 
     def __init__(self):
+        self.samecodes = ''        
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'        
         self._load_same_codes()
-    
+        
+
     def getcodes(self):
+        '''public method to return the same codes list'''
         return self.samecodes
-    
+
     def getstate(self, geosame):
+        '''Return the state of a given SAME code'''
         state = self.samecodes[geosame]['state']
         return state
 
 
     def getfeedscope(self, geocodes):
+        '''Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
+           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get 
+           all alerts for the given SAME codes'''
+           
         states = self._get_states_from_samecodes(geocodes)
         if len(states) >= 2:
             return 'US'
         else:
             return states[0]
-        
-        
+
+
     def _get_states_from_samecodes(self, geocodes):
+        '''Returns all states for a given list of SAME codes'''
         states = []
         for code in geocodes:
-            state = self.samecodes[code]['state']
+            try:
+                state = self.samecodes[code]['state']
+            except KeyError:
+                if not isinstance(geocodes, list):
+                    print ("specified geocodes must be list")
+                    raise
+                else:
+                    print("SAMECODE Not found")
             if state not in states:
                 states.append(state)
         return states
 
+    def reload(self):
+        '''force refresh of Same Codes (mainly for testing)'''
+        self._load_same_codes(refresh=True)
 
 
     def _load_same_codes(self, refresh=False):
-            if refresh == True:
-                self._get_same_codes()
-            else:
-                cached = self._cached_same_codes()
-                if cached == None:
-                    self.samecodes = self._get_same_codes()
-        
+        '''Loads the Same Codes into this object'''
+        if refresh == True:
+            self._get_same_codes()
+        else:
+            cached = self._cached_same_codes()
+            if cached == None:
+                self.samecodes = self._get_same_codes()
+
 
     def _get_same_codes(self):
         '''get SAME codes, load into a dict and cache'''
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
-        codes_file = urllib.request.urlopen(url)
+        codes_file = request.urlopen(url)
         for row in codes_file.readlines():
             try:
                 code, local, state = str(row, "utf-8").strip().split(',')
@@ -100,6 +122,7 @@ class SameCodes(object):
 
 
     def _cached_same_codes(self):
+        '''If a cached copy is availible, return it'''
         cache_file = self._same_cache_file
         if os.path.exists(cache_file):
             now = datetime.now()
@@ -124,7 +147,10 @@ class SameCodes(object):
 
 
 
-class CapAlerts(object):
+class CapAlertsFeed(object):
+    '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
+       if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
+       as well to save some processing''' 
     def __init__(self, state='US', same=None):
         self.state = state
         self._cachedir = str(tempfile.gettempdir()) + '/'
@@ -139,23 +165,28 @@ class CapAlerts(object):
         self._cachetime = 3
         self._load_alerts()
         self._feedstatus = ''
-        
+        self.output = FormatAlerts(self)
+
+
 
     def set_maxage(self, maxage=3):
+        '''Override the default max age for the alerts cache''' 
         self._cachetime = maxage
 
 
     def set_state(self, state='US'):
+        '''switch to a new state without creating a new instance'''
         self.state = state
         self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
         self._load_alerts()
 
 
     def reload_alerts(self):
-        #print "Reloading Alerts"
+        '''Reload alerts bypassing cache'''
         self._load_alerts(refresh=True)
 
     def _cached_alertobj(self):
+        '''If a recent cache exists, return it'''
         if os.path.exists(self._alert_cache_file):
             now = datetime.now()
             maxage = now - timedelta(minutes=self._cachetime)
@@ -178,6 +209,7 @@ class CapAlerts(object):
         return alerts
 
     def _load_alerts(self, refresh=False):
+        '''Load the alerts feed and parse it'''
         if refresh == True:
             self.alerts = self._parse_cap(self._get_nws_feed())
         elif refresh == False:
@@ -191,18 +223,15 @@ class CapAlerts(object):
                 #print "Loaded alerts from cache"
 
 
-
-
-
-
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
         url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
-        feed = urllib.request.urlopen(url)
+        feed = request.urlopen(url)
         xml = feed.readall()
         return xml
 
     def _parse_cap(self, xmlstr):
+        '''parse the feed contents'''
         main_dom = minidom.parseString(xmlstr)
 
         xml_entries = main_dom.getElementsByTagName('entry')
@@ -270,14 +299,6 @@ class CapAlerts(object):
 
     alert_summary = property(_alerts_summary)
 
-    def print_alerts_summary(self):
-        if len(self.alert_summary.keys()) == 0:
-            print("No active alerts for specified area: '%s'" % (self.state))
-        for key in self.alert_summary.keys():
-            print(key + ":")
-            for value in self.alert_summary[key]:
-                print('\t%s county, %s' % (value['local'], value['state']))
-
     def summary(self, alert_data):
         alert_summary = {}
         if len(alert_data) == 0:
@@ -294,31 +315,8 @@ class CapAlerts(object):
         return alert_summary
 
 
-    def print_summary(self, alerts):
-        if len(alerts) == 0:
-            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
-        for key in alerts.keys():
-            print(key + ":")
-            for value in alerts[key]:
-                print('\t%s county, %s' % (value['local'], value['state']))
-
-    def print_alertobj(self, alert_data):
-        if alert_data == []:
-            print("No alerts")
-        else:
-            import pprint
-            pp = pprint.PrettyPrinter(indent=4)
-            pp.pprint(alert_data)
-
-    def print_alerts(self, alert_data):
-        if alert_data == []:
-            print("No Active Alerts")
-        for alert in alert_data:
-            print(alert['title'])
-            print('\t' + alert['summary'])
-
-
     def alerts_by_county_state(self, county, state):
+        '''returns alerts for given county, state'''
         location_alerts = []
         for alert in self.alerts.keys():
             for location in  self.alerts[alert]['locations']:
@@ -364,18 +362,118 @@ class CapAlerts(object):
 
 
 
+class FormatAlerts(object):
+    def __init__(self, cap, alerts=''):
+        self.cap = cap
+
+
+    def print_alerts_summary(self):
+        outstr = ''
+        if len(self.cap.alert_summary.keys()) == 0:
+            outstr = "No active alerts for specified area: '%s'" % (self.cap.feed)
+        else:
+            for key in self.cap.alert_summary.keys():
+                outstr = outstr + key + ":"
+                for value in self.cap.alert_summary[key]:
+                    outstr = outstr + '\t%s county, %s' % (value['local'], value['state'])
+        return outstr
+
+
+    def print_summary(self, alerts):
+        if len(alerts) == 0:
+            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
+        for key in alerts.keys():
+            print(key + ":")
+            for value in alerts[key]:
+                print('\t%s county, %s' % (value['local'], value['state']))
+
+
+    def print_alertobj(self, alert_data):
+        if alert_data == []:
+            print("No alerts")
+        else:
+            import pprint
+            pp = pprint.PrettyPrinter(indent=4)
+            pp.pprint(alert_data)
+
+    def alerts(self, alert_data):
+        outstr = ''
+        if alert_data == []:
+            outstr = "No Active Alerts"
+        else:
+            for alert in alert_data:
+                outstr = outstr + (alert['title'])
+                outstr = outstr + ('\t' + alert['summary'])
+        return outstr
+
+
+    def jsonout(self, alerts):
+        jsonobj = json.dumps(alerts)
+        return jsonobj    
+
+
+class Alerts(object):
+    def __init__(self):
+        pass
+
+
+    def national_summary(self):
+        cap = CapAlertsFeed(state='US')
+        outstr = cap.output.print_alerts_summary()
+        return outstr
+
+
+    def state_summary(self, state):
+        cap = CapAlertsFeed(state=state)
+        cap.output.print_alerts_summary()
+
+
+    def activefor_county(self, location, formatout='print'):
+        cap = CapAlertsFeed(location['state'])
+        alerts = cap.alerts_by_county_state(location['county'], location['state'])
+        if formatout == 'print':
+            strout = cap.output.alerts(alerts)
+        elif formatout == 'json':
+            strout = cap.output.jsonout(alerts)
+        return strout        
+
+
+    def activefor_samecodes(self, geocodes, formatout='print'):
+        geocodes = geocodes.split(',')
+        same = SameCodes()
+        scope = same.getfeedscope(geocodes)
+        cap = CapAlertsFeed(state=scope, same=same)
+        alerts = cap.alerts_by_samecodes(geocodes)
+        if formatout == 'print':
+            strout = cap.output.alerts(alerts)
+        elif formatout == 'json':
+            strout = cap.output.jsonout(alerts)
+        return strout
+
+
 
 if __name__ == "__main__":
+    same = SameCodes()
+    testcases = [(['016027','047065'], 'US'),
+                 (['016027','016001'], 'ID'),
+                 ('016027', 'ID')]
+    for codes, scope in testcases:
+        response = same.getfeedscope(codes)
+    exit()
+    
     if len(sys.argv) > 1:
+        nwsalerts = Alerts()
         req_type = sys.argv[1]
         if req_type == 'summary':
-            cap = CapAlerts()
-            cap.print_alerts_summary()
+            result = nwsalerts.national_summary()
         if req_type == 'location':
-            cap = CapAlerts(state=sys.argv[3])
-            cap.print_alerts(cap.alerts_by_county_state(sys.argv[2], sys.argv[3]))
+            req_location = { 'county': sys.argv[2], 'state': sys.argv[3]}
+            result = nwsalerts.activefor_county(req_location)
         if req_type == 'state':
-            cap = CapAlerts(state=sys.argv[2])
-            cap.print_summary(cap.summary(cap.alerts_by_state(sys.argv[2])))
+            result = nwsalerts.state_summary(state=sys.argv[2])
+        if req_type == 'samecodes':
+            result = nwsalerts.activefor_samecodes(sys.argv[2])
+
+        print(result)
     else:
         print("No arguments supplied")

@@ -30,7 +30,7 @@ from nws_alerts import nws_alerts
 def check_alerts(alerts):
     if len(alerts) == 0:
         print("No active alerts")
-        exit(0)
+        statuscode = 0
     elif len(alerts) == 1:
         print(cap.alerts.alerts_type())
     else:
@@ -42,14 +42,15 @@ def check_alerts(alerts):
                 types.append(alert_type)
         for alert_type in types:
             print(alert_type + ',', end=' ')
-    exit(1)
+        statuscode = 1
+    return statuscode
 
 
 def loadalerts(geocodes):
     geocodes = geocodes.split(',')
     same = nws_alerts.SameCodes()
     scope = same.getfeedscope(geocodes)
-    cap = nws_alerts.CapAlerts(state=scope, same=same)
+    cap = nws_alerts.CapAlertsFeed(state=scope, same=same)
     alerts = cap.alerts_by_samecodes(geocodes)    
     check_alerts(alerts)
 
@@ -62,8 +63,8 @@ if __name__ == "__main__":
 \tSeparate multiple same codes by commas with no spaces''') 
         exit(3)
     else:
-        loadalerts(argv[1])
-
+        statuscode = loadalerts(argv[1])
+        exit(statuscode)
 
 
 
