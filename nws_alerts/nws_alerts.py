@@ -201,10 +201,10 @@ class CapAlertsFeed(object):
                     # (this is here to prevent issues switching between python2 and python3)
                     alerts = None
             else:
-                #print "Alerts cache is old"
+                #"Alerts cache is old"
                 alerts = None
         else:
-            #print "No Alerts cache availible"
+            #"No Alerts cache availible"
             alerts = None
         return alerts
 
@@ -373,9 +373,9 @@ class FormatAlerts(object):
             outstr = "No active alerts for specified area: '%s'" % (self.cap.feed)
         else:
             for key in self.cap.alert_summary.keys():
-                outstr = outstr + key + ":"
+                outstr = outstr + key + ":" + '\n'
                 for value in self.cap.alert_summary[key]:
-                    outstr = outstr + '\t%s county, %s' % (value['local'], value['state'])
+                    outstr = outstr + '\t%s county, %s' % (value['local'], value['state']) + '\n'
         return outstr
 
 
@@ -453,14 +453,6 @@ class Alerts(object):
 
 
 if __name__ == "__main__":
-    same = SameCodes()
-    testcases = [(['016027','047065'], 'US'),
-                 (['016027','016001'], 'ID'),
-                 ('016027', 'ID')]
-    for codes, scope in testcases:
-        response = same.getfeedscope(codes)
-    exit()
-    
     if len(sys.argv) > 1:
         nwsalerts = Alerts()
         req_type = sys.argv[1]
