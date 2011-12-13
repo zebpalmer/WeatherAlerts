@@ -12,11 +12,11 @@ This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements
 
 You can this project lives at `git.zebpalmer.com/nws-alerts <http://git.zebpalmer.com/nws-alerts>`_  For current documentation, visit the `Wiki <http://git.zebpalmer.com/nws-alerts/wiki/Home>`_
 
-**The Author**
+**About The Author**
+
+Originally written by Zeb Palmer, a Linux Systems/Professional Photographer who writes a bit of python at work and play. 
 Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
  
-
----------- 
 
 
 Python 2 Support
