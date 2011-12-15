@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='WeatherAlerts',
-    version='0.4.2',
+    version='0.4.2build2',
     author='Zeb Palmer',
     author_email='zeb@zebpalmer.com',
     packages=['weatheralerts', 'weatheralerts.test'],

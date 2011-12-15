@@ -5,12 +5,11 @@ NWS-ALERTS README
 
 About
 ======
-
-This project module started as part of another project of mine. But since this provided additional functionality, I've decided to move it to it's own project and open source it. 
+This python module started as part of another project of mine. But since this provided additional functionality, I've decided to move it to it's own project and open source it. 
 
 This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
 
-You can this project lives at `git.zebpalmer.com/nws-alerts <http://git.zebpalmer.com/nws-alerts>`_  For current documentation, visit the `Wiki <http://git.zebpalmer.com/nws-alerts/wiki/Home>`_
+You can this project lives at `git.zebpalmer.com/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit the `Wiki <http://github.com/zebpalmer/WeatherAlerts/wiki/Home>`_
 
 **About The Author**
 
@@ -21,13 +20,11 @@ Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my 
 
 Python 2 Support
 -----------------
-
 The master branch and all releases of this program are written for Python 3.x. Shortly after any released version, I will update the python2.x branch, you can download and use it, but there will be no supported releases from it. 
 
 
 Goals
 ------
-
 Use cases that I am moving to support first. 
 
 - Command line usage 
@@ -36,4 +33,3 @@ Use cases that I am moving to support first.
 - A web service that given various paramaters will return json or raw text summaries of the requested data.
  
 *If you have another use case, feel free to submit a request and jump in to help if you can.*
-
