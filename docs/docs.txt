@@ -1,0 +1,1 @@
+For now, please see the wiki at the project page on GitHub  http://github.com/zebpalmer/WeatherAlerts

@@ -23,7 +23,7 @@
 
 
 from sys import exit, argv
-from nws_alerts import nws_alerts
+from weatheralerts import nws
 
 
 
@@ -48,9 +48,9 @@ def check_alerts(alerts):
 
 def loadalerts(geocodes):
     geocodes = geocodes.split(',')
-    same = nws_alerts.SameCodes()
+    same = nws.SameCodes()
     scope = same.getfeedscope(geocodes)
-    cap = nws_alerts.CapAlertsFeed(state=scope, same=same)
+    cap = nws.CapAlertsFeed(state=scope, same=same)
     alerts = cap.alerts_by_samecodes(geocodes)    
     check_alerts(alerts)
 
