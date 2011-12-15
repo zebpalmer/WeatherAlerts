@@ -2,6 +2,11 @@
 Release Changes
 ===============
 
+**v0.4.1** 
+- Changing project name to better fit PyPi
+- Packaging as an installable module
+
+
 **v0.4**
 - Added basic nose test script
 - Refactored classes
