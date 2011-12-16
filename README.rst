@@ -9,7 +9,7 @@ This python module started as part of another project of mine. But since this pr
 
 This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
 
-You can this project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit the `Wiki <http://github.com/zebpalmer/WeatherAlerts/wiki/Home>`_
+This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit the `Wiki <http://github.com/zebpalmer/WeatherAlerts/wiki/Home>`_
 
 **About The Author**
 
@@ -18,12 +18,13 @@ Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my 
  
 Install
 ---------
-You can download and install via PIP by runing ``pip install -u weatheralerts``
+You can download and install via PIP by runing:  ``pip install -u weatheralerts``
 
 
 Python 2 Support
 -----------------
-The master branch and all releases of this program are written for Python 3.x. Shortly after any released version, I will update the python2.x branch, you can download and use it, but there will be no supported releases from it. 
+The master branch of this program is written for Python 3.x. I'm working on a unified installer (and sane way to automate backporting/building) to handle installing in either python 2 or 3.
+
 
 Use
 --------
@@ -32,11 +33,14 @@ Please see the wiki linked above for current use documentation.
 
 Goals
 ------
-Use cases that I am moving to support first. 
+Use cases that I am planning to support. 
 
 - Command line usage 
 - Packaged module to call from other programs 
+- Daemon to run and post alerts to console as they come in 
 - Nagios monitoring script 
 - A web service that given various paramaters will return json or raw text summaries of the requested data.
- 
+- Would love to see someone (or me when I get time/figure out how) write a KDE plasmoid/widget from this... 
+
+
 *If you have another use case, feel free to submit a request and jump in to help if you can.*
