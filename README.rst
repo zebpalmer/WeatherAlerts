@@ -23,8 +23,9 @@ You can download and install via PIP by runing:  ``pip install -u weatheralerts`
 
 Python 2 Support
 -----------------
-The master branch of this program is written for Python 3.x. I'm working on a unified installer (and sane way to automate backporting/building) to handle installing in either python 2 or 3.
+Development of this program is done in Python 3.x. However the installer now supports python 2 and with each release I'll backport the changes to the python2 files.
 
+ 
 
 Use
 --------

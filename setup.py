@@ -1,11 +1,26 @@
 from distutils.core import setup
+import sys
+
+
+VERSION_MAJOR = 0
+VERSION_MINOR = 4
+VERSION_PATCH = 3
+versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
+
+
+if sys.version_info[0] == 2:
+    base_dir = 'python2'
+elif sys.version_info[0] == 3:
+    base_dir = 'python3'
 
 setup(
     name='WeatherAlerts',
-    version='0.4.2build2',
+    version=versionstr,
     author='Zeb Palmer',
     author_email='zeb@zebpalmer.com',
     packages=['weatheralerts', 'weatheralerts.test'],
+    package_dir={
+        'weatheralerts': base_dir + '/weatheralerts'},
     scripts=['bin/NagiosWeatherAlerts.py'],
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
@@ -25,6 +40,7 @@ setup(
               'Natural Language :: English',
               'Operating System :: OS Independent',
               'Programming Language :: Python',
+              'Programming Language :: Python :: 2',
               'Programming Language :: Python :: 3',
               'Programming Language :: Python :: 3.2',
               'Topic :: Software Development :: Libraries :: Python Modules',

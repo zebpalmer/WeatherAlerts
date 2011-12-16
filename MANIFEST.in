@@ -2,3 +2,5 @@ include *.txt
 include *.rst
 recursive-include docs *.txt
 recursive-include docs *.rst
+recursive-include python2 *
+recursive-include python3 *

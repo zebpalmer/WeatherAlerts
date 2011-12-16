@@ -9,3 +9,5 @@ settings.cfg
 *.wpr
 *.wpu
 *.bak
+build
+dist
