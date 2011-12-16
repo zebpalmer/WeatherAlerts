@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 '''
-    Project home: git.zebpalmer.com/nws-alerts
+    Project home: github.com/zebpalmer/WeatherAlerts
     Original Author: Zeb Palmer   (www.zebpalmer.com)
     For more info, please see the README.rst
 
