@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-'''
-    Project home: git.zebpalmer.com/nws-alerts
+u'''
+    Project home: github.com/zebpalmer/WeatherAlerts
     Original Author: Zeb Palmer   (www.zebpalmer.com)
     For more info, please see the README.rst
 
@@ -29,10 +29,10 @@ from weatheralerts import nws
 
 def check_alerts(alerts):
     if len(alerts) == 0:
-        print("No active alerts")
+        print u"No active alerts"
         statuscode = 0
     elif len(alerts) == 1:
-        print(cap.alerts.alerts_type())
+        print cap.alerts.alerts_type()
     else:
         #print "{0} Alerts".format(len(alerts))
         types = []
@@ -41,13 +41,13 @@ def check_alerts(alerts):
             if alert_type not in types:
                 types.append(alert_type)
         for alert_type in types:
-            print(alert_type + ',', end=' ')
+            print alert_type + u',',
         statuscode = 1
     return statuscode
 
 
 def loadalerts(geocodes):
-    geocodes = geocodes.split(',')
+    geocodes = geocodes.split(u',')
     same = nws.SameCodes()
     scope = same.getfeedscope(geocodes)
     cap = nws.CapAlertsFeed(state=scope, same=same)
@@ -56,11 +56,11 @@ def loadalerts(geocodes):
 
 
 
-if __name__ == "__main__":
+if __name__ == u"__main__":
     if len(argv) != 2:
-        print ('''Please specify the SAME code(s) for the area(s) you wish to check
+        print u'''Please specify the SAME code(s) for the area(s) you wish to check
 \tSee http://www.nws.noaa.gov/nwr/indexnw.htm for help finding your SAME area.
-\tSeparate multiple same codes by commas with no spaces''') 
+\tSeparate multiple same codes by commas with no spaces''' 
         exit(3)
     else:
         statuscode = loadalerts(argv[1])

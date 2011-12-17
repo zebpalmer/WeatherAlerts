@@ -2,6 +2,13 @@
 Release Changes
 ===============
 
+
+**v0.4.4**
+- Reorganized for easier packaging
+- Supporting both Python2 and Python3 in the installer
+- tox automated virtenv & tests for python 2.6, 2.7, 3.2
+- Added command line monitoring script
+
 **v0.4.1** 
 - Changing project name to better fit PyPi
 - Packaging as an installable module

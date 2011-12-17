@@ -4,7 +4,10 @@ import sys
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 4
-VERSION_PATCH = 3
+VERSION_PATCH = 4
+
+
+
 versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
 
 
@@ -20,8 +23,9 @@ setup(
     author_email='zeb@zebpalmer.com',
     packages=['weatheralerts', 'weatheralerts.test'],
     package_dir={
-        'weatheralerts': base_dir + '/weatheralerts'},
-    scripts=['bin/NagiosWeatherAlerts.py'],
+        'weatheralerts': base_dir + "/weatheralerts"},
+    scripts=[ base_dir + "/bin/NagiosWeatherAlerts.py", 
+              base_dir + "/bin/MonitorAlertsByCounty.py"],
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',  
