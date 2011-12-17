@@ -5,7 +5,7 @@ NWS-ALERTS README
 
 About
 ======
-This python module started as part of another project of mine. But since this provided additional functionality, I've decided to move it to it's own project and open source it. 
+This python module started as part of another project of mine. But since this is more useful as a standalone module, I've decided to move it to it's own project and open source it. 
 
 This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
 
@@ -18,7 +18,7 @@ Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my 
  
 Install
 ---------
-You can download and install via PIP by runing:  ``pip install -u weatheralerts``
+You can download and install via PIP by runing:  ``pip install -U weatheralerts``
 
 
 Python 2 Support
