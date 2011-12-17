@@ -20,9 +20,9 @@ setup(
     author_email='zeb@zebpalmer.com',
     packages=['weatheralerts', 'weatheralerts.test'],
     package_dir={
-        'weatheralerts': base_dir + '/weatheralerts'},
-    scripts=[ base_dir + "bin/NagiosWeatherAlerts.py", 
-              base_dir + "bin/MonitorAlertsByCounty.py" ],
+        'weatheralerts': base_dir + "/weatheralerts"},
+    scripts=[ base_dir + "/bin/NagiosWeatherAlerts.py", 
+              base_dir + "/bin/MonitorAlertsByCounty.py"],
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',  
