@@ -19,13 +19,11 @@ Install
 You can download and install via PIP by runing:  ``pip install -U weatheralerts``
 
 
-
 Python 2 Support
 -----------------
 Development of this program is done in Python 3. However the installer now supports python 2 and with each release I'll backport any changes to the python2 code base. 
 I'm currently building and testing for Python 2.6, 2.7 and 3.2. Essentially, it should work on anything 2.6 or newer. 
 
- 
 
 Use
 --------
@@ -35,7 +33,6 @@ Please see the wiki linked above for current use documentation.
 Bugs & Feature Requests
 ------------------------
 I'm pretty new to the python world. This is my first publicly released package, that and it's still alpha, so it's got some rough edges. If you find one, please visit the `issue tracker <http://github.com/zebpalmer/WeatherAlerts/issues>`_ and let me know. 
-
 
 
 Goals
