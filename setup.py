@@ -24,11 +24,11 @@ setup(
     packages=['weatheralerts', 'weatheralerts.test'],
     package_dir={
         'weatheralerts': base_dir + "/weatheralerts"},
-    scripts=[ base_dir + "/bin/NagiosWeatherAlerts.py", 
-              base_dir + "/bin/MonitorAlertsByCounty.py"],
+    scripts=[ base_dir + "/NagiosWeatherAlerts.py",
+              base_dir + "/MonitorAlertsByCounty.py"],
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
-    description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',  
+    description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',
     long_description=open('README.rst').read(),
     classifiers=[
               'Development Status :: 3 - Alpha',
@@ -51,7 +51,7 @@ setup(
               'Programming Language :: Python :: 3.2',
               'Topic :: Software Development :: Libraries :: Python Modules',
               'Topic :: Utilities'
-              ],    
+              ],
 )
 
 
