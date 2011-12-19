@@ -43,3 +43,17 @@ def test_same_get_scope():
     for codes, scope in testcases:
         response = same.getfeedscope(codes)
         assert response == scope
+
+def test_same_lookup():
+    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
+    same = nws.SameCodes()
+    req_location = { 'code': '016027'}
+    response = same.location_lookup(req_location)
+    assert response == expected
+
+def test_county_lookup():
+    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
+    same = nws.SameCodes()
+    req_location = {'state': 'ID', 'local': 'Canyon'}
+    response = same.location_lookup(req_location)
+    assert response == expected
