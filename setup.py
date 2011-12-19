@@ -26,7 +26,7 @@ setup(
         'weatheralerts': base_dir + "/weatheralerts"},
     scripts=[ base_dir + "/NagiosWeatherAlerts.py",
               base_dir + "/MonitorAlertsByCounty.py",
-              base_dre + "/test_WeatherAlerts_scripts.py"],
+              base_dir + "/test_WeatherAlerts_scripts.py"],
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',
