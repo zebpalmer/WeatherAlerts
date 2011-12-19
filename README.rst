@@ -22,7 +22,7 @@ You can download and install via PIP by runing:  ``pip install -U weatheralerts`
 
 Python 2 Support
 -----------------
-Development of this program is done in Python 3. However the installer now supports python 2 and with each release I'll backport any changes to the python2 code base. 
+Development of this program is done in Python 3. However the installer now supports python 2 and with each major/minor revision release I'll backport changes to the python2 code base. 
 I'm currently building and testing for Python 2.6, 2.7 and 3.2. Essentially, it should work on anything 2.6 or newer. 
 
 

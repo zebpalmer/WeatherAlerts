@@ -145,6 +145,32 @@ class SameCodes(object):
             return None
 
 
+    def location_lookup(self, req_location):
+        '''
+        returns full location given samecode or county and state. Returns False if not valid.
+        '''
+        location = False
+        locations = self.samecodes
+        try:
+            location = locations[req_location['code']]
+        except KeyError:
+            pass
+        try:
+            location = self.lookup_samecode(req_location['local'], req_location['state'])
+        except KeyError:
+            pass
+        return location
+
+
+    def lookup_samecode(self, local, state):
+        '''return same code given county, state'''
+        for location in self.samecodes:
+            if state == self.samecodes[location]['state']:
+                if local == self.samecodes[location]['local']:
+                    return self.samecodes[location]
+
+        return False
+
 
 class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
@@ -162,6 +188,7 @@ class CapAlertsFeed(object):
         self.samecodes = self.same.getcodes()
         self.alerts = ''
         self._cachetime = 3
+        self._alerts_ts = datetime.now()
         self._load_alerts()
         self._feedstatus = ''
         self.output = FormatAlerts(self)
@@ -209,6 +236,7 @@ class CapAlertsFeed(object):
 
 
     def _check_objectage(self):
+        '''check age of alerts in this object, reload if past max cache time'''
         now = datetime.now()
         maxage = now - timedelta(minutes=self._cachetime)
         if self._alerts_ts > maxage:
@@ -348,8 +376,9 @@ class CapAlertsFeed(object):
                     location_alerts.append(self.alerts[alert])
         return location_alerts
 
-
-    def _active_locations(self):
+    @property
+    def active_locations(self):
+        '''returns list of all active locations'''
         warned_areas = {}
         for alert in self.alerts.keys():
             for location in self.alerts[alert]['locations']:
@@ -358,9 +387,10 @@ class CapAlertsFeed(object):
                 else:
                     warned_areas[location['code']].append(alert)
         return warned_areas
-    active_areas = property(_active_locations)
+
 
     def alert_type(self, alert):
+        '''return alert type for a given alert'''
         title = alert['title']
         a_type = title.split('issued')[0].strip()
         return a_type
@@ -368,7 +398,7 @@ class CapAlertsFeed(object):
 
 
 class FormatAlerts(object):
-    def __init__(self, cap, alerts=''):
+    def __init__(self, cap):
         self.cap = cap
 
 
@@ -413,6 +443,7 @@ class FormatAlerts(object):
 
 
     def jsonout(self, alerts):
+        '''dump given alerts to json'''
         jsonobj = json.dumps(alerts)
         return jsonobj
 
@@ -429,11 +460,13 @@ class Alerts(object):
 
 
     def state_summary(self, state):
+        '''print all alerts for a given state'''
         cap = CapAlertsFeed(state=state)
         cap.output.print_alerts_summary()
 
 
     def activefor_county(self, location, formatout='print'):
+        '''display alerts for a county/state'''
         cap = CapAlertsFeed(location['state'])
         alerts = cap.alerts_by_county_state(location['county'], location['state'])
         if formatout == 'print':
@@ -457,20 +490,41 @@ class Alerts(object):
 
 
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        nwsalerts = Alerts()
-        req_type = sys.argv[1]
-        if req_type == 'summary':
-            result = nwsalerts.national_summary()
-        if req_type == 'location':
-            req_location = { 'county': sys.argv[2], 'state': sys.argv[3]}
-            result = nwsalerts.activefor_county(req_location)
-        if req_type == 'state':
-            result = nwsalerts.state_summary(state=sys.argv[2])
-        if req_type == 'samecodes':
-            result = nwsalerts.activefor_samecodes(sys.argv[2])
+def test_same_lookup():
+    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
+    same = SameCodes()
+    req_location = { 'code': '016027'}
+    response = same.location_lookup(req_location)
+    assert response == expected
 
-        print(result)
-    else:
-        print("No arguments supplied")
+def test_county_lookup():
+    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
+    same = SameCodes()
+    req_location = {'state': 'ID', 'local': 'Canyon'}
+    response = same.location_lookup(req_location)
+    assert response == expected
+
+
+
+if __name__ == "__main__":
+    pass
+
+
+
+#TODO move this to it's on cli script
+    #if len(sys.argv) > 1:
+        #nwsalerts = Alerts()
+        #req_type = sys.argv[1]
+        #if req_type == 'summary':
+            #result = nwsalerts.national_summary()
+        #if req_type == 'location':
+            #req_location = { 'county': sys.argv[2], 'state': sys.argv[3]}
+            #result = nwsalerts.activefor_county(req_location)
+        #if req_type == 'state':
+            #result = nwsalerts.state_summary(state=sys.argv[2])
+        #if req_type == 'samecodes':
+            #result = nwsalerts.activefor_samecodes(sys.argv[2])
+
+        #print(result)
+    #else:
+        #print("No arguments supplied")
