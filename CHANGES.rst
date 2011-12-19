@@ -2,6 +2,9 @@
 Release Changes
 ===============
 
+**v0.4.5**
+- minor packaging changes
+- added initial suppor for object reload based on age
 
 **v0.4.4**
 - Reorganized for easier packaging
