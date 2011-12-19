@@ -22,7 +22,6 @@
 '''
 
 
-
 import os
 import sys
 import re
@@ -36,13 +35,13 @@ import json
 
 
 class SameCodes(object):
-    '''SameCodes Class downloads/caches the samecodes list into an object''' 
+    '''SameCodes Class downloads/caches the samecodes list into an object'''
     def __init__(self):
-        self.samecodes = ''        
+        self.samecodes = ''
         self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'        
+        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._load_same_codes()
-        
+
 
     def getcodes(self):
         '''public method to return the same codes list'''
@@ -56,9 +55,9 @@ class SameCodes(object):
 
     def getfeedscope(self, geocodes):
         '''Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
-           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get 
+           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
            all alerts for the given SAME codes'''
-           
+
         states = self._get_states_from_samecodes(geocodes)
         if len(states) >= 2:
             return 'US'
@@ -150,7 +149,7 @@ class SameCodes(object):
 class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
-       as well to save some processing''' 
+       as well to save some processing'''
     def __init__(self, state='US', same=None):
         self.state = state
         self._cachedir = str(tempfile.gettempdir()) + '/'
@@ -160,7 +159,7 @@ class CapAlertsFeed(object):
             self.same = SameCodes()
         else:
             self.same = same
-        self.samecodes = self.same.getcodes()        
+        self.samecodes = self.same.getcodes()
         self.alerts = ''
         self._cachetime = 3
         self._load_alerts()
@@ -170,7 +169,7 @@ class CapAlertsFeed(object):
 
 
     def set_maxage(self, maxage=3):
-        '''Override the default max age for the alerts cache''' 
+        '''Override the default max age for the alerts cache'''
         self._cachetime = maxage
 
 
@@ -208,6 +207,14 @@ class CapAlertsFeed(object):
             alerts = None
         return alerts
 
+
+    def _check_objectage(self):
+        now = datetime.now()
+        maxage = now - timedelta(minutes=self._cachetime)
+        if self._alerts_ts > maxage:
+            self.reload_alerts()
+
+
     def _load_alerts(self, refresh=False):
         '''Load the alerts feed and parse it'''
         if refresh == True:
@@ -215,12 +222,9 @@ class CapAlertsFeed(object):
         elif refresh == False:
             cached = self._cached_alertobj()
             if cached == None:
-                #print "Loading from web"
                 self.alerts = self._parse_cap(self._get_nws_feed())
-                #print "Done"
             else:
                 self.alerts = cached
-                #print "Loaded alerts from cache"
 
 
     def _get_nws_feed(self):
@@ -282,6 +286,7 @@ class CapAlertsFeed(object):
         cache = open(self._alert_cache_file, 'wb')
         pickle.dump(alerts, cache)
         cache.close()
+        self._alerts_ts = datetime.now()
         return alerts
 
 
@@ -332,7 +337,7 @@ class CapAlertsFeed(object):
             for location in  self.alerts[alert]['locations']:
                 if location['code'] in geocodes:
                     location_alerts.append(self.alerts[alert])
-        return location_alerts        
+        return location_alerts
 
 
     def alerts_by_state(self, state):
@@ -409,7 +414,7 @@ class FormatAlerts(object):
 
     def jsonout(self, alerts):
         jsonobj = json.dumps(alerts)
-        return jsonobj    
+        return jsonobj
 
 
 class Alerts(object):
@@ -435,7 +440,7 @@ class Alerts(object):
             strout = cap.output.alerts(alerts)
         elif formatout == 'json':
             strout = cap.output.jsonout(alerts)
-        return strout        
+        return strout
 
 
     def activefor_samecodes(self, geocodes, formatout='print'):
