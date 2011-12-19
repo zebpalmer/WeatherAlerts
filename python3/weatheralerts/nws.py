@@ -151,21 +151,25 @@ class SameCodes(object):
         '''
         location = False
         locations = self.samecodes
-        if req_location['code'] in locations.keys():
+        try:
             location = locations[req_location['code']]
-        else:
+        except KeyError:
+            pass
+        try:
             location = self.lookup_samecode(req_location['local'], req_location['state'])
+        except KeyError:
+            pass
         return location
 
 
     def lookup_samecode(self, local, state):
         '''return same code given county, state'''
         for location in self.samecodes:
-            if state == location['state']:
-                if local == location['local']:
-                    return location['code']
-            else:
-                return False
+            if state == self.samecodes[location]['state']:
+                if local == self.samecodes[location]['local']:
+                    return self.samecodes[location]
+
+        return False
 
 
 class CapAlertsFeed(object):
@@ -486,8 +490,25 @@ class Alerts(object):
 
 
 
+def test_same_lookup():
+    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
+    same = SameCodes()
+    req_location = { 'code': '016027'}
+    response = same.location_lookup(req_location)
+    assert response == expected
+
+def test_county_lookup():
+    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
+    same = SameCodes()
+    req_location = {'state': 'ID', 'local': 'Canyon'}
+    response = same.location_lookup(req_location)
+    assert response == expected
+
+
+
 if __name__ == "__main__":
     pass
+
 
 
 #TODO move this to it's on cli script
