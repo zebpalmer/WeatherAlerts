@@ -26,6 +26,7 @@ setup(
         'weatheralerts': base_dir + "/weatheralerts"},
     scripts=[ base_dir + "/NagiosWeatherAlerts.py",
               base_dir + "/MonitorAlertsByCounty.py",
+              base_dir + "/NWS_Alerts.py",
               base_dir + "/test_WeatherAlerts_scripts.py"],
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
