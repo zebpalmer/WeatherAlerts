@@ -177,7 +177,9 @@ class CapAlertsFeed(object):
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
     def __init__(self, state='US', same=None):
-        self.set_state(state)
+        self.alerts = ''
+        self._feedstatus = ''
+        self.state = self.set_state(state, refresh=False)
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
@@ -186,12 +188,10 @@ class CapAlertsFeed(object):
         else:
             self.same = same
         self.samecodes = self.same.getcodes()
-        self.alerts = ''
         self._cachetime = 3
         self._alerts_ts = datetime.now()
         self._load_alerts()
-        self._feedstatus = ''
-        self.output = FormatAlerts(self)
+        #self.output = FormatAlerts(self)
 
 
     def set_maxage(self, maxage=3):
@@ -199,14 +199,14 @@ class CapAlertsFeed(object):
         self._cachetime = maxage
 
 
-    def set_state(self, state, refresh=False):
-        '''set refresh = True to switch to a new state without creating a new instance'''
+    def set_state(self, state, refresh=True):
+        '''sets state, reloads alerts unless told otherwise'''
         if len(state) == 2:
             self.state = state.upper()
             if refresh == True:
                 self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
                 self._load_alerts()
-            return True
+            return state
         else:
             raise Exception('Error parsing given state')
 
@@ -214,6 +214,14 @@ class CapAlertsFeed(object):
     def reload_alerts(self):
         '''Reload alerts bypassing cache'''
         self._load_alerts(refresh=True)
+
+
+    def check_objectage(self):
+        '''check age of alerts in this object, reload if past max cache time'''
+        now = datetime.now()
+        maxage = now - timedelta(minutes=self._cachetime)
+        if self._alerts_ts > maxage:
+            self.reload_alerts()
 
 
     def _cached_alertobj(self):
@@ -238,14 +246,6 @@ class CapAlertsFeed(object):
             #"No Alerts cache availible"
             alerts = None
         return alerts
-
-
-    def _check_objectage(self):
-        '''check age of alerts in this object, reload if past max cache time'''
-        now = datetime.now()
-        maxage = now - timedelta(minutes=self._cachetime)
-        if self._alerts_ts > maxage:
-            self.reload_alerts()
 
 
     def _load_alerts(self, refresh=False):
@@ -322,6 +322,7 @@ class CapAlertsFeed(object):
         self._alerts_ts = datetime.now()
         return alerts
 
+#----------------------------------------------------
 
     def _alerts_summary(self):
         alert_summary = {}
