@@ -342,6 +342,12 @@ class FormatAlerts(object):
             for value in alert_data[key]:
                 print('\t%s county, %s' % (value['local'], value['state']))
 
+    def print_titles(self, alert_data):
+        strout = ''
+        for alert in alert_data:
+            strout = strout + alert['title'] + '\n'
+        return strout
+
 
     def print_obj(self, alert_data):
         if alert_data == []:
@@ -431,7 +437,17 @@ class Alerts(object):
 
 
 
-
+    def alerts_by_county_state(self, req_location):
+            '''returns alerts for given county, state'''
+            alert_data = self.cap.alerts
+            county = req_location['local']
+            state = req_location['state']
+            location_alerts = []
+            for alert in alert_data.keys():
+                for location in  alert_data[alert]['locations']:
+                    if location['state'] == str(state) and location['local'] == str(county):
+                        location_alerts.append(alert_data[alert])
+            return location_alerts
 
 
 
@@ -452,19 +468,6 @@ class Alerts(object):
                     #if area not in alert_summary[a_type]:
                         #alert_summary[a_type].append(area)
         #return alert_summary
-
-
-    #def alerts_by_county_state(self, alert_data, county, state):
-        #'''returns alerts for given county, state'''
-        #location_alerts = []
-        #for alert in alert_data.keys():
-            #for location in  alert_data[alert]['locations']:
-                #if location['state'] == str(state) and location['local'] == str(county):
-                    #location_alerts.append(alert_data[alert])
-        #return location_alerts
-
-
-
 
 
     def alerts_by_state(self, alert_data, state):

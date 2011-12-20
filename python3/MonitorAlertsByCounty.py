@@ -35,15 +35,18 @@ def monitor_alert_by_county(reqcounty='', reqstate=''):
     if reqcounty == '' or reqstate == '':
         print("No Location Provided")
         exit()
-    req_location = { 'county': reqcounty, 'state': reqstate }
+    req_location = { 'local': reqcounty, 'state': reqstate }
 
     while True:
         try:
-            alerts = nws.Alerts()
-            alerts.activefor_county(req_location)
-            result = alerts.activefor_county(req_location)
+            nws_alerts = nws.Alerts(state=reqstate)
+            active_alerts = nws_alerts.alerts_by_county_state(req_location)
+            if len(active_alerts) == 0:
+                active_summary = "No Alerts for {0}, {1}".format(reqcounty, reqstate)
+            else:
+                active_summary = nws_alerts.output.print_titles(active_alerts)
             os.system('cls' if os.name=='nt' else 'clear')
-            print(result)
+            print(active_summary)
             sleep(30)
         except KeyboardInterrupt:
             print("  ........Exiting.")
