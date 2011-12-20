@@ -335,12 +335,16 @@ class FormatAlerts(object):
 
 
     def print_summary(self, alert_data):
+        strout = ''
         if len(alert_data) == 0:
-            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
+            strout = "No active alerts for specified area: '%s'" % (sys.argv[2])
         for key in alert_data.keys():
-            print(key + ":")
+            strout = strout + key + ":\n"
             for value in alert_data[key]:
-                print('\t%s county, %s' % (value['local'], value['state']))
+                strout = strout + '\t%s county, %s\n' % (value['local'], value['state'])
+        return strout
+
+
 
     def print_titles(self, alert_data):
         strout = ''
@@ -451,24 +455,24 @@ class Alerts(object):
 
 
 
+    def summary(self):
+        alert_data = self.cap.alerts
+        alert_summary = {}
+        if len(alert_data) == 0:
+            return {}
+        else:
+            for item in alert_data:
+                item = alert_data[item]
+                alertareas = item['locations']
+                a_type = item['type']
+                for area in alertareas:
+                    if a_type not in alert_summary:
+                        alert_summary[a_type] = list()
+                    if area not in alert_summary[a_type]:
+                        alert_summary[a_type].append(area)
+        return alert_summary
+
 #----------------------------------------------------
-
-
-    #def summary(self, alert_data):
-        #alert_summary = {}
-        #if len(alert_data) == 0:
-            #return {}
-        #else:
-            #for item in alert_data:
-                #alertareas = item['locations']
-                #a_type = item['type']
-                #for area in alertareas:
-                    #if a_type not in alert_summary:
-                        #alert_summary[a_type] = list()
-                    #if area not in alert_summary[a_type]:
-                        #alert_summary[a_type].append(area)
-        #return alert_summary
-
 
     def alerts_by_state(self, alert_data, state):
         location_alerts = []

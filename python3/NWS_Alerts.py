@@ -10,7 +10,8 @@ if __name__ == "__main__":
         nwsalerts = nws.Alerts()
         req_type = sys.argv[1]
         if req_type == 'summary':
-            result = nwsalerts.national_summary()
+            alert_data = nwsalerts.summary()
+            result = nwsalerts.output.print_summary(alert_data)
         if req_type == 'location':
             req_location = { 'county': sys.argv[2], 'state': sys.argv[3]}
             result = nwsalerts.activefor_county(req_location)
