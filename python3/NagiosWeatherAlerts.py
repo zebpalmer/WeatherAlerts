@@ -46,13 +46,11 @@ def check_alerts(alerts):
     return statuscode
 
 
-def loadalerts(geocodes):
-    geocodes = geocodes.split(',')
-    same = nws.SameCodes()
-    scope = same.getfeedscope(geocodes)
-    cap = nws.CapAlertsFeed(state=scope, same=same)
-    alerts = cap.alerts_by_samecodes(geocodes)    
-    check_alerts(alerts)
+def loadalerts(requested_geocodes):
+    requested_geocodes = requested_geocodes.split(',')
+    nws_alerts = nws.Alerts(geocodes=requested_geocodes)
+    alert_data = nws_alerts.alerts_by_samecodes(requested_geocodes)
+    check_alerts(alert_data)
 
 
 
@@ -60,7 +58,7 @@ if __name__ == "__main__":
     if len(argv) != 2:
         print ('''Please specify the SAME code(s) for the area(s) you wish to check
 \tSee http://www.nws.noaa.gov/nwr/indexnw.htm for help finding your SAME area.
-\tSeparate multiple same codes by commas with no spaces''') 
+\tSeparate multiple same codes by commas with no spaces''')
         exit(3)
     else:
         statuscode = loadalerts(argv[1])
