@@ -22,7 +22,7 @@ You can download and install via PIP by runing:  ``pip install -U weatheralerts`
 
 Python 2 Support
 -----------------
-Development of this program is done in Python 3. However the installer now supports python 2 and with each major/minor revision release I'll backport changes to the python2 code base. 
+Development of this program is done in Python 3. However the installer supports python 2 and with each major/minor release I'll backport changes to the python2 code base. 
 I'm currently building and testing for Python 2.6, 2.7 and 3.2. Essentially, it should work on anything 2.6 or newer. 
 
 
@@ -38,7 +38,7 @@ I'm pretty new to the python world. This is my first publicly released package, 
 
 Goals
 ------
-Use cases that I am in the process of supporting.  
+(these are in various stages of implementation) 
 
 - Command line usage 
 - Packaged module to call from other programs 
@@ -51,8 +51,7 @@ Use cases that I am in the process of supporting.
 *If you have another use case, feel free to submit a request and jump in to help if you can.*
 
 
-
-This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. 
+This program is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. 
 Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
 
 
