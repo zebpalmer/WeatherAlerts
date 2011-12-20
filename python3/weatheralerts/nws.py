@@ -211,8 +211,6 @@ class CapAlertsFeed(object):
         else:
             raise Exception('Error parsing given state')
 
-
-
     def reload_alerts(self):
         '''Reload alerts bypassing cache'''
         self._load_alerts(refresh=True)
@@ -515,22 +513,3 @@ def test_county_lookup():
 if __name__ == "__main__":
     pass
 
-
-
-#TODO move this to it's on cli script
-    #if len(sys.argv) > 1:
-        #nwsalerts = Alerts()
-        #req_type = sys.argv[1]
-        #if req_type == 'summary':
-            #result = nwsalerts.national_summary()
-        #if req_type == 'location':
-            #req_location = { 'county': sys.argv[2], 'state': sys.argv[3]}
-            #result = nwsalerts.activefor_county(req_location)
-        #if req_type == 'state':
-            #result = nwsalerts.state_summary(state=sys.argv[2])
-        #if req_type == 'samecodes':
-            #result = nwsalerts.activefor_samecodes(sys.argv[2])
-
-        #print(result)
-    #else:
-        #print("No arguments supplied")
