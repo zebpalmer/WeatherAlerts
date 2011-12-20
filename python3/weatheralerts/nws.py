@@ -372,7 +372,7 @@ class Alerts(object):
     def __init__(self, state='US'):
         self.state = state
         self.cap = CapAlertsFeed(state=state)
-        self.output = FormatAlerts(self)
+        self.output = FormatAlerts()
 
     def set_state(self, state):
         '''sets state, reloads alerts unless told otherwise'''
