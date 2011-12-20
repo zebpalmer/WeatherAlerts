@@ -396,6 +396,18 @@ class Alerts(object):
                 self.scope = state
         else:
             self.scope = self.same.getfeedscope(geocodes)
+
+        self.cap = CapAlertsFeed(state=self.scope)
+
+    def load(self, state='', geocodes=''):
+        '''manually load the cap feed/alerts'''
+        if geocodes == '':
+            if self.state == '':
+                self.scope = 'US'
+            else:
+                self.scope = state
+        else:
+            self.scope = self.same.getfeedscope(geocodes)
         self.cap = CapAlertsFeed(state=self.scope)
 
 
@@ -434,7 +446,7 @@ class Alerts(object):
         activealerts = cap.alerts
         location_alerts = []
         for alert in activealerts.keys():
-            for location in  activealerts[alert]['locations']:
+            for location in activealerts[alert]['locations']:
                 if location['code'] in geocodes:
                     location_alerts.append(activealerts[alert])
         return location_alerts
