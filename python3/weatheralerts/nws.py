@@ -452,19 +452,17 @@ class Alerts(object):
         return location_alerts
 
 
-
     def alerts_by_county_state(self, req_location):
-            '''returns alerts for given county, state'''
-            alert_data = self.cap.alerts
-            county = req_location['local']
-            state = req_location['state']
-            location_alerts = []
-            for alert in alert_data.keys():
-                for location in  alert_data[alert]['locations']:
-                    if location['state'] == str(state) and location['local'] == str(county):
-                        location_alerts.append(alert_data[alert])
-            return location_alerts
-
+        '''returns alerts for given county, state'''
+        alert_data = self.cap.alerts
+        county = req_location['local']
+        state = req_location['state']
+        location_alerts = []
+        for alert in alert_data.keys():
+            for location in  alert_data[alert]['locations']:
+                if location['state'] == str(state) and location['local'] == str(county):
+                    location_alerts.append(alert_data[alert])
+        return location_alerts
 
 
     def summary(self):
@@ -530,4 +528,3 @@ def alert_type(alert):
 
 if __name__ == "__main__":
     pass
-
