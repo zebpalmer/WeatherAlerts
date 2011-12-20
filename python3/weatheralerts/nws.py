@@ -194,14 +194,13 @@ class CapAlertsFeed(object):
         self.output = FormatAlerts(self)
 
 
-
     def set_maxage(self, maxage=3):
         '''Override the default max age for the alerts cache'''
         self._cachetime = maxage
 
 
-    def set_state(self, state='US', refresh=False):
-        '''switch to a new state without creating a new instance'''
+    def set_state(self, state, refresh=False):
+        '''set refresh = True to switch to a new state without creating a new instance'''
         if len(state) == 2:
             self.state = state.upper()
             if refresh == True:
@@ -212,10 +211,10 @@ class CapAlertsFeed(object):
             raise Exception('Error parsing given state')
 
 
-
     def reload_alerts(self):
         '''Reload alerts bypassing cache'''
         self._load_alerts(refresh=True)
+
 
     def _cached_alertobj(self):
         '''If a recent cache exists, return it'''
@@ -337,6 +336,7 @@ class CapAlertsFeed(object):
         return alert_summary
 
     alert_summary = property(_alerts_summary)
+
 
     def summary(self, alert_data):
         alert_summary = {}
@@ -515,22 +515,3 @@ def test_county_lookup():
 if __name__ == "__main__":
     pass
 
-
-
-#TODO move this to it's on cli script
-    #if len(sys.argv) > 1:
-        #nwsalerts = Alerts()
-        #req_type = sys.argv[1]
-        #if req_type == 'summary':
-            #result = nwsalerts.national_summary()
-        #if req_type == 'location':
-            #req_location = { 'county': sys.argv[2], 'state': sys.argv[3]}
-            #result = nwsalerts.activefor_county(req_location)
-        #if req_type == 'state':
-            #result = nwsalerts.state_summary(state=sys.argv[2])
-        #if req_type == 'samecodes':
-            #result = nwsalerts.activefor_samecodes(sys.argv[2])
-
-        #print(result)
-    #else:
-        #print("No arguments supplied")
