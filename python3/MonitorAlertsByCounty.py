@@ -36,17 +36,19 @@ def monitor_alert_by_county(reqcounty='', reqstate=''):
         print("No Location Provided")
         exit()
     req_location = { 'local': reqcounty, 'state': reqstate }
+    print("Loading Alerts")
 
     while True:
         try:
             nws_alerts = nws.Alerts(state=reqstate)
             active_alerts = nws_alerts.alerts_by_county_state(req_location)
             if len(active_alerts) == 0:
-                active_summary = "No Alerts for {0}, {1}".format(reqcounty, reqstate)
+                active_summary = "\n\tNo Alerts for {0}, {1}".format(reqcounty, reqstate)
             else:
                 active_summary = nws_alerts.output.print_titles(active_alerts)
             os.system('cls' if os.name=='nt' else 'clear')
-            print(active_summary)
+            print('\n\t'+ active_summary)
+            print("\n\nPress CTRL+C to Exit")
             sleep(30)
         except KeyboardInterrupt:
             print("  ........Exiting.")
