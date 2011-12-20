@@ -177,7 +177,7 @@ class CapAlertsFeed(object):
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
     def __init__(self, state='US', same=None):
-        self.alerts = ''
+        self._alerts = ''
         self._feedstatus = ''
         self.state = self.set_state(state, refresh=False)
         self._cachedir = str(tempfile.gettempdir()) + '/'
@@ -191,8 +191,12 @@ class CapAlertsFeed(object):
         self._cachetime = 3
         self._alerts_ts = datetime.now()
         self._load_alerts()
-        #self.output = FormatAlerts(self)
 
+
+    @property
+    def alerts(self):
+        self.check_objectage()
+        return self._alerts()
 
     def set_maxage(self, maxage=3):
         '''Override the default max age for the alerts cache'''
@@ -251,13 +255,13 @@ class CapAlertsFeed(object):
     def _load_alerts(self, refresh=False):
         '''Load the alerts feed and parse it'''
         if refresh == True:
-            self.alerts = self._parse_cap(self._get_nws_feed())
+            self._alerts = self._parse_cap(self._get_nws_feed())
         elif refresh == False:
             cached = self._cached_alertobj()
             if cached == None:
-                self.alerts = self._parse_cap(self._get_nws_feed())
+                self._alerts = self._parse_cap(self._get_nws_feed())
             else:
-                self.alerts = cached
+                self._alerts = cached
 
 
     def _get_nws_feed(self):
@@ -322,21 +326,84 @@ class CapAlertsFeed(object):
         self._alerts_ts = datetime.now()
         return alerts
 
+
+
+
+class FormatAlerts(object):
+    def __init__(self):
+        pass
+
+
+    def print_summary(self, alert_data):
+        if len(alert_data) == 0:
+            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
+        for key in alert_data.keys():
+            print(key + ":")
+            for value in alert_data[key]:
+                print('\t%s county, %s' % (value['local'], value['state']))
+
+
+    def print_obj(self, alert_data):
+        if alert_data == []:
+            print("No alerts")
+        else:
+            import pprint
+            pp = pprint.PrettyPrinter(indent=4)
+            pp.pprint(alert_data)
+
+    def print_alerts(self, alert_data):
+        outstr = ''
+        if alert_data == []:
+            outstr = "No Active Alerts"
+        else:
+            for alert in alert_data:
+                outstr = outstr + (alert['title'])
+                outstr = outstr + ('\t' + alert['summary'])
+        return outstr
+
+
+    def jsonout(self, alert_data):
+        '''dump given alerts to json'''
+        jsonobj = json.dumps(alert_data)
+        return jsonobj
+
+
+class Alerts(object):
+    def __init__(self, state='US'):
+        self.state = state
+        self.cap = CapAlertsFeed(state=state)
+        self.output = FormatAlerts(self)
+
+    def set_state(self, state):
+        '''sets state, reloads alerts unless told otherwise'''
+        if len(state) == 2:
+            self.state = state.upper()
+
+
+    @property
+    def json(self):
+        '''returns json object of all alerts on specified feed (National feed by default)'''
+        cap = CapAlertsFeed()
+        alerts = cap.alerts
+        jsonobj = self.output.jsonout(alerts)
+        return jsonobj
+
+
+    def national_summary(self):
+        cap = CapAlertsFeed(state='US')
+        activealerts = cap.alerts
+        self.output.print_summary(activealerts)
+
+
+    def state_summary(self, state=''):
+        '''print all alerts for a given state'''
+        if state == '':
+            state = self.state
+        alert_data = self.cap.alerts
+        self.output.print_summary(alert_data)
+
+
 #----------------------------------------------------
-
-    def _alerts_summary(self):
-        alert_summary = {}
-        alert_data = self.alerts
-        for item in alert_data:
-            alertareas = alert_data[item]['locations']
-            a_type = alert_data[item]['type']
-            for area in alertareas:
-                if a_type not in alert_summary:
-                    alert_summary[a_type] = list()
-                alert_summary[a_type].append(area)
-        return alert_summary
-
-    alert_summary = property(_alerts_summary)
 
 
     def summary(self, alert_data):
@@ -355,40 +422,40 @@ class CapAlertsFeed(object):
         return alert_summary
 
 
-    def alerts_by_county_state(self, county, state):
+    def alerts_by_county_state(self, alert_data, county, state):
         '''returns alerts for given county, state'''
         location_alerts = []
-        for alert in self.alerts.keys():
-            for location in  self.alerts[alert]['locations']:
+        for alert in alert_data.keys():
+            for location in  alert_data[alert]['locations']:
                 if location['state'] == str(state) and location['local'] == str(county):
-                    location_alerts.append(self.alerts[alert])
+                    location_alerts.append(alert_data[alert])
         return location_alerts
 
 
-    def alerts_by_samecodes(self, geocodes):
+    def alerts_by_samecodes(self, alert_data, geocodes):
         '''returns alerts for a given SAME code'''
         location_alerts = []
-        for alert in self.alerts.keys():
-            for location in  self.alerts[alert]['locations']:
+        for alert in alert_data.keys():
+            for location in  alert_data[alert]['locations']:
                 if location['code'] in geocodes:
-                    location_alerts.append(self.alerts[alert])
+                    location_alerts.append(alert_data[alert])
         return location_alerts
 
 
-    def alerts_by_state(self, state):
+    def alerts_by_state(self, alert_data, state):
         location_alerts = []
-        for alert in self.alerts.keys():
-            for location in self.alerts[alert]['locations']:
+        for alert in alert_data.keys():
+            for location in alert_data[alert]['locations']:
                 if location['state'] == state:
-                    location_alerts.append(self.alerts[alert])
+                    location_alerts.append(alert_data[alert])
         return location_alerts
 
     @property
-    def active_locations(self):
+    def active_locations(self, alert_data):
         '''returns list of all active locations'''
         warned_areas = {}
-        for alert in self.alerts.keys():
-            for location in self.alerts[alert]['locations']:
+        for alert in alert_data.keys():
+            for location in alert_data[alert]['locations']:
                 if location['code'] not in list(warned_areas.keys()):
                     warned_areas[location['code']] = [alert]
                 else:
@@ -396,120 +463,24 @@ class CapAlertsFeed(object):
         return warned_areas
 
 
-    def alert_type(self, alert):
-        '''return alert type for a given alert'''
-        title = alert['title']
-        a_type = title.split('issued')[0].strip()
-        return a_type
+def alert_type(alert):
+    '''return alert type for a given alert'''
+    title = alert['title']
+    a_type = title.split('issued')[0].strip()
+    return a_type
 
 
 
-class FormatAlerts(object):
-    def __init__(self, cap):
-        self.cap = cap
-
-
-    def print_alerts_summary(self):
-        outstr = ''
-        if len(self.cap.alert_summary.keys()) == 0:
-            outstr = "No active alerts for specified area: '%s'" % (self.cap.feed)
-        else:
-            for key in self.cap.alert_summary.keys():
-                outstr = outstr + key + ":" + '\n'
-                for value in self.cap.alert_summary[key]:
-                    outstr = outstr + '\t%s county, %s' % (value['local'], value['state']) + '\n'
-        return outstr
-
-
-    def print_summary(self, alerts):
-        if len(alerts) == 0:
-            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
-        for key in alerts.keys():
-            print(key + ":")
-            for value in alerts[key]:
-                print('\t%s county, %s' % (value['local'], value['state']))
-
-
-    def print_alertobj(self, alert_data):
-        if alert_data == []:
-            print("No alerts")
-        else:
-            import pprint
-            pp = pprint.PrettyPrinter(indent=4)
-            pp.pprint(alert_data)
-
-    def alerts(self, alert_data):
-        outstr = ''
-        if alert_data == []:
-            outstr = "No Active Alerts"
-        else:
-            for alert in alert_data:
-                outstr = outstr + (alert['title'])
-                outstr = outstr + ('\t' + alert['summary'])
-        return outstr
-
-
-    def jsonout(self, alerts):
-        '''dump given alerts to json'''
-        jsonobj = json.dumps(alerts)
-        return jsonobj
-
-
-class Alerts(object):
-    def __init__(self):
-        pass
-
-
-    def national_summary(self):
-        cap = CapAlertsFeed(state='US')
-        outstr = cap.output.print_alerts_summary()
-        return outstr
-
-
-    def state_summary(self, state):
-        '''print all alerts for a given state'''
-        cap = CapAlertsFeed(state=state)
-        cap.output.print_alerts_summary()
-
-
-    def activefor_county(self, location, formatout='print'):
-        '''display alerts for a county/state'''
-        cap = CapAlertsFeed(location['state'])
-        alerts = cap.alerts_by_county_state(location['county'], location['state'])
-        if formatout == 'print':
-            strout = cap.output.alerts(alerts)
-        elif formatout == 'json':
-            strout = cap.output.jsonout(alerts)
-        return strout
-
-
-    def activefor_samecodes(self, geocodes, formatout='print'):
-        geocodes = geocodes.split(',')
-        same = SameCodes()
-        scope = same.getfeedscope(geocodes)
-        cap = CapAlertsFeed(state=scope, same=same)
-        alerts = cap.alerts_by_samecodes(geocodes)
-        if formatout == 'print':
-            strout = cap.output.alerts(alerts)
-        elif formatout == 'json':
-            strout = cap.output.jsonout(alerts)
-        return strout
 
 
 
-def test_same_lookup():
-    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
-    same = SameCodes()
-    req_location = { 'code': '016027'}
-    response = same.location_lookup(req_location)
-    assert response == expected
 
-def test_county_lookup():
-    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
-    same = SameCodes()
-    req_location = {'state': 'ID', 'local': 'Canyon'}
-    response = same.location_lookup(req_location)
-    assert response == expected
+
+
+
+
+
+
 
 
 
