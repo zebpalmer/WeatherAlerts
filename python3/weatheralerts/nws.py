@@ -196,7 +196,7 @@ class CapAlertsFeed(object):
     @property
     def alerts(self):
         self.check_objectage()
-        return self._alerts()
+        return self._alerts
 
     def set_maxage(self, maxage=3):
         '''Override the default max age for the alerts cache'''
@@ -369,10 +369,25 @@ class FormatAlerts(object):
 
 
 class Alerts(object):
-    def __init__(self, state='US'):
+    '''
+    Alerts object that controls interaction with the samecodes and capparser classes/methods.
+    Pass state='' or geocodes='samecodes_list' to change which feed is being parsed
+    passing a list of samecodes will determine if they are in the same state and pick
+    the correct feed or use the US feed if they're in different states
+    '''
+    def __init__(self, state='', geocodes=''):
         self.state = state
-        self.cap = CapAlertsFeed(state=state)
+        self.same = SameCodes()
         self.output = FormatAlerts()
+        if geocodes == '':
+            if self.state == '':
+                self.scope = 'US'
+            else:
+                self.scope = state
+        else:
+            self.scope = self.same.getfeedscope(geocodes)
+        self.cap = CapAlertsFeed(state=self.scope)
+
 
     def set_state(self, state):
         '''sets state, reloads alerts unless told otherwise'''
@@ -403,43 +418,53 @@ class Alerts(object):
         self.output.print_summary(alert_data)
 
 
+    def alerts_by_samecodes(self, geocodes):
+        '''returns alerts for a given SAME code'''
+        cap = CapAlertsFeed(state='US')
+        activealerts = cap.alerts
+        location_alerts = []
+        for alert in activealerts.keys():
+            for location in  activealerts[alert]['locations']:
+                if location['code'] in geocodes:
+                    location_alerts.append(activealerts[alert])
+        return location_alerts
+
+
+
+
+
+
+
 #----------------------------------------------------
 
 
-    def summary(self, alert_data):
-        alert_summary = {}
-        if len(alert_data) == 0:
-            return {}
-        else:
-            for item in alert_data:
-                alertareas = item['locations']
-                a_type = item['type']
-                for area in alertareas:
-                    if a_type not in alert_summary:
-                        alert_summary[a_type] = list()
-                    if area not in alert_summary[a_type]:
-                        alert_summary[a_type].append(area)
-        return alert_summary
+    #def summary(self, alert_data):
+        #alert_summary = {}
+        #if len(alert_data) == 0:
+            #return {}
+        #else:
+            #for item in alert_data:
+                #alertareas = item['locations']
+                #a_type = item['type']
+                #for area in alertareas:
+                    #if a_type not in alert_summary:
+                        #alert_summary[a_type] = list()
+                    #if area not in alert_summary[a_type]:
+                        #alert_summary[a_type].append(area)
+        #return alert_summary
 
 
-    def alerts_by_county_state(self, alert_data, county, state):
-        '''returns alerts for given county, state'''
-        location_alerts = []
-        for alert in alert_data.keys():
-            for location in  alert_data[alert]['locations']:
-                if location['state'] == str(state) and location['local'] == str(county):
-                    location_alerts.append(alert_data[alert])
-        return location_alerts
+    #def alerts_by_county_state(self, alert_data, county, state):
+        #'''returns alerts for given county, state'''
+        #location_alerts = []
+        #for alert in alert_data.keys():
+            #for location in  alert_data[alert]['locations']:
+                #if location['state'] == str(state) and location['local'] == str(county):
+                    #location_alerts.append(alert_data[alert])
+        #return location_alerts
 
 
-    def alerts_by_samecodes(self, alert_data, geocodes):
-        '''returns alerts for a given SAME code'''
-        location_alerts = []
-        for alert in alert_data.keys():
-            for location in  alert_data[alert]['locations']:
-                if location['code'] in geocodes:
-                    location_alerts.append(alert_data[alert])
-        return location_alerts
+
 
 
     def alerts_by_state(self, alert_data, state):
