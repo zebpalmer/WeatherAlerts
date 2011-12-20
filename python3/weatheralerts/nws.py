@@ -177,7 +177,7 @@ class CapAlertsFeed(object):
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
     def __init__(self, state='US', same=None):
-        self.state = state
+        self.set_state(state)
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
@@ -200,11 +200,17 @@ class CapAlertsFeed(object):
         self._cachetime = maxage
 
 
-    def set_state(self, state='US'):
+    def set_state(self, state='US', refresh=False):
         '''switch to a new state without creating a new instance'''
-        self.state = state
-        self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
-        self._load_alerts()
+        if len(state) == 2:
+            self.state = state.upper()
+            if refresh == True:
+                self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
+                self._load_alerts()
+            return True
+        else:
+            raise Exception('Error parsing given state')
+
 
 
     def reload_alerts(self):
