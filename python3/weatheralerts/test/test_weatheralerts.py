@@ -53,7 +53,7 @@ def test_same_lookup():
 
 def test_county_lookup():
     expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
-    geo = nws.geo()
+    geo = nws.Geo()
     req_location = {'state': 'ID', 'local': 'Canyon'}
     response = geo.location_lookup(req_location)
     assert response == expected
