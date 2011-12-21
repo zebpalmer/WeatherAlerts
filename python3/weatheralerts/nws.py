@@ -34,18 +34,93 @@ import json
 
 
 
-class SameCodes(object):
-    '''SameCodes Class downloads/caches the samecodes list into an object'''
+class Geo(object):
+    '''Class to interact with samecodes object and (soon) other geo data
+    TODO: move interaction with samecodes data to here'''
     def __init__(self):
-        self.samecodes = ''
+        self.__same = SameCodes()
+        self.samecodes = self.__same.samecodes
+
+
+    def location_lookup(self, req_location):
+        '''
+        returns full location given samecode or county and state. Returns False if not valid.
+        '''
+        location = False
+        locations = self.samecodes
+        try:
+            location = locations[req_location['code']]
+        except KeyError:
+            pass
+        try:
+            location = self.lookup_samecode(req_location['local'], req_location['state'])
+        except KeyError:
+            pass
+        return location
+
+
+    def lookup_samecode(self, local, state):
+        '''return same code given county, state'''
+        for location in self.samecodes:
+            if state == self.samecodes[location]['state']:
+                if local == self.samecodes[location]['local']:
+                    return self.samecodes[location]
+
+        return False
+
+    def getstate(self, geosame):
+        '''Return the state of a given SAME code'''
+        state = self.samecodes[geosame]['state']
+        return state
+
+
+    def getfeedscope(self, geocodes):
+        '''Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
+           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
+           all alerts for the given SAME codes'''
+
+        states = self._get_states_from_samecodes(geocodes)
+        if len(states) >= 2:
+            return 'US'
+        else:
+            return states[0]
+
+
+    def _get_states_from_samecodes(self, geocodes):
+        '''Returns all states for a given list of SAME codes'''
+        states = []
+        for code in geocodes:
+            try:
+                state = self.samecodes[code]['state']
+            except KeyError:
+                if not isinstance(geocodes, list):
+                    print ("specified geocodes must be list")
+                    raise
+                else:
+                    print("SAMECODE Not found")
+            if state not in states:
+                states.append(state)
+        return states
+
+    def reload(self):
+        '''force refresh of Same Codes (mainly for testing)'''
+        self._load_same_codes(refresh=True)
+
+
+#### GET/PARSE SAME CODES TABLE ##############################################################
+
+class SameCodes(object):
+    '''Download and parse samecodes database into an object, cache it'''
+    def __init__(self):
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._load_same_codes()
 
-
-    def getcodes(self):
+    @property
+    def samecodes(self):
         '''public method to return the same codes list'''
-        return self.samecodes
+        return self._samecodes
+
 
     def getstate(self, geosame):
         '''Return the state of a given SAME code'''
@@ -93,7 +168,7 @@ class SameCodes(object):
         else:
             cached = self._cached_same_codes()
             if cached == None:
-                self.samecodes = self._get_same_codes()
+                self._samecodes = self._get_same_codes()
 
 
     def _get_same_codes(self):
@@ -145,32 +220,7 @@ class SameCodes(object):
             return None
 
 
-    def location_lookup(self, req_location):
-        '''
-        returns full location given samecode or county and state. Returns False if not valid.
-        '''
-        location = False
-        locations = self.samecodes
-        try:
-            location = locations[req_location['code']]
-        except KeyError:
-            pass
-        try:
-            location = self.lookup_samecode(req_location['local'], req_location['state'])
-        except KeyError:
-            pass
-        return location
-
-
-    def lookup_samecode(self, local, state):
-        '''return same code given county, state'''
-        for location in self.samecodes:
-            if state == self.samecodes[location]['state']:
-                if local == self.samecodes[location]['local']:
-                    return self.samecodes[location]
-
-        return False
-
+#### FEED PARSER #######################################################################################################
 
 class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
@@ -187,7 +237,7 @@ class CapAlertsFeed(object):
             self.same = SameCodes()
         else:
             self.same = same
-        self.samecodes = self.same.getcodes()
+        self.samecodes = self.same.samecodes
         self._cachetime = 3
         self._alerts_ts = datetime.now()
         self._load_alerts()
@@ -195,6 +245,7 @@ class CapAlertsFeed(object):
 
     @property
     def alerts(self):
+        '''returns all alerts on feed'''
         self.check_objectage()
         return self._alerts
 
@@ -397,7 +448,7 @@ class Alerts(object):
         else:
             self.scope = self.same.getfeedscope(geocodes)
 
-        self.cap = CapAlertsFeed(state=self.scope)
+        self.cap = CapAlertsFeed(state=self.scope, same=self.same)
 
     def load(self, state='', geocodes=''):
         '''manually load the cap feed/alerts'''

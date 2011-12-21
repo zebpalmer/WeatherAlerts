@@ -41,7 +41,7 @@ def check_alerts(alerts):
             if alert_type not in types:
                 types.append(alert_type)
         for alert_type in types:
-            print(alert_type + ',', end=' ')
+            print(alert_type + ",", end=' ')
         statuscode = 1
     return statuscode
 
