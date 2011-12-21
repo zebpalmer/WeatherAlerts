@@ -43,6 +43,10 @@ class GeoLocation(object):
         else:
             self._same = same
 
+    @property
+    def samecodes(self):
+        return self._same.samecodes
+
 
 
 
