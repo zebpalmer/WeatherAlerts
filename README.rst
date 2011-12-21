@@ -40,12 +40,12 @@ Goals
 ------
 Use cases that I am in the process of supporting.  
 
-- Command line usage 
-- Packaged module to call from other programs 
-- Daemon to run and post alerts to console as they come in 
-- Nagios monitoring script 
-- A web service that given various paramaters will return json or raw text summaries of the requested data.
-- Would love to see someone (or me when I get time/figure out how) write a KDE plasmoid/widget from this... 
+- Command line usage (mostly done)
+- Packaged module to call from other programs (working, some features to add) 
+- Daemon to run and post alerts to console as they come in (done)
+- Nagios monitoring script (working, but lots of features to add)
+- A web service that given various paramaters will return json or raw text summaries of the requested data. (not started)
+- Would love to see someone (or me when I get time/figure out how) write a KDE plasmoid/widget from this... (one day...)
 
 
 *If you have another use case, feel free to submit a request and jump in to help if you can.*
