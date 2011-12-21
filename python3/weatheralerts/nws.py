@@ -34,18 +34,32 @@ import json
 
 
 
+class GeoLocation(object):
+    '''Class to interact with samecodes object and (soon) other geo data'''
+    def __init__(self, same=None):
+        if same == None:
+            self._same = SameCodes()
+        else:
+            self._same = same        
+    def 
+        
+
+
+
+
 class SameCodes(object):
-    '''SameCodes Class downloads/caches the samecodes list into an object'''
+    '''Download and parse samecodes database into an object, cache it'''
     def __init__(self):
         self.samecodes = ''
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._load_same_codes()
 
-
-    def getcodes(self):
+    @property
+    def samecodes(self):
         '''public method to return the same codes list'''
-        return self.samecodes
+        return self._samecodes
+
 
     def getstate(self, geosame):
         '''Return the state of a given SAME code'''
@@ -171,6 +185,7 @@ class SameCodes(object):
 
         return False
 
+#### FEED PARSER #######################################################################################################
 
 class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
@@ -195,6 +210,7 @@ class CapAlertsFeed(object):
 
     @property
     def alerts(self):
+        '''returns all alerts on feed'''
         self.check_objectage()
         return self._alerts
 
@@ -397,7 +413,7 @@ class Alerts(object):
         else:
             self.scope = self.same.getfeedscope(geocodes)
 
-        self.cap = CapAlertsFeed(state=self.scope)
+        self.cap = CapAlertsFeed(state=self.scope, same=self.same)
 
     def load(self, state='', geocodes=''):
         '''manually load the cap feed/alerts'''
