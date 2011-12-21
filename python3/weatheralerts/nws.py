@@ -68,6 +68,45 @@ class Geo(object):
 
         return False
 
+    def getstate(self, geosame):
+        '''Return the state of a given SAME code'''
+        state = self.samecodes[geosame]['state']
+        return state
+
+
+    def getfeedscope(self, geocodes):
+        '''Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
+           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
+           all alerts for the given SAME codes'''
+
+        states = self._get_states_from_samecodes(geocodes)
+        if len(states) >= 2:
+            return 'US'
+        else:
+            return states[0]
+
+
+    def _get_states_from_samecodes(self, geocodes):
+        '''Returns all states for a given list of SAME codes'''
+        states = []
+        for code in geocodes:
+            try:
+                state = self.samecodes[code]['state']
+            except KeyError:
+                if not isinstance(geocodes, list):
+                    print ("specified geocodes must be list")
+                    raise
+                else:
+                    print("SAMECODE Not found")
+            if state not in states:
+                states.append(state)
+        return states
+
+    def reload(self):
+        '''force refresh of Same Codes (mainly for testing)'''
+        self._load_same_codes(refresh=True)
+
+
 #### GET/PARSE SAME CODES TABLE ##############################################################
 
 class SameCodes(object):
