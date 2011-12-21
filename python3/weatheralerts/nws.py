@@ -34,23 +34,41 @@ import json
 
 
 
-class GeoLocation(object):
+class Geo(object):
     '''Class to interact with samecodes object and (soon) other geo data
     TODO: move interaction with samecodes data to here'''
-    def __init__(self, same=None):
-        if same == None:
-            self._same = SameCodes()
-        else:
-            self._same = same
-
-    @property
-    def samecodes(self):
-        return self._same.samecodes
+    def __init__(self):
+        self.__same = SameCodes()
+        self.samecodes = self.__same.samecodes
 
 
+    def location_lookup(self, req_location):
+        '''
+        returns full location given samecode or county and state. Returns False if not valid.
+        '''
+        location = False
+        locations = self.samecodes
+        try:
+            location = locations[req_location['code']]
+        except KeyError:
+            pass
+        try:
+            location = self.lookup_samecode(req_location['local'], req_location['state'])
+        except KeyError:
+            pass
+        return location
 
 
+    def lookup_samecode(self, local, state):
+        '''return same code given county, state'''
+        for location in self.samecodes:
+            if state == self.samecodes[location]['state']:
+                if local == self.samecodes[location]['local']:
+                    return self.samecodes[location]
 
+        return False
+
+#### GET/PARSE SAME CODES TABLE ##############################################################
 
 class SameCodes(object):
     '''Download and parse samecodes database into an object, cache it'''
@@ -162,32 +180,6 @@ class SameCodes(object):
             #print "No SAME codes cache availible, loading from web"
             return None
 
-
-    def location_lookup(self, req_location):
-        '''
-        returns full location given samecode or county and state. Returns False if not valid.
-        '''
-        location = False
-        locations = self.samecodes
-        try:
-            location = locations[req_location['code']]
-        except KeyError:
-            pass
-        try:
-            location = self.lookup_samecode(req_location['local'], req_location['state'])
-        except KeyError:
-            pass
-        return location
-
-
-    def lookup_samecode(self, local, state):
-        '''return same code given county, state'''
-        for location in self.samecodes:
-            if state == self.samecodes[location]['state']:
-                if local == self.samecodes[location]['local']:
-                    return self.samecodes[location]
-
-        return False
 
 #### FEED PARSER #######################################################################################################
 
