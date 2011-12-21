@@ -35,14 +35,15 @@ import json
 
 
 class GeoLocation(object):
-    '''Class to interact with samecodes object and (soon) other geo data'''
+    '''Class to interact with samecodes object and (soon) other geo data
+    TODO: move interaction with samecodes data to here'''
     def __init__(self, same=None):
         if same == None:
             self._same = SameCodes()
         else:
             self._same = same        
-    def 
-        
+    
+    
 
 
 
@@ -50,7 +51,6 @@ class GeoLocation(object):
 class SameCodes(object):
     '''Download and parse samecodes database into an object, cache it'''
     def __init__(self):
-        self.samecodes = ''
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._load_same_codes()
@@ -107,7 +107,7 @@ class SameCodes(object):
         else:
             cached = self._cached_same_codes()
             if cached == None:
-                self.samecodes = self._get_same_codes()
+                self._samecodes = self._get_same_codes()
 
 
     def _get_same_codes(self):
