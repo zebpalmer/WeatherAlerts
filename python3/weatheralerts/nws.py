@@ -41,9 +41,9 @@ class GeoLocation(object):
         if same == None:
             self._same = SameCodes()
         else:
-            self._same = same        
-    
-    
+            self._same = same
+
+
 
 
 
@@ -202,7 +202,7 @@ class CapAlertsFeed(object):
             self.same = SameCodes()
         else:
             self.same = same
-        self.samecodes = self.same.getcodes()
+        self.samecodes = self.same.samecodes
         self._cachetime = 3
         self._alerts_ts = datetime.now()
         self._load_alerts()
