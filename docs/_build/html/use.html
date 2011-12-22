@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WeatherAlerts v1.0 documentation" href="index.html" />
-    <link rel="next" title="API Usage" href="api.html" />
+    <link rel="next" title="Development Status" href="devstatus.html" />
     <link rel="prev" title="About WeatherAlerts" href="about.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="api.html" title="API Usage"
+          <a href="devstatus.html" title="Development Status"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="about.html" title="About WeatherAlerts"
@@ -53,8 +53,8 @@
 <h1>Using WeatherAlerts<a class="headerlink" href="#using-weatheralerts" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="use-cases">
 <h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
-<p>&#8220;WeatherAlerts was originally started as just an module/api to get and interact with the National Weather Service Alerts Feed and that remains the primary use case.
-That is, using this module to incorperate the NWS Alerts into other python programs. I will show later in the documentation how to easily to that.&#8221;</p>
+<p>WeatherAlerts was originally started as just an module/api to get and interact with the National Weather Service Alerts Feed and that remains the primary use case.
+That is, using this module to incorperate the NWS Alerts into other python programs. I will show later in the documentation how to easily to that.</p>
 <p>The secondary purpose of this project is to provide some interaction with this data.</p>
 <ul class="simple">
 <li>A Plugin for use in Nagios (or similar monitoring server), to monitor and notify when alerts are issued</li>
@@ -62,11 +62,15 @@ That is, using this module to incorperate the NWS Alerts into other python progr
 <li>An API/Webservice build to wrap this project and provide the data in a restful webservice.</li>
 <li>Desktop Plasmoid/Widget for KDE</li>
 </ul>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nagios.html">Nagios Monitoring</a></li>
-</ul>
+<div class="section" id="nagios">
+<h3>Nagios<a class="headerlink" href="#nagios" title="Permalink to this headline">¶</a></h3>
+<p>The example Nagios plugin does work though it needs improvement to add more configuration options.
+Currently the plugin accepts a list of SAME codes separated by comma and will result in a Nagios alert for any alert issued for the requested area.</p>
+<p>Additional configuration for this is planned, allowing you to specify which alert types result in what level of nagios status.</p>
+</div>
+<div class="section" id="api">
+<h3>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
+<p>See API</p>
 </div>
 </div>
 </div>
@@ -81,6 +85,8 @@ That is, using this module to incorperate the NWS Alerts into other python progr
   <ul>
 <li><a class="reference internal" href="#">Using WeatherAlerts</a><ul>
 <li><a class="reference internal" href="#use-cases">Use cases</a><ul>
+<li><a class="reference internal" href="#nagios">Nagios</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
 </ul>
 </li>
 </ul>
@@ -91,8 +97,8 @@ That is, using this module to incorperate the NWS Alerts into other python progr
   <p class="topless"><a href="about.html"
                         title="previous chapter">About WeatherAlerts</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="api.html"
-                        title="next chapter">API Usage</a></p>
+  <p class="topless"><a href="devstatus.html"
+                        title="next chapter">Development Status</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/use.txt"
@@ -122,7 +128,7 @@ That is, using this module to incorperate the NWS Alerts into other python progr
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="api.html" title="API Usage"
+          <a href="devstatus.html" title="Development Status"
              >next</a> |</li>
         <li class="right" >
           <a href="about.html" title="About WeatherAlerts"
