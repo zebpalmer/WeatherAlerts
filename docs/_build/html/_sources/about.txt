@@ -41,7 +41,8 @@ Use cases that I am in the process of supporting.
 *If you have another use case, feel free to submit a request and jump in to help if you can.*
 
 
-
+Author
+-------
 This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. 
 Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
 

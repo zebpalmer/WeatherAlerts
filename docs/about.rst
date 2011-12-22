@@ -1,5 +1,5 @@
 About WeatherAlerts
-====================
+*********************
 
 This python module started as part of another project of mine. But since this is more useful as a standalone module, I've decided to move it to it's own project and open source it. As this is a alpha/beta release aspects of the project will change, and probably pretty often. Check back here for updates, if you install using pip, you can run ``pip install -U weatheralerts`` to get the latest version. (I've been releasing on average a minor release per week, and several point releases per week.)
 
@@ -11,23 +11,23 @@ This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zeb
 
 
 Install
----------
+========
 You can download and install via PIP by runing:  ``pip install -U weatheralerts``
 
 
 Python 2 Support
------------------
+=================
 Development of this program is done in Python 3. However the installer now supports python 2 and with each major/minor revision release I'll backport changes to the python2 code base. 
 I'm currently building and testing for Python 2.6, 2.7 and 3.2. Essentially, it should work on anything 2.6 or newer. 
 
 
 Bugs & Feature Requests
-------------------------
+========================
 I'm pretty new to the python world. This is my first publicly released package, that and it's still alpha, so it's got some rough edges. If you find one, please visit the `issue tracker <http://github.com/zebpalmer/WeatherAlerts/issues>`_ and let me know. 
 
 
 Goals
-------
+======
 Use cases that I am in the process of supporting.  
 
 - Command line usage (mostly done)
@@ -41,7 +41,8 @@ Use cases that I am in the process of supporting.
 *If you have another use case, feel free to submit a request and jump in to help if you can.*
 
 
-
+Author
+=======
 This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. 
 Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
 
