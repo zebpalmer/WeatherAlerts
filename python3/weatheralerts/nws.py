@@ -34,7 +34,7 @@ import json
 
 
 
-class Geo(object):
+class GeoDB(object):
     '''Class to interact with samecodes object and (soon) other geo data
     TODO: move interaction with samecodes data to here'''
     def __init__(self):
@@ -79,14 +79,14 @@ class Geo(object):
            Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
            all alerts for the given SAME codes'''
 
-        states = self._get_states_from_samecodes(geocodes)
+        states = self.get_states_from_samecodes(geocodes)
         if len(states) >= 2:
             return 'US'
         else:
             return states[0]
 
 
-    def _get_states_from_samecodes(self, geocodes):
+    def get_states_from_samecodes(self, geocodes):
         '''Returns all states for a given list of SAME codes'''
         states = []
         for code in geocodes:
@@ -102,9 +102,6 @@ class Geo(object):
                 states.append(state)
         return states
 
-    def reload(self):
-        '''force refresh of Same Codes (mainly for testing)'''
-        self._load_same_codes(refresh=True)
 
 
 #### GET/PARSE SAME CODES TABLE ##############################################################
@@ -121,40 +118,6 @@ class SameCodes(object):
         '''public method to return the same codes list'''
         return self._samecodes
 
-
-    def getstate(self, geosame):
-        '''Return the state of a given SAME code'''
-        state = self.samecodes[geosame]['state']
-        return state
-
-
-    def getfeedscope(self, geocodes):
-        '''Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
-           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
-           all alerts for the given SAME codes'''
-
-        states = self._get_states_from_samecodes(geocodes)
-        if len(states) >= 2:
-            return 'US'
-        else:
-            return states[0]
-
-
-    def _get_states_from_samecodes(self, geocodes):
-        '''Returns all states for a given list of SAME codes'''
-        states = []
-        for code in geocodes:
-            try:
-                state = self.samecodes[code]['state']
-            except KeyError:
-                if not isinstance(geocodes, list):
-                    print ("specified geocodes must be list")
-                    raise
-                else:
-                    print("SAMECODE Not found")
-            if state not in states:
-                states.append(state)
-        return states
 
     def reload(self):
         '''force refresh of Same Codes (mainly for testing)'''
@@ -226,18 +189,18 @@ class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
-    def __init__(self, state='US', same=None):
+    def __init__(self, state='US', geo=None):
         self._alerts = ''
         self._feedstatus = ''
         self.state = self.set_state(state, refresh=False)
         self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
-        if same == None:
-            self.same = SameCodes()
+        if geo == None:
+            self.geo = GeoDB()
         else:
-            self.same = same
-        self.samecodes = self.same.samecodes
+            self.geo = geo
+            
+        self.samecodes = self.geo.samecodes
         self._cachetime = 3
         self._alerts_ts = datetime.now()
         self._load_alerts()
@@ -436,9 +399,13 @@ class Alerts(object):
     passing a list of samecodes will determine if they are in the same state and pick
     the correct feed or use the US feed if they're in different states
     '''
-    def __init__(self, state='', geocodes=''):
+    def __init__(self, state='', geocodes='', load=True):
+        '''
+        init Alerts, default to National Feed, set state or geocodes to define a feed for a given area.
+        if geocodes are specified, then all alerts objects will be limited to those areas
+        '''
         self.state = state
-        self.same = SameCodes()
+        self.geo = GeoDB()
         self.output = FormatAlerts()
         if geocodes == '':
             if self.state == '':
@@ -448,7 +415,9 @@ class Alerts(object):
         else:
             self.scope = self.same.getfeedscope(geocodes)
 
-        self.cap = CapAlertsFeed(state=self.scope, same=self.same)
+        if load == True:
+            self.cap = CapAlertsFeed(state=self.scope, geo=self.geo)
+
 
     def load(self, state='', geocodes=''):
         '''manually load the cap feed/alerts'''
@@ -470,12 +439,19 @@ class Alerts(object):
 
     @property
     def json(self):
-        '''returns json object of all alerts on specified feed (National feed by default)'''
-        cap = CapAlertsFeed()
-        alerts = cap.alerts
+        '''returns json object of all alerts on specified feed or area (National feed by default)'''
+        alerts = self.cap.alerts
         jsonobj = self.output.jsonout(alerts)
         return jsonobj
 
+
+    @property
+    def pyobj(self):
+        '''returns python object of all alerts for specified feed or area (National by default)'''
+        if self.geo
+        alerts = self.cap.alerts
+        jsonobj = self.output.jsonout(alerts)
+        
 
     def national_summary(self):
         cap = CapAlertsFeed(state='US')
