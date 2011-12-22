@@ -12,7 +12,7 @@ Since this project gets it's data from the National Weather Service XML/CAP feed
 
 This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
 
-This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit the `Wiki <http://github.com/zebpalmer/WeatherAlerts/wiki/Home>`_
+This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit http://weatheralerts.readthedocs.org_
 
 
 Install
@@ -28,7 +28,7 @@ I'm currently building and testing for Python 2.6, 2.7 and 3.2. Essentially, it 
 
 Use
 --------
-Please see the wiki linked above for current use documentation. 
+Please see the documentation at http://weatheralerts.readthedocs.org 
 
 
 Bugs & Feature Requests
