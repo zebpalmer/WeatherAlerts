@@ -422,7 +422,7 @@ class Alerts(object):
     def load_alerts(self):
         '''manually load the cap feed/alerts'''
         self.cap = CapAlertsFeed(state=self.scope, geo=self.geo)
-        self._alerts = cap.alerts
+        self._alerts = self.cap.alerts
 
 
     def refresh_alerts(self):

@@ -27,21 +27,21 @@ def test_samecodes_obj_reload():
     same = nws.SameCodes()
     same.reload()
 
-def test_same_get_state():
+def test_geo_get_state():
     testcases = [('016027', 'ID'),
                  ('047065', 'TN')]
-    same = nws.SameCodes()
+    geo = nws.GeoDB()
     for code, state in testcases:
-        response = same.getstate(code)
+        response = geo.getstate(code)
         assert response == state
 
-def test_same_get_scope():
-    same = nws.SameCodes()
+def test_geo_get_scope():
+    geo = nws.GeoDB()
     testcases = [(['016027','047065'], 'US'),
                  (['016027','016001'], 'ID'),
                  (['016027'], 'ID')]
     for codes, scope in testcases:
-        response = same.getfeedscope(codes)
+        response = geo.getfeedscope(codes)
         assert response == scope
 
 
