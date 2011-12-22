@@ -16,6 +16,7 @@ Please take a look through the documentation here, if you still have questions, 
    :maxdepth: 2
 
    about
+   use
    nagios
    devstatus
 
