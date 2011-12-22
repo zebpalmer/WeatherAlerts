@@ -416,30 +416,39 @@ class Alerts(object):
             self.scope = self.same.getfeedscope(geocodes)
 
         if load == True:
-            self.cap = CapAlertsFeed(state=self.scope, geo=self.geo)
+            self.load_alerts()
+            
 
-
-    def load(self, state='', geocodes=''):
+    def load_alerts(self):
         '''manually load the cap feed/alerts'''
-        if geocodes == '':
-            if self.state == '':
-                self.scope = 'US'
-            else:
-                self.scope = state
-        else:
-            self.scope = self.same.getfeedscope(geocodes)
-        self.cap = CapAlertsFeed(state=self.scope)
+        self.cap = CapAlertsFeed(state=self.scope, geo=self.geo)
+        self._alerts = cap.alerts
+
+
+    def refresh_alerts(self):
+        self.cap.reload_alerts()
+        self.load_alerts()
 
 
     def set_state(self, state):
         '''sets state, reloads alerts unless told otherwise'''
         if len(state) == 2:
             self.state = state.upper()
+            self.scope = self.state
+            self.load_alerts_from_feed()
+
+
+    def target_area(self, locations):
+        '''
+        TODO: not used yet
+        sets target areas to be used in all limiting functions
+        '''
+        self.targetareas = locations
 
 
     @property
     def json(self):
-        '''returns json object of all alerts on specified feed or area (National feed by default)'''
+        '''returns json object of all alerts on specified feed (National feed by default)'''
         alerts = self.cap.alerts
         jsonobj = self.output.jsonout(alerts)
         return jsonobj
@@ -447,8 +456,10 @@ class Alerts(object):
 
     @property
     def pyobj(self):
-        '''returns python object of all alerts for specified feed or area (National by default)'''
-        if self.geo
+        '''returns python object of all alerts for specified feed(National by default)'''
+        if self.geocodes:
+            alerts = self.cap.alerts
+            
         alerts = self.cap.alerts
         jsonobj = self.output.jsonout(alerts)
         
