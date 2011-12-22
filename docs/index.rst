@@ -1,8 +1,9 @@
 WeatherAlerts Docs
 **********************
 
-**Note:**
-  This documentation is a work in progress, I hope to have it completed by the 1.0 release of WeatherAlerts.
+.. Note::
+   This documentation is a work in progress, I hope to have it completed by the 1.0 release of WeatherAlerts.
+
 
 Welcome!
 ==========
