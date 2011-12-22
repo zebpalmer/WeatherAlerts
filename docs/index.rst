@@ -10,8 +10,7 @@ WeatherAlerts is a python project I started in Nov 2011 as part of another weath
 Please take a look through the documentation here, if you still have questions, email me zeb@zebpalmer.com. 
 
 
-Contents:
-++++++++++
+**Contents:**
 
 .. toctree::
    :maxdepth: 2
