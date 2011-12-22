@@ -34,18 +34,39 @@ import json
 
 
 
-class SameCodes(object):
-    '''SameCodes Class downloads/caches the samecodes list into an object'''
+class GeoDB(object):
+    '''Class to interact with samecodes object and (soon) other geo data
+    TODO: move interaction with samecodes data to here'''
     def __init__(self):
-        self.samecodes = ''
-        self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
-        self._load_same_codes()
+        self.__same = SameCodes()
+        self.samecodes = self.__same.samecodes
 
 
-    def getcodes(self):
-        '''public method to return the same codes list'''
-        return self.samecodes
+    def location_lookup(self, req_location):
+        '''
+        returns full location given samecode or county and state. Returns False if not valid.
+        '''
+        location = False
+        locations = self.samecodes
+        try:
+            location = locations[req_location['code']]
+        except KeyError:
+            pass
+        try:
+            location = self.lookup_samecode(req_location['local'], req_location['state'])
+        except KeyError:
+            pass
+        return location
+
+
+    def lookup_samecode(self, local, state):
+        '''return same code given county, state'''
+        for location in self.samecodes:
+            if state == self.samecodes[location]['state']:
+                if local == self.samecodes[location]['local']:
+                    return self.samecodes[location]
+
+        return False
 
     def getstate(self, geosame):
         '''Return the state of a given SAME code'''
@@ -58,14 +79,14 @@ class SameCodes(object):
            Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
            all alerts for the given SAME codes'''
 
-        states = self._get_states_from_samecodes(geocodes)
+        states = self.get_states_from_samecodes(geocodes)
         if len(states) >= 2:
             return 'US'
         else:
             return states[0]
 
 
-    def _get_states_from_samecodes(self, geocodes):
+    def get_states_from_samecodes(self, geocodes):
         '''Returns all states for a given list of SAME codes'''
         states = []
         for code in geocodes:
@@ -81,6 +102,23 @@ class SameCodes(object):
                 states.append(state)
         return states
 
+
+
+#### GET/PARSE SAME CODES TABLE ##############################################################
+
+class SameCodes(object):
+    '''Download and parse samecodes database into an object, cache it'''
+    def __init__(self):
+        self._cachedir = str(tempfile.gettempdir()) + '/'
+        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
+        self._load_same_codes()
+
+    @property
+    def samecodes(self):
+        '''public method to return the same codes list'''
+        return self._samecodes
+
+
     def reload(self):
         '''force refresh of Same Codes (mainly for testing)'''
         self._load_same_codes(refresh=True)
@@ -93,7 +131,7 @@ class SameCodes(object):
         else:
             cached = self._cached_same_codes()
             if cached == None:
-                self.samecodes = self._get_same_codes()
+                self._samecodes = self._get_same_codes()
 
 
     def _get_same_codes(self):
@@ -145,68 +183,48 @@ class SameCodes(object):
             return None
 
 
-    def location_lookup(self, req_location):
-        '''
-        returns full location given samecode or county and state. Returns False if not valid.
-        '''
-        location = False
-        locations = self.samecodes
-        try:
-            location = locations[req_location['code']]
-        except KeyError:
-            pass
-        try:
-            location = self.lookup_samecode(req_location['local'], req_location['state'])
-        except KeyError:
-            pass
-        return location
-
-
-    def lookup_samecode(self, local, state):
-        '''return same code given county, state'''
-        for location in self.samecodes:
-            if state == self.samecodes[location]['state']:
-                if local == self.samecodes[location]['local']:
-                    return self.samecodes[location]
-
-        return False
-
+#### FEED PARSER #######################################################################################################
 
 class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
-    def __init__(self, state='US', same=None):
-        self.set_state(state)
+    def __init__(self, state='US', geo=None):
+        self._alerts = ''
+        self._feedstatus = ''
+        self.state = self.set_state(state, refresh=False)
         self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
-        if same == None:
-            self.same = SameCodes()
+        if geo == None:
+            self.geo = GeoDB()
         else:
-            self.same = same
-        self.samecodes = self.same.getcodes()
-        self.alerts = ''
+            self.geo = geo
+            
+        self.samecodes = self.geo.samecodes
         self._cachetime = 3
         self._alerts_ts = datetime.now()
         self._load_alerts()
-        self._feedstatus = ''
-        self.output = FormatAlerts(self)
 
+
+    @property
+    def alerts(self):
+        '''returns all alerts on feed'''
+        self.check_objectage()
+        return self._alerts
 
     def set_maxage(self, maxage=3):
         '''Override the default max age for the alerts cache'''
         self._cachetime = maxage
 
 
-    def set_state(self, state, refresh=False):
-        '''set refresh = True to switch to a new state without creating a new instance'''
+    def set_state(self, state, refresh=True):
+        '''sets state, reloads alerts unless told otherwise'''
         if len(state) == 2:
             self.state = state.upper()
             if refresh == True:
                 self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
                 self._load_alerts()
-            return True
+            return state
         else:
             raise Exception('Error parsing given state')
 
@@ -214,6 +232,14 @@ class CapAlertsFeed(object):
     def reload_alerts(self):
         '''Reload alerts bypassing cache'''
         self._load_alerts(refresh=True)
+
+
+    def check_objectage(self):
+        '''check age of alerts in this object, reload if past max cache time'''
+        now = datetime.now()
+        maxage = now - timedelta(minutes=self._cachetime)
+        if self._alerts_ts > maxage:
+            self.reload_alerts()
 
 
     def _cached_alertobj(self):
@@ -240,24 +266,16 @@ class CapAlertsFeed(object):
         return alerts
 
 
-    def _check_objectage(self):
-        '''check age of alerts in this object, reload if past max cache time'''
-        now = datetime.now()
-        maxage = now - timedelta(minutes=self._cachetime)
-        if self._alerts_ts > maxage:
-            self.reload_alerts()
-
-
     def _load_alerts(self, refresh=False):
         '''Load the alerts feed and parse it'''
         if refresh == True:
-            self.alerts = self._parse_cap(self._get_nws_feed())
+            self._alerts = self._parse_cap(self._get_nws_feed())
         elif refresh == False:
             cached = self._cached_alertobj()
             if cached == None:
-                self.alerts = self._parse_cap(self._get_nws_feed())
+                self._alerts = self._parse_cap(self._get_nws_feed())
             else:
-                self.alerts = cached
+                self._alerts = cached
 
 
     def _get_nws_feed(self):
@@ -323,113 +341,33 @@ class CapAlertsFeed(object):
         return alerts
 
 
-    def _alerts_summary(self):
-        alert_summary = {}
-        alert_data = self.alerts
-        for item in alert_data:
-            alertareas = alert_data[item]['locations']
-            a_type = alert_data[item]['type']
-            for area in alertareas:
-                if a_type not in alert_summary:
-                    alert_summary[a_type] = list()
-                alert_summary[a_type].append(area)
-        return alert_summary
-
-    alert_summary = property(_alerts_summary)
-
-
-    def summary(self, alert_data):
-        alert_summary = {}
-        if len(alert_data) == 0:
-            return {}
-        else:
-            for item in alert_data:
-                alertareas = item['locations']
-                a_type = item['type']
-                for area in alertareas:
-                    if a_type not in alert_summary:
-                        alert_summary[a_type] = list()
-                    if area not in alert_summary[a_type]:
-                        alert_summary[a_type].append(area)
-        return alert_summary
-
-
-    def alerts_by_county_state(self, county, state):
-        '''returns alerts for given county, state'''
-        location_alerts = []
-        for alert in self.alerts.keys():
-            for location in  self.alerts[alert]['locations']:
-                if location['state'] == str(state) and location['local'] == str(county):
-                    location_alerts.append(self.alerts[alert])
-        return location_alerts
-
-
-    def alerts_by_samecodes(self, geocodes):
-        '''returns alerts for a given SAME code'''
-        location_alerts = []
-        for alert in self.alerts.keys():
-            for location in  self.alerts[alert]['locations']:
-                if location['code'] in geocodes:
-                    location_alerts.append(self.alerts[alert])
-        return location_alerts
-
-
-    def alerts_by_state(self, state):
-        location_alerts = []
-        for alert in self.alerts.keys():
-            for location in self.alerts[alert]['locations']:
-                if location['state'] == state:
-                    location_alerts.append(self.alerts[alert])
-        return location_alerts
-
-    @property
-    def active_locations(self):
-        '''returns list of all active locations'''
-        warned_areas = {}
-        for alert in self.alerts.keys():
-            for location in self.alerts[alert]['locations']:
-                if location['code'] not in list(warned_areas.keys()):
-                    warned_areas[location['code']] = [alert]
-                else:
-                    warned_areas[location['code']].append(alert)
-        return warned_areas
-
-
-    def alert_type(self, alert):
-        '''return alert type for a given alert'''
-        title = alert['title']
-        a_type = title.split('issued')[0].strip()
-        return a_type
-
 
 
 class FormatAlerts(object):
-    def __init__(self, cap):
-        self.cap = cap
+    def __init__(self):
+        pass
 
 
-    def print_alerts_summary(self):
-        outstr = ''
-        if len(self.cap.alert_summary.keys()) == 0:
-            outstr = "No active alerts for specified area: '%s'" % (self.cap.feed)
-        else:
-            for key in self.cap.alert_summary.keys():
-                outstr = outstr + key + ":" + '\n'
-                for value in self.cap.alert_summary[key]:
-                    outstr = outstr + '\t%s county, %s' % (value['local'], value['state']) + '\n'
-        return outstr
+    def print_summary(self, alert_data):
+        strout = ''
+        if len(alert_data) == 0:
+            strout = "No active alerts for specified area: '%s'" % (sys.argv[2])
+        for key in alert_data.keys():
+            strout = strout + key + ":\n"
+            for value in alert_data[key]:
+                strout = strout + '\t%s county, %s\n' % (value['local'], value['state'])
+        return strout
 
 
-    def print_summary(self, alerts):
-        if len(alerts) == 0:
-            print("No active alerts for specified area: '%s'" % (sys.argv[2]))
-        for key in alerts.keys():
-            print(key + ":")
-            for value in alerts[key]:
-                print('\t%s county, %s' % (value['local'], value['state']))
+
+    def print_titles(self, alert_data):
+        strout = ''
+        for alert in alert_data:
+            strout = strout + alert['title'] + '\n'
+        return strout
 
 
-    def print_alertobj(self, alert_data):
+    def print_obj(self, alert_data):
         if alert_data == []:
             print("No alerts")
         else:
@@ -437,7 +375,7 @@ class FormatAlerts(object):
             pp = pprint.PrettyPrinter(indent=4)
             pp.pprint(alert_data)
 
-    def alerts(self, alert_data):
+    def print_alerts(self, alert_data):
         outstr = ''
         if alert_data == []:
             outstr = "No Active Alerts"
@@ -448,70 +386,183 @@ class FormatAlerts(object):
         return outstr
 
 
-    def jsonout(self, alerts):
+    def jsonout(self, alert_data):
         '''dump given alerts to json'''
-        jsonobj = json.dumps(alerts)
+        jsonobj = json.dumps(alert_data)
         return jsonobj
 
 
 class Alerts(object):
-    def __init__(self):
-        pass
+    '''
+    Alerts object that controls interaction with the samecodes and capparser classes/methods.
+    Pass state='' or geocodes='samecodes_list' to change which feed is being parsed
+    passing a list of samecodes will determine if they are in the same state and pick
+    the correct feed or use the US feed if they're in different states
+    '''
+    def __init__(self, state='', geocodes='', load=True):
+        '''
+        init Alerts, default to National Feed, set state or geocodes to define a feed for a given area.
+        if geocodes are specified, then all alerts objects will be limited to those areas
+        '''
+        self.state = state
+        self.geo = GeoDB()
+        self.output = FormatAlerts()
+        if geocodes == '':
+            if self.state == '':
+                self.scope = 'US'
+            else:
+                self.scope = state
+        else:
+            self.scope = self.geo.getfeedscope(geocodes)
 
+        if load == True:
+            self.load_alerts()
+            
+
+    def load_alerts(self):
+        '''manually load the cap feed/alerts'''
+        self.cap = CapAlertsFeed(state=self.scope, geo=self.geo)
+        self._alerts = self.cap.alerts
+
+
+    def refresh_alerts(self):
+        self.cap.reload_alerts()
+        self.load_alerts()
+
+
+    def set_state(self, state):
+        '''sets state, reloads alerts unless told otherwise'''
+        if len(state) == 2:
+            self.state = state.upper()
+            self.scope = self.state
+            self.load_alerts_from_feed()
+
+
+    def target_area(self, locations):
+        '''
+        TODO: not used yet
+        sets target areas to be used in all limiting functions
+        '''
+        self.targetareas = locations
+
+
+    @property
+    def json(self):
+        '''returns json object of all alerts on specified feed (National feed by default)'''
+        alerts = self.cap.alerts
+        jsonobj = self.output.jsonout(alerts)
+        return jsonobj
+
+
+    @property
+    def pyobj(self):
+        '''returns python object of all alerts for specified feed(National by default)'''
+        if self.geocodes:
+            alerts = self.cap.alerts
+            
+        alerts = self.cap.alerts
+        jsonobj = self.output.jsonout(alerts)
+        
 
     def national_summary(self):
         cap = CapAlertsFeed(state='US')
-        outstr = cap.output.print_alerts_summary()
-        return outstr
+        activealerts = cap.alerts
+        self.output.print_summary(activealerts)
 
 
-    def state_summary(self, state):
+    def state_summary(self, state=''):
         '''print all alerts for a given state'''
-        cap = CapAlertsFeed(state=state)
-        cap.output.print_alerts_summary()
+        if state == '':
+            state = self.state
+        alert_data = self.cap.alerts
+        self.output.print_summary(alert_data)
 
 
-    def activefor_county(self, location, formatout='print'):
-        '''display alerts for a county/state'''
-        cap = CapAlertsFeed(location['state'])
-        alerts = cap.alerts_by_county_state(location['county'], location['state'])
-        if formatout == 'print':
-            strout = cap.output.alerts(alerts)
-        elif formatout == 'json':
-            strout = cap.output.jsonout(alerts)
-        return strout
+    def alerts_by_samecodes(self, geocodes):
+        '''returns alerts for a given SAME code'''
+        cap = CapAlertsFeed(state='US')
+        activealerts = cap.alerts
+        location_alerts = []
+        for alert in activealerts.keys():
+            for location in activealerts[alert]['locations']:
+                if location['code'] in geocodes:
+                    location_alerts.append(activealerts[alert])
+        return location_alerts
 
 
-    def activefor_samecodes(self, geocodes, formatout='print'):
-        geocodes = geocodes.split(',')
-        same = SameCodes()
-        scope = same.getfeedscope(geocodes)
-        cap = CapAlertsFeed(state=scope, same=same)
-        alerts = cap.alerts_by_samecodes(geocodes)
-        if formatout == 'print':
-            strout = cap.output.alerts(alerts)
-        elif formatout == 'json':
-            strout = cap.output.jsonout(alerts)
-        return strout
+    def alerts_by_county_state(self, req_location):
+        '''returns alerts for given county, state'''
+        alert_data = self.cap.alerts
+        county = req_location['local']
+        state = req_location['state']
+        location_alerts = []
+        for alert in alert_data.keys():
+            for location in  alert_data[alert]['locations']:
+                if location['state'] == str(state) and location['local'] == str(county):
+                    location_alerts.append(alert_data[alert])
+        return location_alerts
+
+
+    def summary(self):
+        alert_data = self.cap.alerts
+        alert_summary = {}
+        if len(alert_data) == 0:
+            return {}
+        else:
+            for item in alert_data:
+                item = alert_data[item]
+                alertareas = item['locations']
+                a_type = item['type']
+                for area in alertareas:
+                    if a_type not in alert_summary:
+                        alert_summary[a_type] = list()
+                    if area not in alert_summary[a_type]:
+                        alert_summary[a_type].append(area)
+        return alert_summary
+
+#----------------------------------------------------
+
+    def alerts_by_state(self, alert_data, state):
+        location_alerts = []
+        for alert in alert_data.keys():
+            for location in alert_data[alert]['locations']:
+                if location['state'] == state:
+                    location_alerts.append(alert_data[alert])
+        return location_alerts
+
+    @property
+    def active_locations(self, alert_data):
+        '''returns list of all active locations'''
+        warned_areas = {}
+        for alert in alert_data.keys():
+            for location in alert_data[alert]['locations']:
+                if location['code'] not in list(warned_areas.keys()):
+                    warned_areas[location['code']] = [alert]
+                else:
+                    warned_areas[location['code']].append(alert)
+        return warned_areas
+
+
+def alert_type(alert):
+    '''return alert type for a given alert'''
+    title = alert['title']
+    a_type = title.split('issued')[0].strip()
+    return a_type
 
 
 
-def test_same_lookup():
-    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
-    same = SameCodes()
-    req_location = { 'code': '016027'}
-    response = same.location_lookup(req_location)
-    assert response == expected
 
-def test_county_lookup():
-    expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
-    same = SameCodes()
-    req_location = {'state': 'ID', 'local': 'Canyon'}
-    response = same.location_lookup(req_location)
-    assert response == expected
+
+
+
+
+
+
+
+
+
 
 
 
 if __name__ == "__main__":
     pass
-

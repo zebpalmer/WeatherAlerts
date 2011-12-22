@@ -1,20 +1,34 @@
-.. WeatherAlerts documentation master file, created by
-   sphinx-quickstart on Tue Dec 20 21:46:12 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+WeatherAlerts Docs
+**********************
 
-Welcome to WeatherAlerts's documentation!
-=========================================
+.. Note::
+   This documentation is a work in progress, I hope to have it completed by the 1.0 release of WeatherAlerts.
 
-Contents:
+
+Welcome!
+==========
+WeatherAlerts is a python project I started in Nov 2011 as part of another weather/python project I was working on. 
+I wanted to create a python module to interact with the Emergency Alerts data provided free from the 
+National Weather Service, rather than have to sign up and potentially pay a 3rd party to give me access to this data. 
+Please take a look through the documentation here, if you still have questions, contact me. 
+
+
+Documentation Contents
+-----------------------
 
 .. toctree::
    :maxdepth: 2
+
+   about
+   use
+   devstatus
+   contact
+
+
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
