@@ -413,7 +413,7 @@ class Alerts(object):
             else:
                 self.scope = state
         else:
-            self.scope = self.same.getfeedscope(geocodes)
+            self.scope = self.geo.getfeedscope(geocodes)
 
         if load == True:
             self.load_alerts()
