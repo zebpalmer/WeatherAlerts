@@ -3,6 +3,12 @@ WeatherAlerts README
 =====================
 
 
+Documentation Note:
+===================
+I am in the process of moving documentation to http://weatheralerts.readthedocs.org/ and of course expanding it. The docs are now part of this git repo and can be found in /docs so feel free to contribute there if you want to add something. 
+ 
+
+
 
 Documentation
 ==============
@@ -20,7 +26,7 @@ Other modules I've seen (or written) get data from 3rd parties that require an A
 
 This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
 
-This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit http://weatheralerts.readthedocs.org_
+This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_  For current documentation, visit the online docs at http://weatheralerts.readthedocs.org/
 
 
 Install
