@@ -23,7 +23,7 @@ Documentation Contents
    use
    devstatus
    contact
-
+   changelog
 
 
 Indices and tables
