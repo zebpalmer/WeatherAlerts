@@ -76,6 +76,24 @@ Currently the module provides a json output that memics the CAP standard but wit
 other manipulations. Second (and not recommended) you can take the formatted output from one of the output methods
 and display that directly.</p>
 </div>
+<div class="section" id="command-line-tools">
+<h3>Command Line Tools<a class="headerlink" href="#command-line-tools" title="Permalink to this headline">¶</a></h3>
+<p>Currently there are two command line tools (not counting the nagios plugin) that are included with WeatherAlerts.</p>
+<ol class="arabic simple">
+<li>MonitorAlertsByCounty.py</li>
+<li>NWS_Alerts.py</li>
+</ol>
+<div class="section" id="monitoralertsbycounty-py">
+<h4>MonitorAlertsByCounty.py<a class="headerlink" href="#monitoralertsbycounty-py" title="Permalink to this headline">¶</a></h4>
+<p>This script, given County and State as command line arguments, will display active alerts refreshing the feed every 2-3 minutes.
+Example: <tt class="docutils literal"><span class="pre">MonitorAlertsByCounty.py</span>&nbsp; <span class="pre">Canyon</span> <span class="pre">ID</span></tt></p>
+</div>
+<div class="section" id="nws-alerts-py">
+<h4>NWS_Alerts.py<a class="headerlink" href="#nws-alerts-py" title="Permalink to this headline">¶</a></h4>
+<p>Is a general command line interface to the WeatherAlerts module, it allows you to query alerts based on SAMECODES, County/State as well as State and National Summaries.
+this will be documented soon, but if you look at the script it should be clear.</p>
+</div>
+</div>
 </div>
 </div>
 
@@ -91,6 +109,11 @@ and display that directly.</p>
 <li><a class="reference internal" href="#use-cases">Use cases</a><ul>
 <li><a class="reference internal" href="#nagios">Nagios</a></li>
 <li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#command-line-tools">Command Line Tools</a><ul>
+<li><a class="reference internal" href="#monitoralertsbycounty-py">MonitorAlertsByCounty.py</a></li>
+<li><a class="reference internal" href="#nws-alerts-py">NWS_Alerts.py</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -34,5 +34,22 @@ and display that directly.
 
 
 
+Command Line Tools
+^^^^^^^^^^^^^^^^^^^^
+
+Currently there are two command line tools (not counting the nagios plugin) that are included with WeatherAlerts. 
+
+#. MonitorAlertsByCounty.py
+#. NWS_Alerts.py
 
 
+MonitorAlertsByCounty.py
+""""""""""""""""""""""""
+This script, given County and State as command line arguments, will display active alerts refreshing the feed every 2-3 minutes. 
+Example: ``MonitorAlertsByCounty.py  Canyon ID`` 
+
+
+NWS_Alerts.py
+""""""""""""""
+Is a general command line interface to the WeatherAlerts module, it allows you to query alerts based on SAMECODES, County/State as well as State and National Summaries. 
+this will be documented soon, but if you look at the script it should be clear. 
