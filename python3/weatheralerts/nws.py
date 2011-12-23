@@ -4,6 +4,9 @@
 WeatherAlerts.nws
 *******************
 
+File Information
+==================
+
 **Project Home:**
   http://github.com/zebpalmer/WeatherAlerts
 
@@ -19,14 +22,18 @@ WeatherAlerts.nws
   GPLv3 - full text included in LICENSE.txt
 
 
-**License Notice:**
-  This program is free software you can redistribute it and or modify it under the terms of the GNU General Public
-  License as published by the Free Software Foundation, either version 3 of the License, or (at your option)
-  any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-  See the GNU General Public License for more details.  You should have received a copy of the GNU General Public
-  License along with this program. If not, see <http://www.gnu.org/licenses/>.
+License Notice:
+"""""""""""""""""
+This program is free software you can redistribute it and or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.  You should have received a copy of the GNU General Public
+License along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
+Code Documentation
+===================
 
 '''
 
@@ -49,8 +56,7 @@ import json
 
 
 class GeoDB(object):
-    '''Class to interact with samecodes object and (soon) other geo data
-    TODO: move interaction with samecodes data to here'''
+    '''Interact with samecodes object and other geolocation data that will be added soon'''
     def __init__(self):
         self.__same = SameCodes()
         self.samecodes = self.__same.samecodes
@@ -59,6 +65,7 @@ class GeoDB(object):
     def location_lookup(self, req_location):
         '''
         returns full location given samecode or county and state. Returns False if not valid.
+        *currently locations are a dictionary, once other geo data is added, they will move to a location class/obj*
         '''
         location = False
         locations = self.samecodes
@@ -74,25 +81,23 @@ class GeoDB(object):
 
 
     def lookup_samecode(self, local, state):
-        '''return same code given county, state'''
+        '''Given County, State return the SAME code for specified location. Return False if not found'''
         for location in self.samecodes:
             if state == self.samecodes[location]['state']:
                 if local == self.samecodes[location]['local']:
                     return self.samecodes[location]
-
         return False
 
     def getstate(self, geosame):
-        '''Return the state of a given SAME code'''
+        '''Given a SAME code, return the state that SAME code is in'''
         state = self.samecodes[geosame]['state']
         return state
 
 
     def getfeedscope(self, geocodes):
-        '''Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
-           Otherwise it returns 'US'. This is used to determine which NWS feed needs to be parsed to get
-           all alerts for the given SAME codes'''
-
+        '''Given multiple SAME codes, determine if they are all in one state. If so, it returns that state.
+           Otherwise return 'US'. This is used to determine which NWS feed needs to be parsed to get
+           all alerts for the requested SAME codes'''
         states = self.get_states_from_samecodes(geocodes)
         if len(states) >= 2:
             return 'US'
@@ -101,7 +106,10 @@ class GeoDB(object):
 
 
     def get_states_from_samecodes(self, geocodes):
-        '''Returns all states for a given list of SAME codes'''
+        '''Returns all states for a given list of SAME codes
+        *Shouldn't be used to determine feed scope, please use getfeedscope()*
+
+        '''
         states = []
         for code in geocodes:
             try:
@@ -121,7 +129,10 @@ class GeoDB(object):
 #### GET/PARSE SAME CODES TABLE ##############################################################
 
 class SameCodes(object):
-    '''Download and parse samecodes database into an object, cache it'''
+    '''
+    Is used to download, parse and cache the SAME codes data from the web.
+    *All interaction with the SAME codes data should be done in the GeoGB classy*
+    '''
     def __init__(self):
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'

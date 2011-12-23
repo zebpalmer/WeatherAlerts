@@ -11,7 +11,7 @@ weatheralerts.nws.GeoDB class module.html
 weatheralerts.nws.Alerts.alerts_by_county_state method module.html
 weatheralerts.nws.SameCodes class module.html
 weatheralerts.nws.Alerts.pyobj attribute module.html
-weatheralerts.nws.CapAlertsFeed.set_state method module.html
+weatheralerts.nws.GeoDB.getstate method module.html
 weatheralerts.nws.Alerts.alerts_by_samecodes method module.html
 weatheralerts.nws.CapAlertsFeed.alerts attribute module.html
 weatheralerts.nws.Alerts.active_locations attribute module.html
@@ -21,7 +21,7 @@ weatheralerts.nws.GeoDB.getfeedscope method module.html
 weatheralerts.nws.GeoDB.lookup_samecode method module.html
 weatheralerts.nws.Alerts.set_state method module.html
 weatheralerts.nws.CapAlertsFeed.reload_alerts method module.html
-weatheralerts.nws.GeoDB.getstate method module.html
+weatheralerts.nws.CapAlertsFeed.set_state method module.html
 weatheralerts.nws.Alerts class module.html
 weatheralerts.nws.GeoDB.get_states_from_samecodes method module.html
 weatheralerts.nws.Alerts.state_summary method module.html
