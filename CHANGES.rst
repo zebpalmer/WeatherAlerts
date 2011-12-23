@@ -4,7 +4,7 @@ Release Changes
 
 
 
-**v0.4.7**
+**v0.4.8**
 - rather large changes to classes
 - still running v0.4.5 in python2 installs will update that in 0.4.8 
   which will begin a release canidate for v0.5.0
