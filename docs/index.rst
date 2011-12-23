@@ -24,7 +24,7 @@ Documentation Contents
    devstatus
    contact
    changelog
-
+   module
 
 Indices and tables
 ==================
