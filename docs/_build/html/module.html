@@ -47,19 +47,37 @@
             
   <div class="section" id="module-weatheralerts.nws">
 <h1>Module Documentation<a class="headerlink" href="#module-weatheralerts.nws" title="Permalink to this headline">¶</a></h1>
-<p>Project home: github.com/zebpalmer/WeatherAlerts
-Original Author: Zeb Palmer   (www.zebpalmer.com)
-For more info, please see the README.rst</p>
-<p>This program is free software you can redistribute it and
-or modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version
-3 of the License, or (at your option) any later version.</p>
-<p>This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.</p>
-<p>You should have received a copy of the GNU General Public License
-along with this program.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+<p>Below you&#8217;ll find the documentation for the various classes and methods in WeatherAlerts.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This page is dynamically generated from the documentation written into the code</p>
+</div>
+<div class="section" id="weatheralerts-nws">
+<h2>WeatherAlerts.nws<a class="headerlink" href="#weatheralerts-nws" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="file-information">
+<h3>File Information<a class="headerlink" href="#file-information" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><strong>Project Home:</strong></dt>
+<dd><a class="reference external" href="http://github.com/zebpalmer/WeatherAlerts">http://github.com/zebpalmer/WeatherAlerts</a></dd>
+<dt><strong>Original Author:</strong></dt>
+<dd>Zeb Palmer <a class="reference external" href="http://www.zebpalmer.com">http://www.zebpalmer.com</a></dd>
+<dt><strong>Documentation:</strong></dt>
+<dd><a class="reference external" href="http://weatheralerts.readthedocs.org">http://weatheralerts.readthedocs.org</a></dd>
+<dt><strong>License:</strong></dt>
+<dd>GPLv3 - full text included in LICENSE.txt</dd>
+</dl>
+<div class="section" id="license-notice">
+<h4>License Notice:<a class="headerlink" href="#license-notice" title="Permalink to this headline">¶</a></h4>
+<p>This program is free software you can redistribute it and or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.  You should have received a copy of the GNU General Public
+License along with this program. If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+</div>
+</div>
+<div class="section" id="code-documentation">
+<h3>Code Documentation<a class="headerlink" href="#code-documentation" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="weatheralerts.nws.Alerts">
 <em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">Alerts</tt><big>(</big><em>state=''</em>, <em>geocodes=''</em>, <em>load=True</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts" title="Permalink to this definition">¶</a></dt>
@@ -151,41 +169,43 @@ as well to save some processing</p>
 <dl class="class">
 <dt id="weatheralerts.nws.GeoDB">
 <em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">GeoDB</tt><a class="headerlink" href="#weatheralerts.nws.GeoDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to interact with samecodes object and (soon) other geo data
-TODO: move interaction with samecodes data to here</p>
+<dd><p>Interact with samecodes object and other geolocation data that will be added soon</p>
 <dl class="method">
 <dt id="weatheralerts.nws.GeoDB.get_states_from_samecodes">
 <tt class="descname">get_states_from_samecodes</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.get_states_from_samecodes" title="Permalink to this definition">¶</a></dt>
-<dd>Returns all states for a given list of SAME codes</dd></dl>
+<dd>Returns all states for a given list of SAME codes
+<em>Shouldn&#8217;t be used to determine feed scope, please use getfeedscope()</em></dd></dl>
 
 <dl class="method">
 <dt id="weatheralerts.nws.GeoDB.getfeedscope">
 <tt class="descname">getfeedscope</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.getfeedscope" title="Permalink to this definition">¶</a></dt>
-<dd>Given multiple SAME codes, this determines if they are all in one state if so, it returns that state.
-Otherwise it returns &#8216;US&#8217;. This is used to determine which NWS feed needs to be parsed to get
-all alerts for the given SAME codes</dd></dl>
+<dd>Given multiple SAME codes, determine if they are all in one state. If so, it returns that state.
+Otherwise return &#8216;US&#8217;. This is used to determine which NWS feed needs to be parsed to get
+all alerts for the requested SAME codes</dd></dl>
 
 <dl class="method">
 <dt id="weatheralerts.nws.GeoDB.getstate">
 <tt class="descname">getstate</tt><big>(</big><em>geosame</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.getstate" title="Permalink to this definition">¶</a></dt>
-<dd>Return the state of a given SAME code</dd></dl>
+<dd>Given a SAME code, return the state that SAME code is in</dd></dl>
 
 <dl class="method">
 <dt id="weatheralerts.nws.GeoDB.location_lookup">
 <tt class="descname">location_lookup</tt><big>(</big><em>req_location</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.location_lookup" title="Permalink to this definition">¶</a></dt>
-<dd>returns full location given samecode or county and state. Returns False if not valid.</dd></dl>
+<dd>returns full location given samecode or county and state. Returns False if not valid.
+<em>currently locations are a dictionary, once other geo data is added, they will move to a location class/obj</em></dd></dl>
 
 <dl class="method">
 <dt id="weatheralerts.nws.GeoDB.lookup_samecode">
 <tt class="descname">lookup_samecode</tt><big>(</big><em>local</em>, <em>state</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.lookup_samecode" title="Permalink to this definition">¶</a></dt>
-<dd>return same code given county, state</dd></dl>
+<dd>Given County, State return the SAME code for specified location. Return False if not found</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="weatheralerts.nws.SameCodes">
 <em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">SameCodes</tt><a class="headerlink" href="#weatheralerts.nws.SameCodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download and parse samecodes database into an object, cache it</p>
+<dd><p>Is used to download, parse and cache the SAME codes data from the web.
+<em>All interaction with the SAME codes data should be done in the GeoGB classy</em></p>
 <dl class="method">
 <dt id="weatheralerts.nws.SameCodes.reload">
 <tt class="descname">reload</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.nws.SameCodes.reload" title="Permalink to this definition">¶</a></dt>
@@ -204,6 +224,8 @@ all alerts for the given SAME codes</dd></dl>
 <dd>return alert type for a given alert</dd></dl>
 
 </div>
+</div>
+</div>
 
 
           </div>
@@ -211,6 +233,21 @@ all alerts for the given SAME codes</dd></dl>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Module Documentation</a><ul>
+<li><a class="reference external" href="#weatheralerts-nws">WeatherAlerts.nws</a><ul>
+<li><a class="reference external" href="#file-information">File Information</a><ul>
+<li><a class="reference external" href="#license-notice">License Notice:</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#code-documentation">Code Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
             <h4>Previous topic</h4>
             <p class="topless"><a href="changelog.html"
                                   title="previous chapter">Release Changes</a></p>
