@@ -25,7 +25,11 @@
 import os
 import sys
 import re
-from urllib import request
+try:
+    from urllib import request
+except:
+    from urllib import urlopen as request
+    print("You are trying to run the python3 version in python2, this won't go well")
 from xml.dom import minidom
 from datetime import datetime, timedelta
 import pickle as pickle
@@ -199,7 +203,7 @@ class CapAlertsFeed(object):
             self.geo = GeoDB()
         else:
             self.geo = geo
-            
+
         self.samecodes = self.geo.samecodes
         self._cachetime = 3
         self._alerts_ts = datetime.now()
@@ -417,7 +421,7 @@ class Alerts(object):
 
         if load == True:
             self.load_alerts()
-            
+
 
     def load_alerts(self):
         '''manually load the cap feed/alerts'''
@@ -459,10 +463,10 @@ class Alerts(object):
         '''returns python object of all alerts for specified feed(National by default)'''
         if self.geocodes:
             alerts = self.cap.alerts
-            
+
         alerts = self.cap.alerts
         jsonobj = self.output.jsonout(alerts)
-        
+
 
     def national_summary(self):
         cap = CapAlertsFeed(state='US')
