@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Nagios Monitoring &mdash; WeatherAlerts v1.0 documentation</title>
+    <title>Release Changes &mdash; WeatherAlerts v1.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,8 +24,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="WeatherAlerts v1.0 documentation" href="index.html" />
-    <link rel="next" title="Development Status" href="devstatus.html" />
-    <link rel="prev" title="Nagios Monitoring" href="" /> 
+    <link rel="prev" title="Contact" href="contact.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,10 +34,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="devstatus.html" title="Development Status"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="#" title="Nagios Monitoring"
+          <a href="contact.html" title="Contact"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">WeatherAlerts v1.0 documentation</a> &raquo;</li> 
       </ul>
@@ -49,9 +45,56 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="nagios-monitoring">
-<h1>Nagios Monitoring<a class="headerlink" href="#nagios-monitoring" title="Permalink to this headline">¶</a></h1>
-<p>The example Nagios plugin does work though it needs improvement to add more configuration options. The plugin accepts a list of SAME codes separated by commas, no spaces. I&#8217;ll post example nagios config files once I get the nws-alerts packaged and available via easy_install/pip. For now, anyone with a bit of nagios experience and python knowledge should be able to get it running in a few minutes.</p>
+  <div class="section" id="release-changes">
+<h1>Release Changes<a class="headerlink" href="#release-changes" title="Permalink to this headline">¶</a></h1>
+<p><strong>v0.4.8</strong></p>
+<ul class="simple">
+<li>rather large changes to classes</li>
+<li>still running v0.4.5 in python2 installs will update that in 0.4.8 which will begin a release canidate for v0.5.0</li>
+</ul>
+<p><strong>v0.4.5</strong></p>
+<ul class="simple">
+<li>minor packaging changes</li>
+<li>added initial suppor for object reload based on age</li>
+</ul>
+<p><strong>v0.4.4</strong></p>
+<ul class="simple">
+<li>Reorganized for easier packaging</li>
+<li>Supporting both Python2 and Python3 in the installer</li>
+<li>tox automated virtenv &amp; tests for python 2.6, 2.7, 3.2</li>
+<li>Added command line monitoring script</li>
+</ul>
+<p><strong>v0.4.1</strong></p>
+<ul class="simple">
+<li>Changing project name to better fit PyPi</li>
+<li>Packaging as an installable module</li>
+</ul>
+<p><strong>v0.4</strong></p>
+<ul class="simple">
+<li>Added basic nose test script</li>
+<li>Refactored classes</li>
+<li>Added Alerts() class</li>
+<li>Optional json output (getting ready for web service/api)</li>
+<li>Various code cleanup/improvements</li>
+</ul>
+<p><strong>v0.3.1</strong></p>
+<ul class="simple">
+<li>bugfix only</li>
+</ul>
+<p><strong>v0.3:</strong></p>
+<ul class="simple">
+<li>refactored nagios plugin, it now uses (only) SAME code(s)</li>
+<li>Moved SAME code related methods to new class which can be used without parsing an alerts feed.</li>
+</ul>
+<p><strong>v0.2:</strong></p>
+<ul class="simple">
+<li>moved master branch to python 3.x</li>
+<li>maintaining python2.x branch</li>
+</ul>
+<p><strong>v0.1:</strong></p>
+<ul class="simple">
+<li>First tagged release</li>
+</ul>
 </div>
 
 
@@ -61,14 +104,11 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href=""
-                        title="previous chapter">Nagios Monitoring</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="devstatus.html"
-                        title="next chapter">Development Status</a></p>
+  <p class="topless"><a href="contact.html"
+                        title="previous chapter">Contact</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/nagios.txt"
+    <li><a href="_sources/changelog.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -95,16 +135,13 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="devstatus.html" title="Development Status"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="#" title="Nagios Monitoring"
+          <a href="contact.html" title="Contact"
              >previous</a> |</li>
         <li><a href="index.html">WeatherAlerts v1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Zeb Palmer.
+        &copy; Copyright Zeb Palmer, Licensed under(GPLv3).
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
