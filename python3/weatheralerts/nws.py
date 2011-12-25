@@ -214,23 +214,26 @@ class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
-    def __init__(self, state='US', geo=None):
+    def __init__(self, state='US', geo=None, maxage=3, reload=False):
         self._alerts = ''
         self._feedstatus = ''
-        self.state = self.set_state(state, refresh=False)
+        self._cachetime = maxage
+        self.state = self._set_state(state, refresh=False)
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
         if geo == None:
             self.geo = GeoDB()
         else:
             self.geo = geo
-
         self.samecodes = self.geo.samecodes
+
         self._cachetime = 3
         self._alerts_ts = datetime.now()
-        self.lookuptable = {}
+        self._lookuptable = {}
+        self._reload = reload
+        # now for the real work
         self._load_alerts()
-        print(self.lookuptable)
+        
 
 
     @property
@@ -239,12 +242,8 @@ class CapAlertsFeed(object):
         self.check_objectage()
         return self._alerts
 
-    def set_maxage(self, maxage=3):
-        '''Override the default max age for the alerts cache'''
-        self._cachetime = maxage
 
-
-    def set_state(self, state, refresh=True):
+    def _set_state(self, state, refresh=True):
         '''sets state, reloads alerts unless told otherwise'''
         if len(state) == 2:
             self.state = state.upper()
@@ -376,12 +375,12 @@ class CapAlertsFeed(object):
 
     def _create_lookuptable(self, samecode, alert_num, alert_type):
         alert_tuple = (alert_num, alert_type)
-        if samecode in self.lookuptable:
-            self.lookuptable[samecode].append(alert_tuple)
+        if samecode in self._lookuptable:
+            self._lookuptable[samecode].append(alert_tuple)
         else:
             _alertids = []
             _alertids.append(alert_tuple)
-            self.lookuptable[samecode] = _alertids
+            self._lookuptable[samecode] = _alertids
     
 
 class FormatAlerts(object):
