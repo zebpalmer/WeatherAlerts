@@ -193,7 +193,7 @@ class SameCodes(object):
             if file_ts > maxage:
                 try:
                     cache = open(cache_file, 'rb')
-                    self.samecodes = pickle.load(cache)
+                    self._samecodes = pickle.load(cache)
                     cache.close()
                     #print "Loaded SAME codes from Cache"
                     return True
@@ -214,21 +214,26 @@ class CapAlertsFeed(object):
     '''Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
-    def __init__(self, state='US', geo=None):
+    def __init__(self, state='US', geo=None, maxage=3, reload=False):
         self._alerts = ''
         self._feedstatus = ''
-        self.state = self.set_state(state, refresh=False)
+        self._cachetime = maxage
+        self.state = self._set_state(state, refresh=False)
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
         if geo == None:
             self.geo = GeoDB()
         else:
             self.geo = geo
-
         self.samecodes = self.geo.samecodes
+
         self._cachetime = 3
         self._alerts_ts = datetime.now()
+        self._lookuptable = {}
+        self._reload = reload
+        # now for the real work
         self._load_alerts()
+        
 
 
     @property
@@ -237,12 +242,8 @@ class CapAlertsFeed(object):
         self.check_objectage()
         return self._alerts
 
-    def set_maxage(self, maxage=3):
-        '''Override the default max age for the alerts cache'''
-        self._cachetime = maxage
 
-
-    def set_state(self, state, refresh=True):
+    def _set_state(self, state, refresh=True):
         '''sets state, reloads alerts unless told otherwise'''
         if len(state) == 2:
             self.state = state.upper()
@@ -311,7 +312,7 @@ class CapAlertsFeed(object):
         return xml
 
     def _parse_cap(self, xmlstr):
-        '''parse the feed contents'''
+        '''parse and cache the feed contents'''
         main_dom = minidom.parseString(xmlstr)
 
         xml_entries = main_dom.getElementsByTagName('entry')
@@ -342,6 +343,7 @@ class CapAlertsFeed(object):
                 except IndexError:
                     return {}
             entry['type'] = pat.match(entry['title']).group(1)
+            
             locations = []
             for geo in entry['geocodes']:
                 try:
@@ -351,6 +353,11 @@ class CapAlertsFeed(object):
                                  'local': geo,
                                  'state': 'unknown'}
                 locations.append(location)
+
+                # We're going to create a table to reference alerts by
+                # TODO: make all alert lookups use the resulting data 
+                self._create_lookuptable(geo, entry_num, entry['type'])
+
             target_areas = []
             areas = str(entry['cap:areaDesc']).split(';')
             for area in areas:
@@ -359,14 +366,22 @@ class CapAlertsFeed(object):
             entry['target_areas'] = target_areas
             alerts[entry_num] = entry
             del entry
+        # cache alerts data
         cache = open(self._alert_cache_file, 'wb')
         pickle.dump(alerts, cache)
         cache.close()
         self._alerts_ts = datetime.now()
         return alerts
 
-
-
+    def _create_lookuptable(self, samecode, alert_num, alert_type):
+        alert_tuple = (alert_num, alert_type)
+        if samecode in self._lookuptable:
+            self._lookuptable[samecode].append(alert_tuple)
+        else:
+            _alertids = []
+            _alertids.append(alert_tuple)
+            self._lookuptable[samecode] = _alertids
+    
 
 class FormatAlerts(object):
     def __init__(self):
@@ -555,17 +570,17 @@ class Alerts(object):
                     location_alerts.append(alert_data[alert])
         return location_alerts
 
-    @property
-    def active_locations(self, alert_data):
-        '''returns list of all active locations'''
-        warned_areas = {}
-        for alert in alert_data.keys():
-            for location in alert_data[alert]['locations']:
-                if location['code'] not in list(warned_areas.keys()):
-                    warned_areas[location['code']] = [alert]
-                else:
-                    warned_areas[location['code']].append(alert)
-        return warned_areas
+    #@property
+    #def active_locations(self, alert_data):
+        #'''returns list of all active locations'''
+        #warned_areas = {}
+        #for alert in alert_data.keys():
+            #for location in alert_data[alert]['locations']:
+                #if location['code'] not in list(warned_areas.keys()):
+                    #warned_areas[location['code']] = [alert]
+                #else:
+                    #warned_areas[location['code']].append(alert)
+        #return warned_areas
 
 
 def alert_type(alert):
@@ -583,11 +598,5 @@ def alert_type(alert):
 
 
 
-
-
-
-
-
-
 if __name__ == "__main__":
-    pass
+    nws_alerts = Alerts(state='ID')
