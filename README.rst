@@ -6,7 +6,7 @@ WeatherAlerts README
 Please note:
 ===================
 Haven't had much time to work with this project over the last few months. 
-I'm starting a COMPLETE rewrite of this module, If you want a working copy of the code you can install via pip (See below)
+But now that I do, I'm starting a COMPLETE rewrite. If you want a working copy of the code you can install via pip (See below)
 or download Tag 0.4.7 on github.
 
 
