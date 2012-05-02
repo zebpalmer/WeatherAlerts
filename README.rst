@@ -3,11 +3,11 @@ WeatherAlerts README
 =====================
 
 
-Documentation Note:
+Please note:
 ===================
-I am in the process of moving documentation to http://weatheralerts.readthedocs.org/ and of course expanding it. The docs are now part of this git repo and can be found in /docs so feel free to contribute there if you want to add something. 
- 
-
+Haven't had much time to work with this project over the last few months. 
+I'm starting a COMPLETE rewrite of this module, If you want a working copy of the code you can install via pip (See below)
+or download Tag 0.4.7 on github.
 
 
 Documentation
