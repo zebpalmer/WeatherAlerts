@@ -1,4 +1,24 @@
-class CapAlertsFeed(object):
+import os
+import sys
+import re
+try:
+    from urllib import request
+except:
+    from urllib import urlopen as request
+    print("You are trying to run the python3 version in python2, this won't go well")
+from xml.dom import minidom
+from datetime import datetime, timedelta
+import pickle
+import tempfile
+import json
+
+
+
+from .model import Alert
+from .geo import GeoDB
+import tempfile
+
+class AlertsFeed(object):
     '''Fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
        as well to save some processing'''
@@ -141,10 +161,9 @@ class CapAlertsFeed(object):
                                  'local': geo,
                                  'state': 'unknown'}
                 locations.append(location)
-
-                # We're going to create a table to reference alerts by
-                # TODO: make all alert lookups use the resulting data 
-                self._create_lookuptable(geo, entry_num, entry['type'])
+                
+                #FIXME:
+                #self._create_lookuptable(geo, entry_num, entry['type'])
 
             target_areas = []
             areas = str(entry['cap:areaDesc']).split(';')
@@ -161,12 +180,12 @@ class CapAlertsFeed(object):
         self._alerts_ts = datetime.now()
         return alerts
 
-    def _create_lookuptable(self, samecode, alert_num, alert_type):
-        alert_tuple = (alert_num, alert_type)
-        if samecode in self._lookuptable:
-            self._lookuptable[samecode].append(alert_tuple)
-        else:
-            _alertids = []
-            _alertids.append(alert_tuple)
-            self._lookuptable[samecode] = _alertids
+    #def _create_lookuptable(self, samecode, alert_num, alert_type):
+        #alert_tuple = (alert_num, alert_type)
+        #if samecode in self._lookuptable:
+            #self._lookuptable[samecode].append(alert_tuple)
+        #else:
+            #_alertids = []
+            #_alertids.append(alert_tuple)
+            #self._lookuptable[samecode] = _alertids
     

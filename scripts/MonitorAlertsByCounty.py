@@ -40,7 +40,7 @@ def monitor_alert_by_county(reqcounty='', reqstate=''):
 
     while True:
         try:
-            nws_alerts = nws.Alerts(state=reqstate)
+            nws_alerts = nws.WeatherAlerts(state=reqstate)
             active_alerts = nws_alerts.alerts_by_county_state(req_location)
             if len(active_alerts) == 0:
                 active_summary = "\n\tNo Alerts for {0}, {1}".format(reqcounty, reqstate)

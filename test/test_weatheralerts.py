@@ -4,7 +4,7 @@ from weatheralerts import nws
 
 def test_alerts_objcreation():
     #from nws_alerts import nws_alerts
-    alerts = nws.Alerts()
+    alerts = nws.WeatherAlerts()
 
 def test_same_objcreation():
     #from nws_alerts import nws_alerts
@@ -13,10 +13,10 @@ def test_same_objcreation():
 
 def test_cap_objcreation():
     #from nws_alerts import nws_alerts
-    cap = nws.CapAlertsFeed()
+    cap = nws.AlertsFeed()
 
 def test_cap_obj_reload():
-    cap = nws.CapAlertsFeed(state='ID')
+    cap = nws.AlertsFeed(state='ID')
     cap.reload_alerts()
 
 def test_samecodes_objcreation():

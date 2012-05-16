@@ -48,7 +48,7 @@ def check_alerts(alerts):
 
 def loadalerts(requested_geocodes):
     requested_geocodes = requested_geocodes.split(',')
-    nws_alerts = nws.Alerts(geocodes=requested_geocodes)
+    nws_alerts = nws.WeatherAlerts(geocodes=requested_geocodes)
     alert_data = nws_alerts.alerts_by_samecodes(requested_geocodes)
     check_alerts(alert_data)
 

@@ -1,3 +1,13 @@
+import tempfile
+import os
+import pickle
+from datetime import datetime, timedelta
+
+try:
+    from urllib import request
+except:
+    from urllib import urlopen as request
+
 class GeoDB(object):
     '''Interact with samecodes object and other geolocation data that will be added soon'''
     def __init__(self):
