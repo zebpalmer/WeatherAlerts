@@ -3,169 +3,59 @@ import re
 import requests
 from xml.dom import minidom
 from datetime import datetime, timedelta
-import pickle
 import tempfile
 
 from geo import GeoDB
 
+
 class AlertsFeed(object):
-    '''Fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
-       if an instance of the SameCodes class has already been created (to do a geo lookup), you can pass that
+    '''Fetch the NWS CAP/XML Alerts feed for the US or a single state if requested
+       if an instance of the GeoDB class has already been created, you can pass that
        as well to save some processing'''
-    def __init__(self, state='US', geo=None, maxage=3, feedreload=False):
+    def __init__(self, state='US', maxage=3, feedreload=False):
         self._alerts = ''
         self._feedstatus = ''
         self._cachetime = maxage
-        self.state = self._set_state(state, refresh=False)
+        self._state = state
         self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._alert_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self.state)
-        if geo == None:
-            self.geo = GeoDB()
-        else:
-            self.geo = geo
-        self.samecodes = self.geo.samecodes
-
+        self._feed_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self._state)
         self._cachetime = 3
-        self._alerts_ts = datetime.now()
         self._lookuptable = {}
-        self._reload = feedreload
-        # now for the real work
-        self._load_alerts()
+        self._get_alerts_feed()
 
-
-
-    @property
-    def alerts(self):
-        '''returns all alerts on feed'''
-        self.check_objectage()
-        return self._alerts
-
-
-    def _set_state(self, state, refresh=True):
-        '''sets state, reloads alerts unless told otherwise'''
-        if len(state) == 2:
-            self.state = state.upper()
-            if refresh == True:
-                self._alert_cache_file = self._cachedir + 'self.alerts_%s.cache' % (self.state)
-                self._load_alerts()
-            return state
-        else:
-            raise Exception('Error parsing given state')
-
-
-    def reload_alerts(self):
-        '''Reload alerts bypassing cache'''
-        self._load_alerts(refresh=True)
-
-
-    def check_objectage(self):
-        '''check age of alerts in this object, reload if past max cache time'''
-        maxage = datetime.now() - timedelta(minutes=self._cachetime)
-        if self._alerts_ts > maxage:
-            self.reload_alerts()
-
-
-    def _cached_alertobj(self):
-        '''If a recent cache exists, return it'''
-        if os.path.exists(self._alert_cache_file):
-            now = datetime.now()
-            maxage = now - timedelta(minutes=self._cachetime)
-            file_ts = datetime.fromtimestamp(os.stat(self._alert_cache_file).st_mtime)
+    def _get_feed_cache(self):
+        '''If a recent cache exists, return it, else return None'''
+        feed_cache = None
+        if os.path.exists(self._feed_cache_file):
+            maxage = datetime.now() - timedelta(minutes=self._cachetime)
+            file_ts = datetime.fromtimestamp(os.stat(self._feed_cache_file).st_mtime)
             if file_ts > maxage:
                 try:
-                    cache = open(self._alert_cache_file, 'rb')
-                    tmp_alerts = pickle.load(cache)
-                    cache.close()
+                    with open(self._feed_cache_file, 'rb') as cache:
+                        feed_cache = cache.read()
                 except Exception:
-                    # if any problems loading cache file, ignore and move on
-                    # (this is here to prevent issues switching between python2 and python3)
-                    tmp_alerts = None
-            else:
-                #"Alerts cache is old"
-                tmp_alerts = None
-        else:
-            #"No Alerts cache availible"
-            tmp_alerts = None
-        return tmp_alerts
+                    pass
+        return feed_cache
 
-
-    def _load_alerts(self, refresh=False):
+    def _get_alerts_feed(self, refresh=False):
         '''Load the alerts feed and parse it'''
-        if refresh == True:
-            self._alerts = self._parse_cap(self._get_nws_feed())
-        elif refresh == False:
-            cached = self._cached_alertobj()
-            if cached == None:
-                self._alerts = self._parse_cap(self._get_nws_feed())
-            else:
-                self._alerts = cached
-
+        cached = self._get_feed_cache()
+        if refresh is True or cached is None:
+            self._raw_feed = self._get_nws_feed()
+            self._save_feed_cache(self._raw_feed)
+        else:
+            self._raw_feed = cached
+        return self._raw_feed
 
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
-        url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self.state)
+        url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self._state)
         xml = requests.get(url).content
         return xml
 
-    def _parse_cap(self, xmlstr):
-        '''parse and cache the feed contents'''
-        main_dom = minidom.parseString(xmlstr)
-
-        xml_entries = main_dom.getElementsByTagName('entry')
-        tags = ['title', 'updated', 'published', 'id', 'summary', 'cap:effective', 'cap:expires', 'cap:status',
-                'cap:msgType', 'cap:category', 'cap:urgency', 'cap:severity', 'cap:certainty', 'cap:areaDesc',
-                'cap:geocode']
-
-        entry_num = 0
-        tmp_alerts = {}
-        pat = re.compile('(.*) issued')
-        for dom in xml_entries:
-            entry_num = entry_num + 1
-            entry = {}
-            for tag in tags:
-                try:
-                    if tag == 'cap:geocode':
-                        try:
-                            entry['geocodes'] = str(dom.getElementsByTagName('value')[0].firstChild.data).split(' ')
-                        except AttributeError:
-                            entry['geocodes'] = []
-                    else:
-                        try:
-                            entry[tag] = dom.getElementsByTagName(tag)[0].firstChild.data
-                            if entry['title'] == "There are no active watches, warnings or advisories":
-                                return {}
-                        except AttributeError:
-                            pass
-                except IndexError:
-                    return {}
-            entry['type'] = pat.match(entry['title']).group(1)
-
-            locations = []
-            for geo in entry['geocodes']:
-                try:
-                    location = self.samecodes[geo]
-                except KeyError:
-                    location = { 'code': geo,
-                                 'local': geo,
-                                 'state': 'unknown'}
-                locations.append(location)
-
-
-            target_areas = []
-            areas = str(entry['cap:areaDesc']).split(';')
-            for area in areas:
-                target_areas.append(area.strip())
-            entry['locations'] = locations
-            entry['target_areas'] = target_areas
-            tmp_alerts[entry_num] = entry
-            del entry
-        # cache alerts data
-        with open(self._alert_cache_file, 'wb') as cache:
-            pickle.dump(tmp_alerts, cache)
-        self._alerts_ts = datetime.now()
-        return tmp_alerts
-
+    def _save_feed_cache(self, raw_feed):
+        with open(self._feed_cache_file, 'wb') as cache:
+            cache.write(raw_feed)
 
 if __name__ == '__main__':
-    alerts = AlertsFeed(state='ID')
-    print alerts
+    feed = AlertsFeed(state='ID')
