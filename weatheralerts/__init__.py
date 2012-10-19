@@ -41,16 +41,11 @@ Code Documentation
 import os
 import sys
 import re
-try:
-    from urllib import request
-except:
-    from urllib import urlopen as request
-    print("You are trying to run the python3 version in python2, this won't go well")
 from xml.dom import minidom
 from datetime import datetime, timedelta
 import pickle as pickle
 import tempfile
 import json
 
-from .feed import AlertsFeed
-from .weatheralerts import WeatherAlerts
+#from .feed import AlertsFeed
+#from .weatheralerts import WeatherAlerts

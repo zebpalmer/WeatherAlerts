@@ -1,6 +1,6 @@
-from .geo import GeoDB
-from .feed import AlertsFeed
-from .alert import Alert
+from geo import GeoDB
+from feed import AlertsFeed
+from alert import Alert
 
 class WeatherAlerts(object):
     '''
@@ -33,7 +33,7 @@ class WeatherAlerts(object):
         '''manually load the cap feed/alerts'''
         self.cap = AlertsFeed(state=self.scope, geo=self.geo)
         #FIXME: need to rework the handoff from the feed to the main object
-        #       as part of this refactor 
+        #       as part of this refactor
         self._alerts = self.cap.alerts
 
 

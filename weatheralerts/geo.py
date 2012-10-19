@@ -1,19 +1,20 @@
-import tempfile
+#!/usr/bin/env python
+
 import os
-import pickle
+import requests
+import tempfile
+import cPickle as pickle
 from datetime import datetime, timedelta
 
-try:
-    from urllib import request
-except:
-    from urllib import urlopen as request
 
 class GeoDB(object):
-    '''Interact with samecodes object and other geolocation data that will be added soon'''
+    '''
+    Interact with samecodes data
+    will be adding additional data (zip code lookup) in the future.
+    '''
     def __init__(self):
         self.__same = SameCodes()
         self.samecodes = self.__same.samecodes
-
 
     def location_lookup(self, req_location):
         '''
@@ -32,7 +33,6 @@ class GeoDB(object):
             pass
         return location
 
-
     def lookup_samecode(self, local, state):
         '''Given County, State return the SAME code for specified location. Return False if not found'''
         for location in self.samecodes:
@@ -46,7 +46,6 @@ class GeoDB(object):
         state = self.samecodes[geosame]['state']
         return state
 
-
     def getfeedscope(self, geocodes):
         '''Given multiple SAME codes, determine if they are all in one state. If so, it returns that state.
            Otherwise return 'US'. This is used to determine which NWS feed needs to be parsed to get
@@ -56,7 +55,6 @@ class GeoDB(object):
             return 'US'
         else:
             return states[0]
-
 
     def get_states_from_samecodes(self, geocodes):
         '''Returns all states for a given list of SAME codes
@@ -78,17 +76,15 @@ class GeoDB(object):
         return states
 
 
-
-#### GET/PARSE SAME CODES TABLE ##############################################################
-
 class SameCodes(object):
     '''
     Is used to download, parse and cache the SAME codes data from the web.
-    *All interaction with the SAME codes data should be done in the GeoGB classy*
+    *All interaction with the SAME codes data should be done with the GeoGB object*
     '''
     def __init__(self):
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
+        self._samecodes = None
         self._load_same_codes()
 
     @property
@@ -96,30 +92,26 @@ class SameCodes(object):
         '''public method to return the same codes list'''
         return self._samecodes
 
-
     def reload(self):
         '''force refresh of Same Codes (mainly for testing)'''
         self._load_same_codes(refresh=True)
 
-
     def _load_same_codes(self, refresh=False):
         '''Loads the Same Codes into this object'''
-        if refresh == True:
+        if refresh is True:
             self._get_same_codes()
         else:
             cached = self._cached_same_codes()
-            if cached == None:
+            if cached is None:
                 self._samecodes = self._get_same_codes()
-
 
     def _get_same_codes(self):
         '''get SAME codes, load into a dict and cache'''
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
-        codes_file = request.urlopen(url)
-        for row in codes_file.readlines():
+        for row in requests.get(url).content.split('\n'):
             try:
-                code, local, state = str(row, "utf-8").strip().split(',')
+                code, local, state = str(row).strip().split(',')
                 location = {}
                 location['code'] = code
                 location['local'] = local
@@ -135,13 +127,11 @@ class SameCodes(object):
         cache.close()
         return same
 
-
     def _cached_same_codes(self):
         '''If a cached copy is availible, return it'''
         cache_file = self._same_cache_file
         if os.path.exists(cache_file):
-            now = datetime.now()
-            maxage = now - timedelta(minutes=4320)
+            maxage = datetime.now() - timedelta(minutes=4320)
             file_ts = datetime.fromtimestamp(os.stat(cache_file).st_mtime)
             if file_ts > maxage:
                 try:
@@ -159,3 +149,7 @@ class SameCodes(object):
         else:
             #print "No SAME codes cache availible, loading from web"
             return None
+
+
+if __name__ == '__main__':
+    geo = GeoDB()
