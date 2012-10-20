@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Module Documentation &mdash; WeatherAlerts v1.0 documentation</title>
+    <title>Module Documentation &mdash; WeatherAlerts 0.4 documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WeatherAlerts v1.0 documentation" href="index.html" />
+    <link rel="top" title="WeatherAlerts 0.4 documentation" href="index.html" />
     <link rel="prev" title="Release Changes" href="changelog.html" /> 
   </head>
   <body>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="changelog.html" title="Release Changes"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">WeatherAlerts v1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">WeatherAlerts 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -88,12 +91,6 @@ License along with this program. If not, see &lt;<a class="reference external" h
 Pass state=&#8217;&#8217; or geocodes=&#8217;samecodes_list&#8217; to change which feed is being parsed
 passing a list of samecodes will determine if they are in the same state and pick
 the correct feed or use the US feed if they&#8217;re in different states</p>
-<dl class="attribute">
-<dt id="weatheralerts.nws.Alerts.active_locations">
-<tt class="descname">active_locations</tt><a class="headerlink" href="#weatheralerts.nws.Alerts.active_locations" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns list of all active locations</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="weatheralerts.nws.Alerts.alerts_by_county_state">
 <tt class="descname">alerts_by_county_state</tt><big>(</big><em>req_location</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.alerts_by_county_state" title="Permalink to this definition">¶</a></dt>
@@ -147,7 +144,7 @@ sets target areas to be used in all limiting functions</p>
 
 <dl class="class">
 <dt id="weatheralerts.nws.CapAlertsFeed">
-<em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">CapAlertsFeed</tt><big>(</big><em>state='US'</em>, <em>geo=None</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">CapAlertsFeed</tt><big>(</big><em>state='US'</em>, <em>geo=None</em>, <em>maxage=3</em>, <em>reload=False</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
 if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
 as well to save some processing</p>
@@ -167,18 +164,6 @@ as well to save some processing</p>
 <dt id="weatheralerts.nws.CapAlertsFeed.reload_alerts">
 <tt class="descname">reload_alerts</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.reload_alerts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reload alerts bypassing cache</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.CapAlertsFeed.set_maxage">
-<tt class="descname">set_maxage</tt><big>(</big><em>maxage=3</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.set_maxage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override the default max age for the alerts cache</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.CapAlertsFeed.set_state">
-<tt class="descname">set_state</tt><big>(</big><em>state</em>, <em>refresh=True</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.set_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>sets state, reloads alerts unless told otherwise</p>
 </dd></dl>
 
 </dd></dl>
@@ -284,7 +269,7 @@ all alerts for the requested SAME codes</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -310,12 +295,12 @@ all alerts for the requested SAME codes</p>
         <li class="right" >
           <a href="changelog.html" title="Release Changes"
              >previous</a> |</li>
-        <li><a href="index.html">WeatherAlerts v1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">WeatherAlerts 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright Zeb Palmer, Licensed under (GPLv3).
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

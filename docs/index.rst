@@ -2,13 +2,15 @@ WeatherAlerts Docs
 **********************
 
 .. Warning::
+   Future versions of WeatherAlerts will not be compatibile with this version.
    This module is in alpha, it's API can and will change. New versions will likely break backwards compatibility.
    This will become more stable as we approch the 1.0 release. For now, I encourage you to test new versions with your
    program before upgrading.
 
 .. Note::
-   You are looking at the documentation for the latest released version. There is active work on completly rewritten version
-   which will be released soon. If you'd like to check the documentation for the new version, check `here <http://weatheralerts.readthedocs.org/en/rewrite/>`_
+   You are looking at the documentation for version 0.4.9.
+   Current work is being done on 0.5.0, a completly rewritten version which will be released soon.
+   If you'd like to check the documentation for the new version, check `here <http://weatheralerts.readthedocs.org/en/rewrite/>`_
 
 
 Welcome
