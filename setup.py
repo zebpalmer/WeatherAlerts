@@ -1,15 +1,11 @@
 from distutils.core import setup
 import sys
 
-
 VERSION_MAJOR = 0
 VERSION_MINOR = 5
 VERSION_PATCH = 1
 
-
-
 versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
-
 
 setup(
     name='WeatherAlerts',
@@ -26,6 +22,7 @@ setup(
     license='GPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',
     long_description=open('README.rst').read(),
+    install_requires=['requests', 'dateutils'],
     classifiers=[
               'Development Status :: 3 - Alpha',
               'Environment :: Console',
