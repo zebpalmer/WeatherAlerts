@@ -5,7 +5,9 @@ VERSION_MAJOR = 0
 VERSION_MINOR = 5
 VERSION_PATCH = 0
 
-versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
+#versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
+versionstr = '0.5.0a1'
+
 
 setup(
     name='WeatherAlerts',
@@ -20,7 +22,7 @@ setup(
               #"scripts/NWS_Alerts.py"}
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
-    description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',
+    description='Parse the National Weather Service Emergency Alerts Feed (NWS CAP format), do useful stuff with it',
     long_description=open('README.rst').read(),
     install_requires=['requests', 'dateutils'],
     classifiers=[

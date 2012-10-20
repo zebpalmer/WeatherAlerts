@@ -2,6 +2,10 @@
 Release Changes
 ===============
 
+**v0.5.0** (in progress, not yet released)
+* complete rewrite
+* improved API organization
+* improved documentation
 
 
 **v0.4.8**
@@ -21,7 +25,7 @@ Release Changes
 * tox automated virtenv & tests for python 2.6, 2.7, 3.2
 * Added command line monitoring script
 
-**v0.4.1** 
+**v0.4.1**
 
 * Changing project name to better fit PyPi
 * Packaging as an installable module
@@ -31,7 +35,7 @@ Release Changes
 
 * Added basic nose test script
 * Refactored classes
-* Added Alerts() class 
+* Added Alerts() class
 * Optional json output (getting ready for web service/api)
 * Various code cleanup/improvements
 
@@ -43,8 +47,8 @@ Release Changes
 
 **v0.3:**
 
-* refactored nagios plugin, it now uses (only) SAME code(s) 
-* Moved SAME code related methods to new class which can be used without parsing an alerts feed.  
+* refactored nagios plugin, it now uses (only) SAME code(s)
+* Moved SAME code related methods to new class which can be used without parsing an alerts feed.
 
 
 **v0.2:**

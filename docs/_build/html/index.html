@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WeatherAlerts Docs &mdash; WeatherAlerts 1.0 documentation</title>
+    <title>WeatherAlerts Docs &mdash; WeatherAlerts 0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0',
+        VERSION:     '0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WeatherAlerts 1.0 documentation" href="#" />
+    <link rel="top" title="WeatherAlerts 0.5 documentation" href="#" />
     <link rel="next" title="About WeatherAlerts" href="about.html" /> 
   </head>
   <body>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="about.html" title="About WeatherAlerts"
              accesskey="N">next</a> |</li>
-        <li><a href="#">WeatherAlerts 1.0 documentation</a> &raquo;</li> 
+        <li><a href="#">WeatherAlerts 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,16 +53,35 @@
             
   <div class="section" id="weatheralerts-docs">
 <h1>WeatherAlerts Docs<a class="headerlink" href="#weatheralerts-docs" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Version 0.5 (rewrite branch) will not be backwards compatibile with version 0.4 (current release)</strong>
+This module is in alpha, it&#8217;s API can and will change. New versions will likely break backwards compatibility.
+This will become more stable as we approch the 1.0 release. For now, I encourage you to test new versions with your
+program before upgrading.</p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This documentation is a work in progress, I hope to have it completed by the 1.0 release of WeatherAlerts.</p>
+<p class="last">You&#8217;re looking at documentation for the rewrite branch of WeatherAlerts. If you&#8217;re looking for documentation
+for the latest stable branch (and what&#8217;s currently in pypi) click <a class="reference external" href="http://weatheralerts.readthedocs.org/en/latest/">Latest</a></p>
 </div>
 <div class="section" id="welcome">
 <h2>Welcome<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h2>
-<p>WeatherAlerts is a python project I started in Nov 2011 as part of another weather/python project I was working on.
-I wanted to create a python module to interact with the Emergency Alerts data provided free from the
-National Weather Service, rather than have to sign up and potentially pay a 3rd party to give me access to this data.
-Please take a look through the documentation here, if you still have questions, contact me.</p>
+<p>WeatherAlerts is a python project which interacts with the Emergency Alerts data provided free from the
+National Weather Service. Feeds for each state (or a National feed) are provided in NWS CAP format, which is XML. This feed is free to the public
+(supported by taxpayers) and offers an alternative to paid services which are just getting data from this feed anyway.</p>
+<p>The project uses S.A.M.E codes, which are geocodes which the NWS uses to target alerts to specifc areas via thier National Weather Radio network.
+We will be adding additional geo location methods in the future.</p>
+<p>Please take a look through the documentation here, if you still have questions, contact me.</p>
+<div class="section" id="current-development">
+<h3>Current Development<a class="headerlink" href="#current-development" title="Permalink to this headline">¶</a></h3>
+<p>The current release is availble on pypi, source code for that release can be found on githug, tagged v0.4.8</p>
+</div>
+</div>
+<div class="section" id="python-2-3-support">
+<h2>Python 2/3 Support<a class="headerlink" href="#python-2-3-support" title="Permalink to this headline">¶</a></h2>
+<p>The current relased version of WeatherAlerts supports both python 2 and python 3. However, current development is being done in Python 2.
+When the rewrite is nearing completion, I&#8217;ll port it to python 3.</p>
 </div>
 <div class="section" id="documentation-contents">
 <h2>Documentation Contents<a class="headerlink" href="#documentation-contents" title="Permalink to this headline">¶</a></h2>
@@ -70,7 +89,6 @@ Please take a look through the documentation here, if you still have questions, 
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About WeatherAlerts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html#install">Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="about.html#python-2-support">Python 2 Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="about.html#bugs-feature-requests">Bugs &amp; Feature Requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="about.html#goals">Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="about.html#author">Author</a></li>
@@ -90,9 +108,6 @@ Please take a look through the documentation here, if you still have questions, 
 <li class="toctree-l1"><a class="reference internal" href="module.html">Module Documentation</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
 <li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
@@ -109,11 +124,14 @@ Please take a look through the documentation here, if you still have questions, 
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">WeatherAlerts Docs</a><ul>
-<li><a class="reference internal" href="#welcome">Welcome</a></li>
+<li><a class="reference internal" href="#welcome">Welcome</a><ul>
+<li><a class="reference internal" href="#current-development">Current Development</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#python-2-3-support">Python 2/3 Support</a></li>
 <li><a class="reference internal" href="#documentation-contents">Documentation Contents</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
 </ul>
@@ -155,7 +173,7 @@ Please take a look through the documentation here, if you still have questions, 
         <li class="right" >
           <a href="about.html" title="About WeatherAlerts"
              >next</a> |</li>
-        <li><a href="#">WeatherAlerts 1.0 documentation</a> &raquo;</li> 
+        <li><a href="#">WeatherAlerts 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

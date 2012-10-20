@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Module Documentation &mdash; WeatherAlerts 1.0 documentation</title>
+    <title>Module Documentation &mdash; WeatherAlerts 0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0',
+        VERSION:     '0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WeatherAlerts 1.0 documentation" href="index.html" />
+    <link rel="top" title="WeatherAlerts 0.5 documentation" href="index.html" />
     <link rel="prev" title="Release Changes" href="changelog.html" /> 
   </head>
   <body>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="changelog.html" title="Release Changes"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">WeatherAlerts 1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">WeatherAlerts 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -65,6 +65,27 @@
 Pass state=&#8217;&#8217; or geocodes=&#8217;samecodes_list&#8217; to change which feed is being parsed
 passing a list of samecodes will determine if they are in the same state and pick
 the correct feed or use the US feed if they&#8217;re in different states</p>
+<p>You can find your location&#8217;s samecode by looking checking the following link
+<a class="reference external" href="http://www.nws.noaa.gov/nwr/indexnw.htm#sametable">http://www.nws.noaa.gov/nwr/indexnw.htm#sametable</a></p>
+<dl class="attribute">
+<dt id="weatheralerts.WeatherAlerts.alert_count">
+<tt class="descname">alert_count</tt><a class="headerlink" href="#weatheralerts.WeatherAlerts.alert_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple property for checking the number of alerts, mainly for debugging purposes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="weatheralerts.WeatherAlerts.load_alerts">
+<tt class="descname">load_alerts</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.WeatherAlerts.load_alerts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets raw xml (cap) from the Alerts feed, throws it into the parser
+and ends up with a list of alerts object, which it stores to self._alerts</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="weatheralerts.WeatherAlerts.samecode_alerts">
+<tt class="descname">samecode_alerts</tt><big>(</big><em>samecode</em><big>)</big><a class="headerlink" href="#weatheralerts.WeatherAlerts.samecode_alerts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns alerts for specified SAME geocodes</p>
+</dd></dl>
+
 </dd></dl>
 
 <span class="target" id="module-geo"></span><dl class="class">
@@ -136,12 +157,88 @@ as well to save some processing</p>
 <dl class="attribute">
 <dt id="feed.AlertsFeed.raw_cap">
 <tt class="descname">raw_cap</tt><a class="headerlink" href="#feed.AlertsFeed.raw_cap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the alerts feed and parse it</p>
+<dd><p>Raw xml(cap) of the the feed. If a valid cache is availible
+it is used, else a new copy of the feed is grabbed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="feed.AlertsFeed.refresh">
+<tt class="descname">refresh</tt><big>(</big><big>)</big><a class="headerlink" href="#feed.AlertsFeed.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh the feed bypassing the cache</p>
 </dd></dl>
 
 </dd></dl>
 
-<span class="target" id="module-cap"></span><span class="target" id="module-alert"></span></div>
+<span class="target" id="module-cap"></span><dl class="class">
+<dt id="cap.CapParser">
+<em class="property">class </em><tt class="descclassname">cap.</tt><tt class="descname">CapParser</tt><big>(</big><em>geo=None</em><big>)</big><a class="headerlink" href="#cap.CapParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the xml from the alert feed, creates and returns a list of alert objects.</p>
+<p>FIXME: the _parse_cap() method of this class needs optimization, it&#8217;s slow.</p>
+<p>NOTE: This class has no public methods and just returns a list, it&#8217;ll probably be moved
+or refactored into a function as the rewrite continues</p>
+<dl class="method">
+<dt id="cap.CapParser.cap">
+<tt class="descname">cap</tt><big>(</big><em>raw_cap</em><big>)</big><a class="headerlink" href="#cap.CapParser.cap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-alert"></span><dl class="class">
+<dt id="alert.Alert">
+<em class="property">class </em><tt class="descclassname">alert.</tt><tt class="descname">Alert</tt><big>(</big><em>cap_dict</em><big>)</big><a class="headerlink" href="#alert.Alert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an alert object with the cap dict created from cap xml parser.</p>
+<p>This object won&#8217;t be pretty... it&#8217;s mostly a bunch of property methods to
+sanitize and muck around with the raw cap data. We put off all that processing
+until it&#8217;s actually needed.</p>
+<dl class="attribute">
+<dt id="alert.Alert.category">
+<tt class="descname">category</tt><a class="headerlink" href="#alert.Alert.category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Category of alert i.e. Met, Civil, etc</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.effective">
+<tt class="descname">effective</tt><a class="headerlink" href="#alert.Alert.effective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Effective timestamp of the alert (datetime object)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.event">
+<tt class="descname">event</tt><a class="headerlink" href="#alert.Alert.event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.expiration">
+<tt class="descname">expiration</tt><a class="headerlink" href="#alert.Alert.expiration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expiration of the alert (datetime object)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.published">
+<tt class="descname">published</tt><a class="headerlink" href="#alert.Alert.published" title="Permalink to this definition">¶</a></dt>
+<dd><p>Published timestamp of the alert (datetime object)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.samecodes">
+<tt class="descname">samecodes</tt><a class="headerlink" href="#alert.Alert.samecodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.severity">
+<tt class="descname">severity</tt><a class="headerlink" href="#alert.Alert.severity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Severity of alert i.e. minor, major, etc</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="alert.Alert.updated">
+<tt class="descname">updated</tt><a class="headerlink" href="#alert.Alert.updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last update to the alert (datetime object)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 
 
           </div>
@@ -186,7 +283,7 @@ as well to save some processing</p>
         <li class="right" >
           <a href="changelog.html" title="Release Changes"
              >previous</a> |</li>
-        <li><a href="index.html">WeatherAlerts 1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">WeatherAlerts 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -14,10 +14,6 @@ Install
 You can download and install the current stable version via PIP by runing:  ``pip install -U weatheralerts``
 
 
-Python 2/3 Support
-=================
-Development of this version is being done in Python 2, when the rewrite is nearing completion, I'll port it to python 3. This is a change from previous versions where development was done in python 3 and backported to 2. The end result will be the same, but everything else I'm currently working on is in 2.7, so this is purely a keep it simple decision.
-
 
 Bugs & Feature Requests
 ========================
