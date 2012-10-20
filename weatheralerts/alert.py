@@ -2,15 +2,16 @@ from dateutil.parser import parse
 from datetime import datetime
 
 
-
 class Alert():
+    '''
+    Create an alert object with the cap dict created from cap xml parser.
+
+    This object won't be pretty... it's mostly a bunch of property methods to
+    sanitize and muck around with the raw cap data. We put off all that processing
+    until it's actually needed.
+
+    '''
     def __init__(self, cap_dict):
-        '''
-        Create an alert object with the cap dict created from cap xml parser.
-        This object won't do much, mostly a bunch of propery methods to sanitize
-        and generally muck around with the raw dict. We put off all that processing
-        until it's actually needed.
-        '''
         self._raw = cap_dict
 
 
@@ -20,31 +21,37 @@ class Alert():
 
     @property
     def expiration(self):
+        '''Expiration of the alert (datetime object)'''
         ts = self._ts_parse(self._raw['cap:expires'])
         return ts
 
 
     @property
     def updated(self):
+        '''Last update to the alert (datetime object)'''
         ts = self._ts_parse(self._raw['updated'])
         return ts
 
     @property
     def effective(self):
+        '''Effective timestamp of the alert (datetime object)'''
         ts = self._ts_parse(self._raw['cap:effective'])
         return ts
 
     @property
     def published(self):
+        '''Published timestamp of the alert (datetime object)'''
         ts = self._ts_parse(self._raw['published'])
         return ts
 
     @property
     def severity(self):
+        '''Severity of alert i.e. minor, major, etc'''
         return self._raw['cap:severity']
 
     @property
     def category(self):
+        '''Category of alert i.e. Met, Civil, etc'''
         return self._raw['cap:category']
 
 

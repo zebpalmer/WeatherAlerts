@@ -4,16 +4,24 @@ from xml.dom import minidom
 import re
 
 class CapParser(object):
-    def __init__(self, geo=None):
+    '''
+    Parses the xml from the alert feed, creates and returns a list of alert objects.
+
+    FIXME: the _parse_cap() method of this class needs optimization, it's slow.
+
+    NOTE: This class has no public methods and just returns a list, it'll probably be moved
+    or refactored into a function as the rewrite continues
+    '''
+    def __init__(self, raw_cap, geo=None):
         if geo is None:
             self.geo = GeoDB()
         else:
             self.geo = geo
         self.samecodes = self.geo.samecodes
+        alerts = _parse_cap(raw_cap)
+        return alerts
 
-
-    def parse_cap(self, xmlstr):
-        '''parse feed contents'''
+    def _parse_cap(self, xmlstr):
         alerts = []
         main_dom = minidom.parseString(xmlstr)
 

@@ -36,8 +36,7 @@ class WeatherAlerts(object):
         and ends up with a list of alerts object, which it stores to self._alerts
         '''
         cap = AlertsFeed(state=self.state).raw_cap
-        parser = CapParser(geo=self.geo)
-        self._alerts = parser.parse_cap(cap)
+        self._alerts = CapParser(cap, geo=self.geo)
 
     @property
     def alert_count(self):

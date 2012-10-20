@@ -33,12 +33,23 @@ class AlertsFeed(object):
         return feed_cache
 
     @property
-    def raw_cap(self, refresh=False):
-        '''Load the alerts feed and parse it'''
+    def raw_cap(self):
+        '''
+        Raw xml(cap) of the the feed. If a valid cache is availible
+        it is used, else a new copy of the feed is grabbed
+        '''
         raw = self._get_feed_cache()
-        if refresh is True or raw is None:
+        if raw is None:
             raw = self._get_nws_feed()
             self._save_feed_cache(raw)
+        return raw
+
+    def refresh(self):
+        '''
+        Refresh the feed bypassing the cache
+        '''
+        raw = self._get_nws_feed()
+        self._save_feed_cache(raw)
         return raw
 
     def _get_nws_feed(self):
