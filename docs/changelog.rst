@@ -6,6 +6,7 @@ Release Changes
 * complete rewrite
 * improved API organization
 * improved documentation
+* relicensed under LGPLv3
 
 
 **v0.4.8**
