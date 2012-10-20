@@ -2,7 +2,7 @@
 Release Changes
 ===============
 
-**v0.5.0** (in progress, not yet released)
+**v0.5.0** (*in progress, not yet released*)
 * complete rewrite
 * improved API organization
 * improved documentation

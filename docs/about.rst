@@ -13,6 +13,8 @@ Install
 ========
 You can download and install the current stable version via PIP by runing:  ``pip install -U weatheralerts``
 
+Alternativly you can download and install directly from the source code on github.
+
 
 
 Bugs & Feature Requests
@@ -24,15 +26,14 @@ Goals
 ======
 Use cases that I am in considering in the development of WeatherAlerts.
 
-- Command line usage
+- Simple command line tool for checking active, local alerts.
 - Packaged module to call from other programs
-- Daemon to run and post alerts to console as they come in
-- Nagios monitoring script
+- Daemon to run and notify alerts as they come in
+- Nagios monitoring pluging
 - A web service that given various paramaters will return json or raw text summaries of the requested data.
-- Would love to see someone (or me when I get time/figure out how) write a KDE plasmoid/widget from this... (one day...)
+- Would love to see someone a KDE plasmoid/widget that would pop up alerts
 
 
-*If you have another use case, feel free to submit a request and jump in to help if you can.*
 
 
 Author

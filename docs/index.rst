@@ -1,57 +1,42 @@
-=====================
-WeatherAlerts Docs
-=====================
+About WeatherAlerts
+*********************
 
-.. Warning::
+This python module started as part of another project of mine. But since this is more useful as a standalone module, I've decided to move it to it's own project and open source it. As this is a alpha/beta release aspects of the project will change, and probably pretty often. Check back here for updates, if you install using pip, you can run ``pip install -U weatheralerts`` to get the latest version. (I've been releasing on average a minor release per week, and several point releases per week.)
 
-   **Version 0.5 (rewrite branch) will not be backwards compatibile with version 0.4 (current release)**
-   This module is in alpha, it's API can and will change. New versions will likely break backwards compatibility.
-   This will become more stable as we approch the 1.0 release. For now, I encourage you to test new versions with your
-   program before upgrading.
+This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
 
-.. Note::
-   You're looking at documentation for the rewrite branch of WeatherAlerts. If you're looking for documentation
-   for the latest stable branch (and what's currently in pypi) click `Latest <http://weatheralerts.readthedocs.org/en/latest/>`_
+This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_
 
-Welcome
-----------
-WeatherAlerts is a python project which interacts with the Emergency Alerts data provided free from the
-National Weather Service. Feeds for each state (or a National feed) are provided in NWS CAP format, which is XML. This feed is free to the public
-(supported by taxpayers) and offers an alternative to paid services which are just getting data from this feed anyway.
+Install
+========
+You can download and install the current stable version via PIP by runing:  ``pip install -U weatheralerts``
 
-The project uses S.A.M.E codes, which are geocodes which the NWS uses to target alerts to specifc areas via thier National Weather Radio network.
-We will be adding additional geo location methods in the future.
-
-Please take a look through the documentation here, if you still have questions, contact me.
-
-Current Development
-.....................
-The current release is availble on pypi, source code for that release can be found on githug, tagged v0.4.8
-
-
-Python 2/3 Support
----------------------
-The current relased version of WeatherAlerts supports both python 2 and python 3. However, current development is being done in Python 2.
-When the rewrite is nearing completion, I'll port it to python 3.
+Alternativly you can download and install directly from the source code on github.
 
 
 
-Documentation Contents
---------------------------------
+Bugs & Feature Requests
+========================
+If you find one, please visit the `issue tracker <http://github.com/zebpalmer/WeatherAlerts/issues>`_ and let me know.
 
-.. toctree::
-   :maxdepth: 2
 
-   about
-   use
-   devstatus
-   contact
-   changelog
-   module
+Goals
+======
+Use cases that I am in considering in the development of WeatherAlerts.
 
-Indices and tables
-==================
+- Simple command line tool for checking active, local alerts.
+- Packaged module to call from other programs
+- Daemon to run and notify alerts as they come in
+- Nagios monitoring pluging
+- A web service that given various paramaters will return json or raw text summaries of the requested data.
+- Would love to see someone a KDE plasmoid/widget that would pop up alerts
 
-* :ref:`genindex`
-* :ref:`search`
+
+
+
+Author
+=======
+This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. See my other work at `Zeb Palmer <http://www.zebpalmer.com>`_
+
+
 
