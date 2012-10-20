@@ -14,17 +14,3 @@ Below you'll find the documentation for the various classes and methods in Weath
    :members:
 
 
-.. automodule:: geo
-   :members:
-
-
-.. automodule:: feed
-   :members:
-
-
-.. automodule:: cap
-   :members:
-
-
-.. automodule:: alert
-   :members:

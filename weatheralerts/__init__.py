@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 '''
 WeatherAlerts.nws
@@ -37,22 +37,8 @@ Code Documentation
 
 '''
 
-#from weatheralerts import WeatherAlerts
-#from weatheralerts import GeoDB
-#from weatheralerts import AlertsFeed
-#from weatheralerts import CapParser
-#from weatheralerts import Alert
-
-
-
-#import os
-#import sys
-#import re
-#from xml.dom import minidom
-#from datetime import datetime, timedelta
-#import pickle as pickle
-#import tempfile
-#import json
-
-##from .feed import AlertsFeed
-##from .weatheralerts import WeatherAlerts
+from weatheralerts import WeatherAlerts
+from weatheralerts import GeoDB
+from weatheralerts import AlertsFeed
+from weatheralerts import CapParser
+from weatheralerts import Alert
