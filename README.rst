@@ -44,7 +44,7 @@ You can download and install via PIP by runing:  ``pip install -U weatheralerts`
 Python 2/3 Support
 -----------------
 Official releases of this module supports recent versions of both 2.x and 3.x.
-Development is currently done in python 2.7
+Development is currently done in python 2.7 and will be ported to 3 upon release.
 
 
 
