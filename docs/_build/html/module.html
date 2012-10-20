@@ -3,13 +3,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Module Documentation &mdash; WeatherAlerts v1.0 documentation</title>
+    <title>Module Documentation &mdash; WeatherAlerts 1.0 documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -23,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="WeatherAlerts v1.0 documentation" href="index.html" />
+    <link rel="top" title="WeatherAlerts 1.0 documentation" href="index.html" />
     <link rel="prev" title="Release Changes" href="changelog.html" /> 
   </head>
   <body>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="changelog.html" title="Release Changes"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">WeatherAlerts v1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">WeatherAlerts 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,202 +58,90 @@
 <p class="first admonition-title">Note</p>
 <p class="last">This page is dynamically generated from the documentation written into the code</p>
 </div>
-<span class="target" id="module-weatheralerts.nws"></span><div class="section" id="weatheralerts-nws">
-<h2>WeatherAlerts.nws<a class="headerlink" href="#weatheralerts-nws" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="file-information">
-<h3>File Information<a class="headerlink" href="#file-information" title="Permalink to this headline">¶</a></h3>
-<dl class="docutils">
-<dt><strong>Project Home:</strong></dt>
-<dd><a class="reference external" href="http://github.com/zebpalmer/WeatherAlerts">http://github.com/zebpalmer/WeatherAlerts</a></dd>
-<dt><strong>Original Author:</strong></dt>
-<dd>Zeb Palmer <a class="reference external" href="http://www.zebpalmer.com">http://www.zebpalmer.com</a></dd>
-<dt><strong>Documentation:</strong></dt>
-<dd><a class="reference external" href="http://weatheralerts.readthedocs.org">http://weatheralerts.readthedocs.org</a></dd>
-<dt><strong>License:</strong></dt>
-<dd>GPLv3 - full text included in LICENSE.txt</dd>
-</dl>
-<div class="section" id="license-notice">
-<h4>License Notice:<a class="headerlink" href="#license-notice" title="Permalink to this headline">¶</a></h4>
-<p>This program is free software you can redistribute it and or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation, either version 3 of the License, or (at your option)
-any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details.  You should have received a copy of the GNU General Public
-License along with this program. If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
-</div>
-</div>
-<div class="section" id="code-documentation">
-<h3>Code Documentation<a class="headerlink" href="#code-documentation" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="weatheralerts.nws.Alerts">
-<em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">Alerts</tt><big>(</big><em>state=''</em>, <em>geocodes=''</em>, <em>load=True</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alerts object that controls interaction with the samecodes and capparser classes/methods.
+<span class="target" id="module-weatheralerts"></span><dl class="class">
+<dt id="weatheralerts.WeatherAlerts">
+<em class="property">class </em><tt class="descclassname">weatheralerts.</tt><tt class="descname">WeatherAlerts</tt><big>(</big><em>state=None</em>, <em>geocodes=None</em>, <em>load=True</em><big>)</big><a class="headerlink" href="#weatheralerts.WeatherAlerts" title="Permalink to this definition">¶</a></dt>
+<dd><p>WeatherAlerts object that controls interaction with the samecodes and capparser classes/methods.
 Pass state=&#8217;&#8217; or geocodes=&#8217;samecodes_list&#8217; to change which feed is being parsed
 passing a list of samecodes will determine if they are in the same state and pick
 the correct feed or use the US feed if they&#8217;re in different states</p>
-<dl class="attribute">
-<dt id="weatheralerts.nws.Alerts.active_locations">
-<tt class="descname">active_locations</tt><a class="headerlink" href="#weatheralerts.nws.Alerts.active_locations" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns list of all active locations</p>
 </dd></dl>
 
+<span class="target" id="module-geo"></span><dl class="class">
+<dt id="geo.GeoDB">
+<em class="property">class </em><tt class="descclassname">geo.</tt><tt class="descname">GeoDB</tt><a class="headerlink" href="#geo.GeoDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interact with samecodes data
+will be adding additional data (zip code lookup) in the future.</p>
 <dl class="method">
-<dt id="weatheralerts.nws.Alerts.alerts_by_county_state">
-<tt class="descname">alerts_by_county_state</tt><big>(</big><em>req_location</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.alerts_by_county_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns alerts for given county, state</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.Alerts.alerts_by_samecodes">
-<tt class="descname">alerts_by_samecodes</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.alerts_by_samecodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns alerts for a given SAME code</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="weatheralerts.nws.Alerts.json">
-<tt class="descname">json</tt><a class="headerlink" href="#weatheralerts.nws.Alerts.json" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns json object of all alerts on specified feed (National feed by default)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.Alerts.load_alerts">
-<tt class="descname">load_alerts</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.load_alerts" title="Permalink to this definition">¶</a></dt>
-<dd><p>manually load the cap feed/alerts</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="weatheralerts.nws.Alerts.pyobj">
-<tt class="descname">pyobj</tt><a class="headerlink" href="#weatheralerts.nws.Alerts.pyobj" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns python object of all alerts for specified feed(National by default)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.Alerts.set_state">
-<tt class="descname">set_state</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.set_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>sets state, reloads alerts unless told otherwise</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.Alerts.state_summary">
-<tt class="descname">state_summary</tt><big>(</big><em>state=''</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.state_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>print all alerts for a given state</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.Alerts.target_area">
-<tt class="descname">target_area</tt><big>(</big><em>locations</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.Alerts.target_area" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: not used yet
-sets target areas to be used in all limiting functions</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="weatheralerts.nws.CapAlertsFeed">
-<em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">CapAlertsFeed</tt><big>(</big><em>state='US'</em>, <em>geo=None</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to fetch and load the NWS CAP/XML Alerts feed for the US or a single state if requested
-if an instance of the SameCodes class has already been (to do a geo lookup), you can pass that
-as well to save some processing</p>
-<dl class="attribute">
-<dt id="weatheralerts.nws.CapAlertsFeed.alerts">
-<tt class="descname">alerts</tt><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.alerts" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns all alerts on feed</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.CapAlertsFeed.check_objectage">
-<tt class="descname">check_objectage</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.check_objectage" title="Permalink to this definition">¶</a></dt>
-<dd><p>check age of alerts in this object, reload if past max cache time</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.CapAlertsFeed.reload_alerts">
-<tt class="descname">reload_alerts</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.reload_alerts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reload alerts bypassing cache</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.CapAlertsFeed.set_maxage">
-<tt class="descname">set_maxage</tt><big>(</big><em>maxage=3</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.set_maxage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Override the default max age for the alerts cache</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="weatheralerts.nws.CapAlertsFeed.set_state">
-<tt class="descname">set_state</tt><big>(</big><em>state</em>, <em>refresh=True</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.CapAlertsFeed.set_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>sets state, reloads alerts unless told otherwise</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="weatheralerts.nws.GeoDB">
-<em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">GeoDB</tt><a class="headerlink" href="#weatheralerts.nws.GeoDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interact with samecodes object and other geolocation data that will be added soon</p>
-<dl class="method">
-<dt id="weatheralerts.nws.GeoDB.get_states_from_samecodes">
-<tt class="descname">get_states_from_samecodes</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.get_states_from_samecodes" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.GeoDB.get_states_from_samecodes">
+<tt class="descname">get_states_from_samecodes</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#geo.GeoDB.get_states_from_samecodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all states for a given list of SAME codes
 <em>Shouldn&#8217;t be used to determine feed scope, please use getfeedscope()</em></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="weatheralerts.nws.GeoDB.getfeedscope">
-<tt class="descname">getfeedscope</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.getfeedscope" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.GeoDB.getfeedscope">
+<tt class="descname">getfeedscope</tt><big>(</big><em>geocodes</em><big>)</big><a class="headerlink" href="#geo.GeoDB.getfeedscope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given multiple SAME codes, determine if they are all in one state. If so, it returns that state.
 Otherwise return &#8216;US&#8217;. This is used to determine which NWS feed needs to be parsed to get
 all alerts for the requested SAME codes</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="weatheralerts.nws.GeoDB.getstate">
-<tt class="descname">getstate</tt><big>(</big><em>geosame</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.getstate" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.GeoDB.getstate">
+<tt class="descname">getstate</tt><big>(</big><em>geosame</em><big>)</big><a class="headerlink" href="#geo.GeoDB.getstate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a SAME code, return the state that SAME code is in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="weatheralerts.nws.GeoDB.location_lookup">
-<tt class="descname">location_lookup</tt><big>(</big><em>req_location</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.location_lookup" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.GeoDB.location_lookup">
+<tt class="descname">location_lookup</tt><big>(</big><em>req_location</em><big>)</big><a class="headerlink" href="#geo.GeoDB.location_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns full location given samecode or county and state. Returns False if not valid.
 <em>currently locations are a dictionary, once other geo data is added, they will move to a location class/obj</em></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="weatheralerts.nws.GeoDB.lookup_samecode">
-<tt class="descname">lookup_samecode</tt><big>(</big><em>local</em>, <em>state</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.GeoDB.lookup_samecode" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.GeoDB.lookup_samecode">
+<tt class="descname">lookup_samecode</tt><big>(</big><em>local</em>, <em>state</em><big>)</big><a class="headerlink" href="#geo.GeoDB.lookup_samecode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given County, State return the SAME code for specified location. Return False if not found</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="weatheralerts.nws.SameCodes">
-<em class="property">class </em><tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">SameCodes</tt><a class="headerlink" href="#weatheralerts.nws.SameCodes" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.SameCodes">
+<em class="property">class </em><tt class="descclassname">geo.</tt><tt class="descname">SameCodes</tt><a class="headerlink" href="#geo.SameCodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is used to download, parse and cache the SAME codes data from the web.
-<em>All interaction with the SAME codes data should be done in the GeoGB classy</em></p>
+<em>All interaction with the SAME codes data should be done with the GeoGB object</em></p>
 <dl class="method">
-<dt id="weatheralerts.nws.SameCodes.reload">
-<tt class="descname">reload</tt><big>(</big><big>)</big><a class="headerlink" href="#weatheralerts.nws.SameCodes.reload" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.SameCodes.reload">
+<tt class="descname">reload</tt><big>(</big><big>)</big><a class="headerlink" href="#geo.SameCodes.reload" title="Permalink to this definition">¶</a></dt>
 <dd><p>force refresh of Same Codes (mainly for testing)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="weatheralerts.nws.SameCodes.samecodes">
-<tt class="descname">samecodes</tt><a class="headerlink" href="#weatheralerts.nws.SameCodes.samecodes" title="Permalink to this definition">¶</a></dt>
+<dt id="geo.SameCodes.samecodes">
+<tt class="descname">samecodes</tt><a class="headerlink" href="#geo.SameCodes.samecodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>public method to return the same codes list</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="weatheralerts.nws.alert_type">
-<tt class="descclassname">weatheralerts.nws.</tt><tt class="descname">alert_type</tt><big>(</big><em>alert</em><big>)</big><a class="headerlink" href="#weatheralerts.nws.alert_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>return alert type for a given alert</p>
+<span class="target" id="module-feed"></span><dl class="class">
+<dt id="feed.AlertsFeed">
+<em class="property">class </em><tt class="descclassname">feed.</tt><tt class="descname">AlertsFeed</tt><big>(</big><em>state='US'</em>, <em>maxage=3</em><big>)</big><a class="headerlink" href="#feed.AlertsFeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the NWS CAP/XML Alerts feed for the US or a single state if requested
+if an instance of the GeoDB class has already been created, you can pass that
+as well to save some processing</p>
+<dl class="attribute">
+<dt id="feed.AlertsFeed.raw_cap">
+<tt class="descname">raw_cap</tt><a class="headerlink" href="#feed.AlertsFeed.raw_cap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the alerts feed and parse it</p>
 </dd></dl>
 
-</div>
-</div>
-</div>
+</dd></dl>
+
+<span class="target" id="module-cap"></span><span class="target" id="module-alert"></span></div>
 
 
           </div>
@@ -258,21 +149,6 @@ all alerts for the requested SAME codes</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Module Documentation</a><ul>
-<li><a class="reference internal" href="#weatheralerts-nws">WeatherAlerts.nws</a><ul>
-<li><a class="reference internal" href="#file-information">File Information</a><ul>
-<li><a class="reference internal" href="#license-notice">License Notice:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="changelog.html"
                         title="previous chapter">Release Changes</a></p>
@@ -284,7 +160,7 @@ all alerts for the requested SAME codes</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -310,12 +186,12 @@ all alerts for the requested SAME codes</p>
         <li class="right" >
           <a href="changelog.html" title="Release Changes"
              >previous</a> |</li>
-        <li><a href="index.html">WeatherAlerts v1.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">WeatherAlerts 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright Zeb Palmer, Licensed under (GPLv3).
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

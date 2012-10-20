@@ -17,8 +17,8 @@ setup(
     author='Zeb Palmer',
     author_email='zeb@zebpalmer.com',
     packages=['weatheralerts'],
-    package_dir={
-        'weatheralerts': "/weatheralerts"},
+    #package_dir={
+        #'weatheralerts': "weatheralerts"},
     #scripts=[ "scripts/NagiosWeatherAlerts.py",
               #"scripts/MonitorAlertsByCounty.py",
               #"scripts/NWS_Alerts.py"}
