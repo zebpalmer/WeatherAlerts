@@ -12,5 +12,7 @@ from weatheralerts import WeatherAlerts
 
 
 if __name__ == "__main__":
-    nws = WeatherAlerts(state='ID')
-    nws.load_alerts()
+    nws = WeatherAlerts()
+    samealerts = nws.samecode_alerts('030081')
+    for alert in samealerts:
+        print alert.event
