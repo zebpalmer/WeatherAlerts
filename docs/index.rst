@@ -2,11 +2,14 @@ WeatherAlerts Docs
 **********************
 
 .. Warning::
+   This module is in alpha, it's API can and will change. New versions will likely break backwards compatibility.
+   This will become more stable as we approch the 1.0 release. For now, I encourage you to test new versions with your
+   program before upgrading.
+
+.. Note::
    You're looking at documentation for the rewrite branch of WeatherAlerts. If you're looking for documentation
    for the latest stable branch (and what's currently in pypi) click `Latest <http://weatheralerts.readthedocs.org/en/latest/>`_
 
-.. Note::
-   This documentation is a work in progress, I hope to have it completed by the 1.0 release of WeatherAlerts.
 
 
 Welcome

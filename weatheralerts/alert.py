@@ -20,6 +20,14 @@ class Alert():
         return dt
 
     @property
+    def event(self):
+        return self._raw['cap:event']
+
+    @property
+    def samecodes(self):
+        return self._raw['geocodes']
+
+    @property
     def expiration(self):
         '''Expiration of the alert (datetime object)'''
         ts = self._ts_parse(self._raw['cap:expires'])

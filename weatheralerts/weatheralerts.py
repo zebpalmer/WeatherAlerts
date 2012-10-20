@@ -10,6 +10,9 @@ class WeatherAlerts(object):
     Pass state='' or geocodes='samecodes_list' to change which feed is being parsed
     passing a list of samecodes will determine if they are in the same state and pick
     the correct feed or use the US feed if they're in different states
+
+    You can find your location's samecode by looking checking the following link
+    http://www.nws.noaa.gov/nwr/indexnw.htm#sametable
     '''
     def __init__(self, state=None, geocodes=None, load=True):
         '''
@@ -35,17 +38,25 @@ class WeatherAlerts(object):
         Gets raw xml (cap) from the Alerts feed, throws it into the parser
         and ends up with a list of alerts object, which it stores to self._alerts
         '''
-        cap = AlertsFeed(state=self.state).raw_cap
-        self._alerts = CapParser(cap, geo=self.geo)
+        cap = AlertsFeed(state=self.scope).raw_cap
+        parser = CapParser(geo=self.geo)
+        self._alerts = parser.cap(cap)
+
 
     @property
     def alert_count(self):
         '''simple property for checking the number of alerts, mainly for debugging purposes'''
         return len(self._alerts)
 
+    def samecode_alerts(self, samecode):
+        '''Returns alerts for specified SAME geocodes'''
+        return [x for x in self._alerts if samecode in x.samecodes]
+
 
 
 
 if __name__ == '__main__':
-    nws = WeatherAlerts(state='ID')
-    print nws.alert_count
+    nws = WeatherAlerts()
+    samealerts = nws.samecode_alerts('030081')
+    for alert in samealerts:
+        print alert.event

@@ -12,18 +12,17 @@ class CapParser(object):
     NOTE: This class has no public methods and just returns a list, it'll probably be moved
     or refactored into a function as the rewrite continues
     '''
-    def __init__(self, raw_cap, geo=None):
+    def __init__(self, geo=None):
         if geo is None:
             self.geo = GeoDB()
         else:
             self.geo = geo
         self.samecodes = self.geo.samecodes
-        alerts = _parse_cap(raw_cap)
-        return alerts
 
-    def _parse_cap(self, xmlstr):
+
+    def cap(self, raw_cap):
         alerts = []
-        main_dom = minidom.parseString(xmlstr)
+        main_dom = minidom.parseString(raw_cap)
 
         xml_entries = main_dom.getElementsByTagName('entry')
         # title is currently first so we can detect "an empty cap feed
