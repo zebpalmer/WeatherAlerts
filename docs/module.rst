@@ -17,3 +17,17 @@ Below you'll find the documentation for the various classes and methods in Weath
 .. automodule:: geo
    :members:
    :undoc-members:
+
+.. automodule:: feed
+   :members:
+   :undoc-members:
+
+
+.. automodule:: cap
+   :members:
+   :undoc-members:
+
+
+.. automodule:: alert
+   :members:
+   :undoc-members:
