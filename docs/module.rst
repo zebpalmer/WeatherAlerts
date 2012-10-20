@@ -14,3 +14,6 @@ Below you'll find the documentation for the various classes and methods in Weath
    :members:
    :undoc-members:
 
+.. automodule:: geo
+   :members:
+   :undoc-members:

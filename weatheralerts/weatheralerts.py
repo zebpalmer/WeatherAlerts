@@ -31,12 +31,17 @@ class WeatherAlerts(object):
             self.load_alerts()
 
     def load_alerts(self):
+        '''
+        Gets raw xml (cap) from the Alerts feed, throws it into the parser
+        and ends up with a list of alerts object, which it stores to self._alerts
+        '''
         cap = AlertsFeed(state=self.state).raw_cap
         parser = CapParser(geo=self.geo)
         self._alerts = parser.parse_cap(cap)
 
     @property
     def alert_count(self):
+        '''simple property for checking the number of alerts, mainly for debugging purposes'''
         return len(self._alerts)
 
 
