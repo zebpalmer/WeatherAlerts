@@ -12,5 +12,5 @@ Below you'll find the documentation for the various classes and methods in Weath
 
 .. automodule:: weatheralerts
    :members:
-
+   :undoc-members:
 
