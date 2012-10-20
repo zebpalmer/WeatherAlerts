@@ -11,6 +11,6 @@ from weatheralerts import WeatherAlerts
 
 
 
-
 if __name__ == "__main__":
-    nws_alerts = WeatherAlerts()
+    nws = WeatherAlerts(state='ID')
+    nws.load_alerts()

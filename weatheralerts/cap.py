@@ -1,21 +1,25 @@
-from weatheralerts import GeoDB
-
+from geo import GeoDB
+from alert import Alert
+from xml.dom import minidom
+import re
 
 class CapParser(object):
-    def __init__(self, capxml, geo=None):
+    def __init__(self, geo=None):
         if geo is None:
             self.geo = GeoDB()
         else:
             self.geo = geo
         self.samecodes = self.geo.samecodes
-        self.parse_cap(capxml)
+
 
     def parse_cap(self, xmlstr):
-        '''parse and cache the feed contents'''
+        '''parse feed contents'''
+        alerts = []
         main_dom = minidom.parseString(xmlstr)
 
         xml_entries = main_dom.getElementsByTagName('entry')
-        tags = ['title', 'updated', 'published', 'id', 'summary', 'cap:effective', 'cap:expires', 'cap:status',
+        # title is currently first so we can detect "an empty cap feed
+        tags = ['title', 'id', 'updated', 'published', 'link', 'summary', 'cap:event', 'cap:effective', 'cap:expires', 'cap:status',
                 'cap:msgType', 'cap:category', 'cap:urgency', 'cap:severity', 'cap:certainty', 'cap:areaDesc',
                 'cap:geocode']
 
@@ -59,6 +63,13 @@ class CapParser(object):
                 target_areas.append(area.strip())
             entry['locations'] = locations
             entry['target_areas'] = target_areas
-            tmp_alerts[entry_num] = entry
+            alert = Alert(entry)
+            alerts.append(alert)
             del entry
-        return tmp_alerts
+            del alert
+
+        return alerts
+
+
+if __name__ == '__main__':
+    pass

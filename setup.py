@@ -3,8 +3,8 @@ import sys
 
 
 VERSION_MAJOR = 0
-VERSION_MINOR = 4
-VERSION_PATCH = 10
+VERSION_MINOR = 5
+VERSION_PATCH = 1
 
 
 
@@ -19,9 +19,9 @@ setup(
     packages=['weatheralerts'],
     package_dir={
         'weatheralerts': "/weatheralerts"},
-    scripts=[ "scripts/NagiosWeatherAlerts.py",
-              "scripts/MonitorAlertsByCounty.py",
-              "scripts/NWS_Alerts.py"}
+    #scripts=[ "scripts/NagiosWeatherAlerts.py",
+              #"scripts/MonitorAlertsByCounty.py",
+              #"scripts/NWS_Alerts.py"}
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='GPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed, do useful stuff with it',
