@@ -30,7 +30,7 @@ class WeatherAlerts(object):
         else:
             self.scope = self.geo.getfeedscope(geocodes)
 
-        if load == True:
+        if load is True:
             self.load_alerts()
 
     def load_alerts(self):
@@ -42,7 +42,6 @@ class WeatherAlerts(object):
         parser = CapParser(geo=self.geo)
         self._alerts = parser.cap(cap)
 
-
     @property
     def alert_count(self):
         '''simple property for checking the number of alerts, mainly for debugging purposes'''
@@ -52,11 +51,26 @@ class WeatherAlerts(object):
         '''Returns alerts for specified SAME geocodes'''
         return [x for x in self._alerts if samecode in x.samecodes]
 
+    def county_state_alerts(self, county, state):
+        '''Given a county and state, return alerts'''
+        samecode = self.geo.lookup_samecode(county, state)
+        return self.samecode_alerts(samecode)
 
-
+    def event_state_counties(self):
+        '''Return an event type and it's state(s) and counties (consolidated)'''
+        for alert in self._alerts:
+            locations = []
+            states = []
+            for samecode in alert.samecodes:
+                county, state = self.geo.lookup_county_state(samecode)
+                locations.append((county, state))
+                if state not in states:
+                    states.append(state)
+            for state in states:
+                counties = [x for x, y in locations if y == state]
+            counties_clean = str(counties).strip("[']")
+            print "{0}: {1} - {2}".format(alert.event, state, counties_clean)
 
 if __name__ == '__main__':
     nws = WeatherAlerts()
-    samealerts = nws.samecode_alerts('030081')
-    for alert in samealerts:
-        print alert.event
+    nws.event_state_counties()

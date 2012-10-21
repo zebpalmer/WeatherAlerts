@@ -3,14 +3,13 @@ from alert import Alert
 from xml.dom import minidom
 import re
 
+
 class CapParser(object):
     '''
     Parses the xml from the alert feed, creates and returns a list of alert objects.
 
     FIXME: the _parse_cap() method of this class needs optimization, it's slow.
 
-    NOTE: This class has no public methods and just returns a list, it'll probably be moved
-    or refactored into a function as the rewrite continues
     '''
     def __init__(self, geo=None):
         if geo is None:
@@ -19,16 +18,15 @@ class CapParser(object):
             self.geo = geo
         self.samecodes = self.geo.samecodes
 
-
     def cap(self, raw_cap):
         alerts = []
         main_dom = minidom.parseString(raw_cap)
 
         xml_entries = main_dom.getElementsByTagName('entry')
-        # title is currently first so we can detect "an empty cap feed
-        tags = ['title', 'id', 'updated', 'published', 'link', 'summary', 'cap:event', 'cap:effective', 'cap:expires', 'cap:status',
-                'cap:msgType', 'cap:category', 'cap:urgency', 'cap:severity', 'cap:certainty', 'cap:areaDesc',
-                'cap:geocode']
+        # title is currently first so we can detect an empty cap feed
+        tags = ['title', 'id', 'updated', 'published', 'link', 'summary', 'cap:event', 'cap:effective', 'cap:expires',
+                'cap:status', 'cap:msgType', 'cap:category', 'cap:urgency', 'cap:severity', 'cap:certainty',
+                'cap:areaDesc', 'cap:geocode']
 
         entry_num = 0
         tmp_alerts = {}
@@ -40,9 +38,13 @@ class CapParser(object):
                 try:
                     if tag == 'cap:geocode':
                         try:
-                            entry['geocodes'] = str(dom.getElementsByTagName('value')[0].firstChild.data).split(' ')
+                            entry['samecodes'] = str(dom.getElementsByTagName('value')[0].firstChild.data).split(' ')
                         except AttributeError:
-                            entry['geocodes'] = []
+                            entry['samecodes'] = []
+                        try:
+                            entry['countycodes'] = str(dom.getElementsByTagName('value')[1].firstChild.data).split(' ')
+                        except AttributeError:
+                            entry['countycodes'] = []
                     else:
                         try:
                             entry[tag] = dom.getElementsByTagName(tag)[0].firstChild.data
@@ -55,7 +57,7 @@ class CapParser(object):
             entry['type'] = pat.match(entry['title']).group(1)
 
             locations = []
-            for geo in entry['geocodes']:
+            for geo in entry['samecodes']:
                 try:
                     location = self.samecodes[geo]
                 except KeyError:
