@@ -36,10 +36,15 @@ class GeoDB(object):
     def lookup_samecode(self, local, state):
         '''Given County, State return the SAME code for specified location. Return False if not found'''
         for location in self.samecodes:
-            if state == self.samecodes[location]['state']:
-                if local == self.samecodes[location]['local']:
+            if state.lower() == self.samecodes[location]['state'].lower():
+                if local.lower() == self.samecodes[location]['local'].lower():
                     return self.samecodes[location]
         return False
+
+    def lookup_county_state(self, samecode):
+        '''Given a samecode, return county, state'''
+        location = self.samecodes[samecode]
+        return location['local'], location['state']
 
     def getstate(self, geosame):
         '''Given a SAME code, return the state that SAME code is in'''

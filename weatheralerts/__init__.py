@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 '''
-WeatherAlerts.nws
+WeatherAlerts
 *******************
 
 File Information
@@ -19,7 +19,7 @@ File Information
 
 
 **License:**
-  GPLv3 - full text included in LICENSE.txt
+  LGPLv3 - full text included in LICENSE.txt
 
 
 License Notice:
@@ -37,8 +37,4 @@ Code Documentation
 
 '''
 
-from weatheralerts import WeatherAlerts
-from weatheralerts import GeoDB
-from weatheralerts import AlertsFeed
-from weatheralerts import CapParser
-from weatheralerts import Alert
+from weather_alerts import WeatherAlerts

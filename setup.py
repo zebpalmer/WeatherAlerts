@@ -21,7 +21,7 @@ setup(
               #"scripts/MonitorAlertsByCounty.py",
               #"scripts/NWS_Alerts.py"}
     url='http://github.com/zebpalmer/WeatherAlerts',
-    license='GPLv3',
+    license='LGPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed (NWS CAP format), do useful stuff with it',
     long_description=open('README.rst').read(),
     install_requires=['requests', 'dateutils'],

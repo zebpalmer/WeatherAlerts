@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import tempfile
 
 
-
 class AlertsFeed(object):
     '''Fetch the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the GeoDB class has already been created, you can pass that

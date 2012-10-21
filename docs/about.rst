@@ -38,8 +38,9 @@ Use cases that I am in considering in the development of WeatherAlerts.
 
 Author
 =======
-This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play.
-Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
+This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of
+python at work and play. Circle me on Google Plus `zebpalmer.com/+ <http://zebpalmer.com/+>`_ and see my other work at
+`ZebPalmer.com <http://www.zebpalmer.com>`_
 
 
 
