@@ -6,8 +6,8 @@ WeatherAlerts README
 Current Relase:
 ===================
 The current release of WeatherAlerts is 0.4.9 and is avilible on pypi.
-The next version 5.x will not be backwards compatible with the 4.x branch
-as there are significant improvement. Please test any scripts that rely
+The next version, 5.x, will not be backwards compatible with the 4.x
+as there are significant improvements. Please test any scripts that rely
 on WeatherAlerts before upgrading.
 
 
