@@ -1,13 +1,19 @@
-from weatheralerts import nws
+try:
+    from weatheralerts import WeatherAlerts
+except:
+    try:
+        from ..weatheralerts import WeatherAlerts
+    except:
+        raise ImportError
 
 '''Tests are commented out until the reorg is complete as which point most will need to be rewritten'''
 
 
 # Some basic Nose tests....
 
-#def test_alerts_objcreation():
-    ##from nws_alerts import nws_alerts
-    #alerts = nws.WeatherAlerts()
+def test_almost_everything():
+    nws = WeatherAlerts()
+    nws.alert_count()
 
 #def test_same_objcreation():
     ##from nws_alerts import nws_alerts

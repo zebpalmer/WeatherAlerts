@@ -6,29 +6,25 @@ from alert import Alert
 
 class WeatherAlerts(object):
     '''
-    WeatherAlerts object that controls interaction with the samecodes and capparser classes/methods.
-    Pass state='' or geocodes='samecodes_list' to change which feed is being parsed
-    passing a list of samecodes will determine if they are in the same state and pick
-    the correct feed or use the US feed if they're in different states
-
-    You can find your location's samecode by looking checking the following link
-    http://www.nws.noaa.gov/nwr/indexnw.htm#sametable
+    WeatherAlerts object that controls interaction with the NWS CAP alerts feed as well and varios geo data sources.
+    Most interaction from users, scripts, etc will be through the api provided by this class. So, as we approach a
+    more stable project, the API in this class will also become more stable and maintain backwards compatibility.
     '''
-    def __init__(self, state=None, geocodes=None, load=True):
+    def __init__(self, state=None, samecodes=None, countycodes=None, load=True):
         '''
-        init Alerts, default to National Feed, set state or geocodes to define a feed for a given area.
-        if geocodes are specified, then all alerts objects will be limited to those areas
+        init Alerts, default to National Feed, set state level samecodes or county codes the area in which you want to
+        load alerts.
         '''
         self._alerts = None
-        self.state = state
         self.geo = GeoDB()
-        if geocodes is None:
-            if self.state is None:
-                self.scope = 'US'
-            else:
-                self.scope = state
-        else:
-            self.scope = self.geo.getfeedscope(geocodes)
+        self.state = state
+        self.scope = 'US'
+        self.samecodes = samecodes
+        self.countycodes = countycodes
+        if self.state is not None:
+            self.scope = self.state
+        elif samecodes is not None or countycodes is not None:
+            self.scope = self.geo.getfeedscope(samecodes, countycodes)
 
         if load is True:
             self.load_alerts()
@@ -39,8 +35,8 @@ class WeatherAlerts(object):
         and ends up with a list of alerts object, which it stores to self._alerts
         '''
         cap = AlertsFeed(state=self.scope).raw_cap
-        parser = CapParser(geo=self.geo)
-        self._alerts = parser.cap(cap)
+        parser = CapParser(cap, geo=self.geo)
+        self._alerts = parser.get_alerts()
 
     @property
     def alert_count(self):

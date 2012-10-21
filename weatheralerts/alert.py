@@ -104,7 +104,6 @@ if __name__ == '__main__':
                 'published': u'2012-10-19T16:17:00-06:00',
                 'cap:effective': u'2012-10-19T16:17:00-06:00',
                 'summary': '''...WIND ADVISORY IN EFFECT FROM 5 AM TO 7 PM PDT SATURDAY... THE NATIONAL WEATHER SERVICE IN SPOKANE HAS ISSUED A WIND ADVISORY...WHICH IS IN EFFECT FROM 5 AM TO 7 PM PDT SATURDAY. * WINDS: SOUTHWEST 25 TO 35 MPH WITH GUSTS UP TO 45 MPH. * TIMING: WINDS WILL STEADILY INCREASE EARLY SATURDAY MORNING AND SHOULD PEAK AROUND MIDDAY.''',
-                'type': u'Wind Advisory',
                 'id': '''http://alerts.weather.gov/cap/wwacapget.php?x=ID124CCA3406C4.WindAdvisory.124CCA41E2D0ID.OTXNPWOTX.24f377e1f6ddc33ee84995f226f90bb5''',
                 'samecodes': ['016055',
                              '016061',
