@@ -9,6 +9,7 @@ settings.cfg
 *.wpr
 *.wpu
 *.bak
+.tox
 build
 dist
 MANIFEST
