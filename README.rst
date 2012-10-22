@@ -17,8 +17,7 @@ This module is a mess (but mostly a functional mess) as
 it started in my early days of python... as I have time I'm rewriting it. I'm
 dropping support for python 3 on the rewrite branch since 90% of what I code
 in is 2.7. I will certainly port it back to 3 before releasing the new
-version to pypi. In the meantime, feel free to work on the rewrite branch,
-but if you want working code, stick with master.
+version to pypi.
 
 This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_
 
