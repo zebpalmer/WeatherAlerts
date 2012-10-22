@@ -2,22 +2,36 @@
 Release Changes
 ===============
 
-**v0.5.0** (*in progress, not yet released*)
+Current Development is on the 5.0 version
+
+**0.5.0** (*in progress, not yet released*)
+
+* building python3 version at install, no longer maintaining separate code
 * complete rewrite
 * improved API organization
 * improved documentation
 * relicensed under LGPLv3
+* supporting county codes
 
 
-**v0.4.8**
 
+**v0.4.9** (*Current Release*)
+
+* Last of the 4.x branch
 * rather large changes to classes
 * still running v0.4.5 in python2 installs will update that in 0.4.8 which will begin a release canidate for v0.5.0
+
+
+Older Versions
+================
+
+Versions prior to 0.4.9 are no longer supported. It is suggest you test and upgrade to 0.5.0 when availible.
+
 
 **v0.4.5**
 
 * minor packaging changes
-* added initial suppor for object reload based on age
+* added initial support for object reload based on age
 
 **v0.4.4**
 

@@ -5,7 +5,7 @@ Using WeatherAlerts
 Use cases
 ------------------
 .. Note::
-   The previous examples no longer work with the rewritten module.
+   The previous examples no longer work with the rewritten module. New examples will be added prior to release.
 
 
 
