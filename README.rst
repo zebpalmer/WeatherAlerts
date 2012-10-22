@@ -10,6 +10,12 @@ The next version, 5.x, will not be backwards compatible with the 4.x
 as there are significant improvements. Please test any scripts that rely
 on WeatherAlerts before upgrading.
 
+Development Release:
+=======================
+You can install the current development release of WeatherAlerts by running
+
+``pip install https://github.com/zebpalmer/WeatherAlerts/tarball/0.5.0a1`` 
+
 
 PROJECT STATUS & TODO
 ===================
