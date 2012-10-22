@@ -1,4 +1,7 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
+
+readme = open('README.rst', 'rt').read()
+
 import sys
 
 VERSION_MAJOR = 0
@@ -10,7 +13,7 @@ versionstr = '0.5.0a1'
 
 
 setup(
-    name='WeatherAlerts',
+	name='WeatherAlerts',
     version=versionstr,
     author='Zeb Palmer',
     author_email='zeb@zebpalmer.com',
@@ -23,8 +26,9 @@ setup(
     url='http://github.com/zebpalmer/WeatherAlerts',
     license='LGPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed (NWS CAP format), do useful stuff with it',
-    long_description=open('README.rst').read(),
+    long_description=readme,
     install_requires=['requests', 'dateutils'],
+    use_2to3=True,
     classifiers=[
               'Development Status :: 3 - Alpha',
               'Environment :: Console',
