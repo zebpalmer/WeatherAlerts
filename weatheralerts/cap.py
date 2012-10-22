@@ -2,7 +2,6 @@ from geo import GeoDB
 from alert import Alert
 from xml.dom import minidom
 
-
 class CapParser(object):
     '''
     Parses the xml from the alert feed, creates and returns a list of alert objects.
@@ -27,7 +26,7 @@ class CapParser(object):
         '''
         emptyfeed = "There are no active watches, warnings or advisories"
         alerts = []
-        if emptyfeed in self._raw_cap:
+        if emptyfeed in str(self._raw_cap):
             return alerts
         main_dom = minidom.parseString(self._raw_cap)
         xml_entries = main_dom.getElementsByTagName('entry')
