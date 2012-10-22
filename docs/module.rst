@@ -4,7 +4,7 @@ Code Documentation
 
 .. Note::
    You're looking at documentation for the development version of WeatherAlerts. If you're looking for documentation
-   for the latest stable release (what's currently in pypi) click `Latest <http://weatheralerts.readthedocs.org/en/v0.4.9/>`_
+   for the latest stable release (what's currently in pypi) click `v0.4.9 <http://weatheralerts.readthedocs.org/en/v0.4.9/>`_
 
 
 
