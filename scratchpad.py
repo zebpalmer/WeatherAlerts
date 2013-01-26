@@ -8,11 +8,7 @@ from weatheralerts import WeatherAlerts
 
 
 
-
-
-
 if __name__ == "__main__":
-    nws = WeatherAlerts()
-    samealerts = nws.samecode_alerts('030081')
-    for alert in samealerts:
+    nws = WeatherAlerts(samecodes='016027')
+    for alert in nws.alerts:
         print alert.event

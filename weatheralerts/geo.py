@@ -72,8 +72,7 @@ class GeoDB(object):
                 state = self.samecodes[code]['state']
             except KeyError:
                 if not isinstance(geocodes, list):
-                    print ("specified geocodes must be list")
-                    raise
+                    raise Exception("specified geocodes must be list")
                 else:
                     print("SAMECODE Not found")
             if state not in states:
