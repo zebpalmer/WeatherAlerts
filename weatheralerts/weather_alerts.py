@@ -1,7 +1,7 @@
+# pylint: disable=W0403
 from feed import AlertsFeed
 from cap import CapParser
 from geo import GeoDB
-from alert import Alert
 
 
 class WeatherAlerts(object):
@@ -41,7 +41,7 @@ class WeatherAlerts(object):
         Gets raw xml (cap) from the Alerts feed, throws it into the parser
         and ends up with a list of alerts object, which it stores to self._alerts
         '''
-        cap = AlertsFeed(state=self.scope).raw_cap
+        cap = AlertsFeed(state=self.scope).raw_cap()
         parser = CapParser(cap, geo=self.geo)
         self._alerts = parser.get_alerts()
 
@@ -73,6 +73,7 @@ class WeatherAlerts(object):
 
     def event_state_counties(self):
         '''Return an event type and it's state(s) and counties (consolidated)'''
+        # FIXME: most of this logic should be moved to the alert instance and refactored
         for alert in self._alerts:
             locations = []
             states = []
@@ -85,7 +86,3 @@ class WeatherAlerts(object):
                 counties = [x for x, y in locations if y == state]
             counties_clean = str(counties).strip("[']")
             print "{0}: {1} - {2}".format(alert.event, state, counties_clean)
-
-if __name__ == '__main__':
-    nws = WeatherAlerts()
-    nws.event_state_counties()

@@ -7,7 +7,8 @@ import tempfile
 class AlertsFeed(object):
     '''Fetch the NWS CAP/XML Alerts feed for the US or a single state if requested
        if an instance of the GeoDB class has already been created, you can pass that
-       as well to save some processing'''
+       as well to save some processing
+       This will cache the feed (in local tempdir) for up to 'maxage' minutes'''
     def __init__(self, state='US', maxage=3):
         self._alerts = ''
         self._feedstatus = ''
@@ -27,20 +28,18 @@ class AlertsFeed(object):
                 try:
                     with open(self._feed_cache_file, 'rb') as cache:
                         feed_cache = cache.read()
-                except Exception:
+                finally:
                     pass
         return feed_cache
 
-    @property
-    def raw_cap(self):
+    def raw_cap(self, refresh=False):
         '''
         Raw xml(cap) of the the feed. If a valid cache is availible
         it is used, else a new copy of the feed is grabbed
         '''
         raw = self._get_feed_cache()
-        if raw is None:
-            raw = self._get_nws_feed()
-            self._save_feed_cache(raw)
+        if raw is None or refresh is True:
+            raw = self.refresh()
         return raw
 
     def refresh(self):
@@ -54,13 +53,10 @@ class AlertsFeed(object):
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
         url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (self._state)
+        # pylint: disable=E1103
         xml = requests.get(url).content
         return xml
 
     def _save_feed_cache(self, raw_feed):
         with open(self._feed_cache_file, 'wb') as cache:
             cache.write(raw_feed)
-
-
-if __name__ == '__main__':
-    feed = AlertsFeed(state='ID')

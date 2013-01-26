@@ -1,5 +1,6 @@
 import unittest
-from weatheralerts import WeatherAlerts
+# pylint: disable=W0403
+from weather_alerts import WeatherAlerts
 
 
 class Test_WeatherAlerts(unittest.TestCase):
@@ -9,26 +10,81 @@ class Test_WeatherAlerts(unittest.TestCase):
     def test_almost_everything(self):
         print "Alerts currently in feed {0}".format(self.nws.alert_count)
 
-    def test_geo_get_state(self):
-        testcases = [('016027', 'ID'),
-                     ('047065', 'TN')]
-        for code, state in testcases:
-            response = self.nws.geo.getstate(code)
-            assert response == state
+    def test_event_state_counties(self):
+        self.nws.event_state_counties()
 
-    def test_geo_get_scope(self):
-        testcases = [(['016027', '047065'], 'US'),
-                     (['016027', '016001'], 'ID'),
-                     (['016027'], 'ID')]
-        for codes, scope in testcases:
-            response = self.nws.geo.getfeedscope(codes)
-            assert response == scope
+    def test_samecode_alerts_method(self):
+        self.nws.samecode_alerts('016027')
 
-    def test_same_lookup(self):
-        expected = {'state': 'ID', 'code': '016027', 'local': 'Canyon'}
-        req_location = {'code': '016027'}
-        response = self.nws.geo.location_lookup(req_location)
-        assert response == expected
+    def test_county_state_alerts(self):
+        self.nws.county_state_alerts('canyon', 'ID')
+
+    def test_alert_attributes(self):
+        for alert in self.nws.alerts:
+            x = alert.title
+            x = alert.summary
+            x = alert.areadesc
+            x = alert.event
+            x = alert.samecodes
+            x = alert.zonecodes
+            x = alert.expiration
+            x = alert.updated
+            x = alert.effective
+            x = alert.published
+            x = alert.severity
+            x = alert.category
+            x = alert.urgency
+
+
+    def test_passing_samecodes(self):
+        # Alerts by a Samecode
+        nws = WeatherAlerts(samecodes='016027')
+        nws = WeatherAlerts(samecodes=['016027','016001','016073','016075'])
+        for alert in nws.alerts:
+            x = alert.title
+            x = alert.summary
+            x = alert.areadesc
+            x = alert.event
+            x = alert.samecodes
+            x = alert.zonecodes
+            x = alert.expiration
+            x = alert.updated
+            x = alert.effective
+            x = alert.published
+            x = alert.severity
+            x = alert.category
+            x = alert.urgency
+
+
+    def test_passing_state(self):
+        nws = WeatherAlerts(state='ID')
+        for alert in nws.alerts:
+            x = alert.title
+            x = alert.summary
+            x = alert.areadesc
+            x = alert.event
+            x = alert.samecodes
+            x = alert.zonecodes
+            x = alert.expiration
+            x = alert.updated
+            x = alert.effective
+            x = alert.published
+            x = alert.severity
+            x = alert.category
+            x = alert.urgency
+
+    def test_break_on_samecodes(self):
+        '''break if you pass in non str/list samecodes'''
+        try:
+            nws = WeatherAlerts(samecodes=1)
+        except Exception:
+            pass
+        else:
+            raise Exception("That shouldn't have worked")
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
