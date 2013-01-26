@@ -10,7 +10,7 @@ class WeatherAlerts(object):
     Most interaction from users, scripts, etc will be through the api provided by this class. So, as we approach a
     more stable project, the API in this class will also become more stable and maintain backwards compatibility.
     '''
-    def __init__(self, state=None, samecodes=None, countycodes=None, load=True):
+    def __init__(self, state=None, samecodes=None, load=True):
         '''
         init Alerts, default to National Feed, set state level samecodes or county codes the area in which you want to
         load alerts.
@@ -19,12 +19,19 @@ class WeatherAlerts(object):
         self.geo = GeoDB()
         self.state = state
         self.scope = 'US'
-        self.samecodes = samecodes
-        self.countycodes = countycodes
+        if samecodes is None:
+            self.samecodes = None
+        elif isinstance(samecodes, str):
+            self.samecodes = []
+            self.samecodes.append(samecodes)
+        elif isinstance(samecodes, list):
+            self.samecodes = samecodes
+        else:
+            raise Exception("Samecode must be string, or list of strings")
         if self.state is not None:
             self.scope = self.state
-        elif samecodes is not None or countycodes is not None:
-            self.scope = self.geo.getfeedscope(samecodes, countycodes)
+        elif samecodes is not None:
+            self.scope = self.geo.getfeedscope(self.samecodes)
 
         if load is True:
             self.load_alerts()
@@ -37,6 +44,18 @@ class WeatherAlerts(object):
         cap = AlertsFeed(state=self.scope).raw_cap
         parser = CapParser(cap, geo=self.geo)
         self._alerts = parser.get_alerts()
+
+    @property
+    def alerts(self):
+        if self.samecodes is not None:
+            temp = []
+            for alert in self._alerts:
+                for code in alert.samecodes:
+                    if code in self.samecodes:
+                        temp.append(alert)
+            return temp
+        else:
+            return self._alerts
 
     @property
     def alert_count(self):

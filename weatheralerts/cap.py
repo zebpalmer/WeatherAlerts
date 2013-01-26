@@ -2,6 +2,7 @@ from geo import GeoDB
 from alert import Alert
 from xml.dom import minidom
 
+
 class CapParser(object):
     '''
     Parses the xml from the alert feed, creates and returns a list of alert objects.
@@ -17,8 +18,8 @@ class CapParser(object):
             self.geo = geo
         self.samecodes = self.geo.samecodes
         self._cap_tags = ['title', 'id', 'updated', 'published', 'link', 'summary', 'cap:event', 'cap:effective',
-                     'cap:expires', 'cap:status', 'cap:msgType', 'cap:category', 'cap:urgency', 'cap:severity',
-                     'cap:certainty', 'cap:areaDesc', 'cap:geocode']
+                          'cap:expires', 'cap:status', 'cap:msgType', 'cap:category', 'cap:urgency', 'cap:severity',
+                          'cap:certainty', 'cap:areaDesc', 'cap:geocode']
 
     def get_alerts(self):
         '''
@@ -31,7 +32,6 @@ class CapParser(object):
         main_dom = minidom.parseString(self._raw_cap)
         xml_entries = main_dom.getElementsByTagName('entry')
         # title is currently first so we can detect an empty cap feed
-
 
         for dom in xml_entries:
             #parse the entry to a temp 'entry' dict

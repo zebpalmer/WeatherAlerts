@@ -9,7 +9,7 @@ VERSION_MINOR = 5
 VERSION_PATCH = 0
 
 #versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
-versionstr = '0.5.0a1'
+versionstr = '0.5.0a2'
 
 
 setup(
