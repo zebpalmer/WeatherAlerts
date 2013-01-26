@@ -5,7 +5,7 @@ Release Changes
 Current Development is on the 5.0 version
 
 **0.5.0** (*in progress, not yet released*)
-
+* 100% Test Coverage
 * building python3 version at install, no longer maintaining separate code
 * complete rewrite
 * improved API organization

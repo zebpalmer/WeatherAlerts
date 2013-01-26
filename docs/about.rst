@@ -5,7 +5,7 @@ This python module started as part of another project of mine. But since this is
 
 Since this project gets it's data from the National Weather Service XML/CAP feed, it's free and straight from the source. Other library's I've seen (or written) get data from 3rd parties that require an API key which in many cases requires a subscription or imposes restrictions.
 
-This code is provided under GPLv3 (see LICENSE.txt). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request or email me: zeb@zebpalmer.com
+This code is provided under LGPLv3 as of version 0.5a (see LICENSE.txt). If you do make improvements, please contribute back to this project. You can submit a git pull request or email me: zeb@zebpalmer.com
 
 This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_
 
@@ -19,7 +19,7 @@ Alternativly you can download and install directly from the source code on githu
 
 Bugs & Feature Requests
 ========================
-If you find one, please report it in the `issue tracker <http://github.com/zebpalmer/WeatherAlerts/issues>`_
+When you find one, please report it in the `issue tracker <http://github.com/zebpalmer/WeatherAlerts/issues>`_
 
 
 Goals
@@ -55,6 +55,7 @@ There are several ways you can contact me or otherwise get help beyond the docum
 
 **Random Chatter**
   Circle me on Google+ `Zeb Palmer Google Plus <https://plus.google.com/u/0/105137345884947048400/>`_
+  Follow me on Twitter `@zebpalmer <http://twitter.com/zebpalmer>`_
 
 **Website**
   For info on other projects, see my website, `Zeb Palmer <http://www.zebpalmer.com>`_

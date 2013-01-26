@@ -22,14 +22,13 @@ class GeoDB(object):
         *currently locations are a dictionary, once other geo data is added, they will move to a location class/obj*
         '''
         location = False
-        locations = self.samecodes
         try:
-            location = locations[req_location['code']]
-        except KeyError:
+            location = self.samecodes[req_location['code']]
+        except Exception:
             pass
         try:
             location = self.lookup_samecode(req_location['local'], req_location['state'])
-        except KeyError:
+        except Exception:
             pass
         return location
 
@@ -55,28 +54,27 @@ class GeoDB(object):
         '''Given multiple SAME codes, determine if they are all in one state. If so, it returns that state.
            Otherwise return 'US'. This is used to determine which NWS feed needs to be parsed to get
            all alerts for the requested SAME codes'''
-        states = self.get_states_from_samecodes(geocodes)
+        states = self._get_states_from_samecodes(geocodes)
         if len(states) >= 2:
             return 'US'
         else:
             return states[0]
 
-    def get_states_from_samecodes(self, geocodes):
+    def _get_states_from_samecodes(self, geocodes):
         '''Returns all states for a given list of SAME codes
         *Shouldn't be used to determine feed scope, please use getfeedscope()*
-
         '''
         states = []
         for code in geocodes:
+            if not isinstance(geocodes, list):
+                raise Exception("specified geocodes must be list")
             try:
                 state = self.samecodes[code]['state']
             except KeyError:
-                if not isinstance(geocodes, list):
-                    raise Exception("specified geocodes must be list")
-                else:
-                    print("SAMECODE Not found")
-            if state not in states:
-                states.append(state)
+                raise Exception("Samecode Not Found")
+            else:
+                if state not in states:
+                    states.append(state)
         return states
 
 
@@ -97,7 +95,7 @@ class SameCodes(object):
         return self._samecodes
 
     def reload(self):
-        '''force refresh of Same Codes (mainly for testing)'''
+        '''force refresh of Same Codes'''
         self._load_same_codes(refresh=True)
 
     def _load_same_codes(self, refresh=False):
@@ -105,14 +103,13 @@ class SameCodes(object):
         if refresh is True:
             self._get_same_codes()
         else:
-            cached = self._cached_same_codes()
-            if cached is None:
-                self._samecodes = self._get_same_codes()
+            self._cached_same_codes()
 
     def _get_same_codes(self):
         '''get SAME codes, load into a dict and cache'''
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
+        # pylint: disable=E1103
         for row in requests.get(url).content.split('\n'):
             try:
                 code, local, state = str(row).strip().split(',')
@@ -124,7 +121,7 @@ class SameCodes(object):
                 #stripping it out
                 location['state'] = state.strip()
                 same[code] = location
-            except ValueError:
+            finally:
                 pass
         cache = open(self._same_cache_file, 'wb')
         pickle.dump(same, cache)
@@ -142,18 +139,7 @@ class SameCodes(object):
                     cache = open(cache_file, 'rb')
                     self._samecodes = pickle.load(cache)
                     cache.close()
-                    #print "Loaded SAME codes from Cache"
                     return True
-                except Exception:
-                    # if any problems opening cache, ignore and move on
-                    return None
-            else:
-                #print "SAME codes cache is old, refreshing from web"
-                return None
-        else:
-            #print "No SAME codes cache availible, loading from web"
-            return None
-
-
-if __name__ == '__main__':
-    geo = GeoDB()
+                finally:
+                    pass
+        self.reload()

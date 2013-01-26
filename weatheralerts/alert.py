@@ -1,5 +1,4 @@
 from dateutil.parser import parse
-from datetime import datetime
 
 
 class Alert():
@@ -47,9 +46,13 @@ class Alert():
         return self._raw['samecodes']
 
     @property
-    def countycodes(self):
-        '''UCG county codes for the alert area'''
-        return self._raw['countycodes']
+    def zonecodes(self):
+        '''UCG codes for the alert area (these are sometimes referred to as county codes,
+        but that's not quite accurate)'''
+        try:
+            return self._raw['UCG']
+        except:
+            return []
 
     @property
     def expiration(self):
@@ -90,31 +93,3 @@ class Alert():
         '''Alert urgency'''
         return self._raw['cap:urgency']
 
-
-if __name__ == '__main__':
-    testdata = {'cap:expires': u'2012-10-20T07:00:00-06:00',
-                'updated': u'2012-10-19T16:17:00-06:00',
-                'locations': [{'state': 'ID', 'code': '016055', 'local': 'Kootenai'},
-                              {'state': 'ID', 'code': '016061', 'local': 'Lewis'},
-                              {'state': 'ID', 'code': '016069', 'local': 'Nez Perce'}],
-                'cap:category': u'Met',
-                'title': u'Wind Advisory issued October 19 at 4:17PM MDT until October 20 at 8:00PM MDT by NWS',
-                'cap:certainty': u'Likely',
-                'cap:severity': u'Minor',
-                'cap:status': u'Actual',
-                'cap:event': u'Wind Advisory',
-                'cap:msgType': u'Alert',
-                'cap:urgency': u'Expected',
-                'cap:areaDesc': u"Coeur d'Alene Area; Lewis and Southern Nez Perce Counties",
-                'published': u'2012-10-19T16:17:00-06:00',
-                'cap:effective': u'2012-10-19T16:17:00-06:00',
-                'summary': '''...WIND ADVISORY IN EFFECT FROM 5 AM TO 7 PM PDT SATURDAY... THE NATIONAL WEATHER SERVICE IN SPOKANE HAS ISSUED A WIND ADVISORY...WHICH IS IN EFFECT FROM 5 AM TO 7 PM PDT SATURDAY. * WINDS: SOUTHWEST 25 TO 35 MPH WITH GUSTS UP TO 45 MPH. * TIMING: WINDS WILL STEADILY INCREASE EARLY SATURDAY MORNING AND SHOULD PEAK AROUND MIDDAY.''',
-                'id': '''http://alerts.weather.gov/cap/wwacapget.php?x=ID124CCA3406C4.WindAdvisory.124CCA41E2D0ID.OTXNPWOTX.24f377e1f6ddc33ee84995f226f90bb5''',
-                'samecodes': ['016055',
-                             '016061',
-                             '016069'],
-
-                }
-
-    alert = Alert(testdata)
-    print alert.summary

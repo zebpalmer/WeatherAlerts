@@ -4,11 +4,7 @@ readme = open('README.rst', 'rt').read()
 
 import sys
 
-VERSION_MAJOR = 0
-VERSION_MINOR = 5
-VERSION_PATCH = 0
 
-#versionstr  = '%s.%s.%s' % (VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH)
 versionstr = '0.5.0a2'
 
 
