@@ -11,13 +11,24 @@ Use cases
 
 Simple example
 ===============
-This is the simplest example, import the WeatherAlerts class, create an instance. We then request all alert event types for a given samecode.
+This is the simplest example, import the WeatherAlerts class, create an instance. We then request all alerts for a
+given samecode, list of samecodes or for a State.
 
 .. code-block:: python
 
    from weatheralerts import WeatherAlerts
 
-   nws = WeatherAlerts()
-   alerts = nws.samecode_alerts('030081')
-   for alert in alerts:
-       print alert.event
+   # Alerts by a Samecode
+   nws = WeatherAlerts(samecodes='016027')
+   for alert in nws.alerts:
+       print alert.title
+
+   # Alerts for a list of Samecodes
+   nws = WeatherAlerts(samecodes=['016027','016001','016073','016075'])
+   for alert in nws.alerts:
+       print alert.title
+
+   # Alerts for a State
+   nws = WeatherAlerts(state='ID')
+   for alert in nws.alerts:
+       print "{0}:  {1}".format(alert.areadesc, alert.title)

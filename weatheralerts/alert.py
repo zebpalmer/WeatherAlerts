@@ -22,6 +22,11 @@ class Alert():
         return dt
 
     @property
+    def title(self):
+        '''Alert title'''
+        return self._raw['title']
+
+    @property
     def summary(self):
         '''Alert summary'''
         return self._raw['summary']
