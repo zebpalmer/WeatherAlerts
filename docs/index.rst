@@ -19,7 +19,6 @@ CURRENT BUILD STATUS:
 .. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 
 
-
 This code and related documentation is provided under LGPLv3 (see LICENSE.txt included in the package source code). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request on github or email me: zeb@zebpalmer.com
 
 
@@ -39,7 +38,7 @@ Documentation Contents
 * :ref:`search`
 
 
-This progam is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. See my other work at `Zeb Palmer <http://www.zebpalmer.com>`_
+This module is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play. See my other work at `Zeb Palmer <http://www.zebpalmer.com>`_
 
 
 
