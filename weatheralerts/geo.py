@@ -110,7 +110,7 @@ class SameCodes(object):
         same = {}
         url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
         # pylint: disable=E1103
-        for row in requests.get(url).content.split('\n'):
+        for row in str(requests.get(url).content).split('\n'):  # convert to str for py3 compatibility
             try:
                 code, local, state = str(row).strip().split(',')
                 location = {}
