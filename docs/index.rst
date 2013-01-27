@@ -13,7 +13,8 @@ WeatherAlerts
 Test/Build Status
 ------------------
 WeatherAlerts has 100% code test coverage, each commit is built and tested in both python 2 and python 3.
-Current Status:
+
+CURRENT BUILD STATUS:
 
 .. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 
