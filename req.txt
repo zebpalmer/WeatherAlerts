@@ -1,2 +1,1 @@
 requests>=0.14.0
-DateUtils>=0.5.0
