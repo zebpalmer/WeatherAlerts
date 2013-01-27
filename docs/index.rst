@@ -14,6 +14,7 @@ Test/Build Status
 ------------------
 WeatherAlerts has 100% code test coverage, each commit is built and tested in both python 2 and python 3.
 Current Status:
+
 .. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 
 This code and related documentation is provided under LGPLv3 (see LICENSE.txt included in the package source code). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request on github or email me: zeb@zebpalmer.com
