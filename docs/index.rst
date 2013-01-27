@@ -18,11 +18,13 @@ CURRENT BUILD STATUS:
 
 .. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 
+
+
 This code and related documentation is provided under LGPLv3 (see LICENSE.txt included in the package source code). If you do make improvements, please contribute back to this project. I certainly welcome new features, improvments and of course bug fixes. You can submit a git pull request on github or email me: zeb@zebpalmer.com
 
 
-Documentation
---------------
+Documentation Contents
+-----------------------
 
 .. toctree::
    :maxdepth: 2
