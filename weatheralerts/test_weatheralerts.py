@@ -1,5 +1,5 @@
 import unittest
-# pylint: disable=W0403
+# pylint: disable=W0403,W0212,W0612
 from weather_alerts import WeatherAlerts
 
 

@@ -1,5 +1,5 @@
 import unittest
-# pylint: disable=W0403
+# pylint: disable=W0403,W0212,W0612
 from cap import CapParser
 
 # some sample cap xml
@@ -297,5 +297,4 @@ class Test_Cap(unittest.TestCase):
         c.get_alerts()
 
 if __name__ == '__main__':
-    c = CapParser(raw_cap=rc, geo=None)
     unittest.main()

@@ -2,11 +2,6 @@
 WeatherAlerts
 *********************
 
-.. Note::
-   You are looking at the documentation for the current development version which will be released soon. If you'd like to check the documentation for the current released version, check `here <http://weatheralerts.readthedocs.org/en/v0.4.9/>`_
-
-.. Warning::
-   Version 0.5 will not be backwards compatible with version 0.4.9 and previous.
 
 **WeatherAlerts a python package that pulls in the National Weather Service (NWS) Common Alerting Protocol (CAP) Emergency Alerts index feed, parses it and provides interaction with currently active alerts.**
 
