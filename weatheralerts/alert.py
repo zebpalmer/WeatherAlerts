@@ -1,4 +1,3 @@
-from dateutil.parser import parse
 
 
 class Alert():
