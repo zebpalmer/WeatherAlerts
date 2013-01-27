@@ -12,7 +12,7 @@ Code Documentation
 Below you'll find the documentation for the various classes and methods in WeatherAlerts.
 
 .. Note::
-   This page is dynamically generated from the documentation written into the code
+   This page is dynamically generated from the documentation written within the code
 
 
 
@@ -20,9 +20,11 @@ Below you'll find the documentation for the various classes and methods in Weath
    :members:
    :undoc-members:
 
+
 .. automodule:: geo
    :members:
    :undoc-members:
+
 
 .. automodule:: feed
    :members:

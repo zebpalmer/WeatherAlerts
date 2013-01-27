@@ -2,17 +2,11 @@
 Using WeatherAlerts
 ********************
 
-Use cases
-------------------
-.. Note::
-   The previous examples no longer work with the rewritten module. New examples will be added prior to release.
-
-
 
 Simple example
 ===============
-This is the simplest example, import the WeatherAlerts class, create an instance. We then request all alerts for a
-given samecode, list of samecodes or for a State.
+This are three examples of the simplest implementation, import the WeatherAlerts class, create an instance requesting alerts for
+an area based on one or more SAMECODES or bt requesting an entire State. 
 
 .. code-block:: python
 

@@ -1,11 +1,18 @@
 About WeatherAlerts
 *********************
 
-This python module started as part of another project of mine. But since this is more useful as a standalone module, I've decided to move it to it's own project and open source it. As this is a alpha/beta release aspects of the project will change, and probably pretty often. Check back here for updates, if you install using pip, you can run ``pip install -U weatheralerts`` to get the latest version. (I've been releasing on average a minor release per week, and several point releases per week.)
+This python module started as part of another project of mine. But since it is
+is more useful as a standalone module, I've decided to move it to it's own
+project and open source it. 
 
-Since this project gets it's data from the National Weather Service XML/CAP feed, it's free and straight from the source. Other library's I've seen (or written) get data from 3rd parties that require an API key which in many cases requires a subscription or imposes restrictions.
+Since this project gets it's data from the National Weather Service XML/CAP
+feed, it's free and straight from the source. Other library's I've seen (or
+written) get data from 3rd parties that require an API key which in many
+cases requires a subscription or imposes use restrictions.
 
-This code is provided under LGPLv3 as of version 0.5a (see LICENSE.txt). If you do make improvements, please contribute back to this project. You can submit a git pull request or email me: zeb@zebpalmer.com
+This code is provided under LGPLv3 as of version 0.5.x (see LICENSE.txt). 
+If you do make improvements, please contribute back to this project. 
+You can submit a git pull request or email me: zeb@zebpalmer.com
 
 This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zebpalmer/WeatherAlerts>`_
 
@@ -24,7 +31,7 @@ When you find one, please report it in the `issue tracker <http://github.com/zeb
 
 Goals
 ======
-Use cases that I am in considering in the development of WeatherAlerts.
+Use cases that I am considering in the development of WeatherAlerts.
 
 - Simple command line tool for checking active, local alerts.
 - Packaged module to call from other programs
@@ -47,14 +54,12 @@ Contact
 
 There are several ways you can contact me or otherwise get help beyond the documentation.
 
-**Bug Reports**
-  Please submit bug reports via the projects issue tracker on github https://github.com/zebpalmer/WeatherAlerts/issues
-
-**Feature Requests**
-  You can submit an issue via the above link or email me zeb@zebpalmer.com
+**Bug Reports & Feature Requests**
+  Please submit via the projects issue tracker on github https://github.com/zebpalmer/WeatherAlerts/issues
 
 **Random Chatter**
   Circle me on Google+ `Zeb Palmer Google Plus <https://plus.google.com/u/0/105137345884947048400/>`_
+  
   Follow me on Twitter `@zebpalmer <http://twitter.com/zebpalmer>`_
 
 **Website**

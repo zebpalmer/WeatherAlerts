@@ -1,7 +1,8 @@
 import unittest
-# pylint: disable=W0403
+# pylint: disable=W0403,W0212,W0612
 from geo import GeoDB, SameCodes
 import os
+
 
 class Test_GeoDB(unittest.TestCase):
     def setUp(self):
@@ -50,14 +51,10 @@ class Test_GeoDB(unittest.TestCase):
         else:
             raise Exception("that should have failed")
 
-
     def test_forced_reload_samecodes(self):
         sc = SameCodes()
         os.remove(sc._same_cache_file)
         sc._load_same_codes()
-
-
-
 
 
 if __name__ == '__main__':

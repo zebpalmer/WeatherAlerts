@@ -1,5 +1,5 @@
 import unittest
-# pylint: disable=W0403
+# pylint: disable=W0403,W0212,W0612
 from weather_alerts import WeatherAlerts
 
 
@@ -35,11 +35,10 @@ class Test_WeatherAlerts(unittest.TestCase):
             x = alert.category
             x = alert.urgency
 
-
     def test_passing_samecodes(self):
         # Alerts by a Samecode
         nws = WeatherAlerts(samecodes='016027')
-        nws = WeatherAlerts(samecodes=['016027','016001','016073','016075'])
+        nws = WeatherAlerts(samecodes=['016027', '016001', '016073', '016075'])
         for alert in nws.alerts:
             x = alert.title
             x = alert.summary
@@ -54,7 +53,6 @@ class Test_WeatherAlerts(unittest.TestCase):
             x = alert.severity
             x = alert.category
             x = alert.urgency
-
 
     def test_passing_state(self):
         nws = WeatherAlerts(state='ID')
@@ -81,9 +79,6 @@ class Test_WeatherAlerts(unittest.TestCase):
             pass
         else:
             raise Exception("That shouldn't have worked")
-
-
-
 
 
 if __name__ == '__main__':
