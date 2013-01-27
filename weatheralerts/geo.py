@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import sys
 import os
 import requests
 import tempfile
@@ -85,7 +85,7 @@ class SameCodes(object):
     '''
     def __init__(self):
         self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._same_cache_file = self._cachedir + 'nws_samecodes.cache'
+        self._same_cache_file = self._cachedir + 'nws_samecodes_{0}.cache'.format(sys.version_info[0])
         self._samecodes = None
         self._load_same_codes()
 
