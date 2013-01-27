@@ -51,7 +51,7 @@ class Alert():
         but that's not quite accurate)'''
         try:
             return self._raw['UCG']
-        except:
+        except Exception:
             return []
 
     @property
@@ -92,4 +92,3 @@ class Alert():
     def urgency(self):
         '''Alert urgency'''
         return self._raw['cap:urgency']
-

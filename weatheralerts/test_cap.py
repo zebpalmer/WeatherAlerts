@@ -1,5 +1,5 @@
 import unittest
-# pylint: disable=W0403
+# pylint: disable=W0403,W0212,W0612
 from cap import CapParser
 
 # some sample cap xml
@@ -8,11 +8,9 @@ rc = """<?xml version = '1.0' encoding = 'UTF-8' standalone = 'yes'?>
 
 
 
-<feed
-xmlns = 'http://www.w3.org/2005/Atom'
+<feed xmlns = 'http://www.w3.org/2005/Atom'
 xmlns:cap = 'urn:oasis:names:tc:emergency:cap:1.1'
-xmlns:ha = 'http://www.alerting.net/namespace/index_1.0'
->
+xmlns:ha = 'http://www.alerting.net/namespace/index_1.0'>
 
 <id>http://alerts.weather.gov/cap/id.atom</id>
 <logo>http://alerts.weather.gov/images/xml_logo.gif</logo>
@@ -271,17 +269,17 @@ empty_cap = """<?xml version = '1.0' encoding = 'UTF-8' standalone = 'yes'?>
 <title>Current Watches, Warnings and Advisories for Oregon Issued by the National Weather Service</title>
 <link href='http://alerts.weather.gov/cap/or.atom'/>
 
-	<entry>
-	<id>http://alerts.weather.gov/cap/or.atom</id>
-	<updated>2013-01-26T20:58:01+00:00</updated>
-	<author>
-	<name>w-nws.webmaster@noaa.gov</name>
-	</author>
-	<title>There are no active watches, warnings or advisories</title>
-	<link href='http://alerts.weather.gov/cap/or.atom'/>
-	<summary>There are no active watches, warnings or advisories</summary>
-	</entry>
-	</feed>"""
+<entry>
+<id>http://alerts.weather.gov/cap/or.atom</id>
+<updated>2013-01-26T20:58:01+00:00</updated>
+<author>
+<name>w-nws.webmaster@noaa.gov</name>
+</author>
+<title>There are no active watches, warnings or advisories</title>
+<link href='http://alerts.weather.gov/cap/or.atom'/>
+<summary>There are no active watches, warnings or advisories</summary>
+</entry>
+</feed>"""
 
 
 class Test_Cap(unittest.TestCase):
@@ -297,5 +295,4 @@ class Test_Cap(unittest.TestCase):
         c.get_alerts()
 
 if __name__ == '__main__':
-    c = CapParser(raw_cap=rc, geo=None)
     unittest.main()

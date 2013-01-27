@@ -59,6 +59,7 @@ There are several ways you can contact me or otherwise get help beyond the docum
 
 **Random Chatter**
   Circle me on Google+ `Zeb Palmer Google Plus <https://plus.google.com/u/0/105137345884947048400/>`_
+  
   Follow me on Twitter `@zebpalmer <http://twitter.com/zebpalmer>`_
 
 **Website**

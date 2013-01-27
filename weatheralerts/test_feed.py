@@ -12,7 +12,5 @@ class Test_Feed(unittest.TestCase):
         self.cf.raw_cap(refresh=False)
 
 
-
-
 if __name__ == '__main__':
     unittest.main()
