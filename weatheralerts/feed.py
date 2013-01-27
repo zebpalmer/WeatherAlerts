@@ -1,3 +1,4 @@
+import sys
 import os
 import requests
 from datetime import datetime, timedelta
@@ -15,7 +16,7 @@ class AlertsFeed(object):
         self._cachetime = maxage
         self._state = state
         self._cachedir = str(tempfile.gettempdir()) + '/'
-        self._feed_cache_file = self._cachedir + 'nws_alerts_%s.cache' % (self._state)
+        self._feed_cache_file = self._cachedir + 'nws_alerts_py{0}_{1}.cache'.format(sys.version_info[0], self._state)
         self._cachetime = 3
 
     def _get_feed_cache(self):

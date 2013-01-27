@@ -1,4 +1,3 @@
-from dateutil.parser import parse
 
 
 class Alert():
@@ -17,7 +16,8 @@ class Alert():
         self._raw = cap_dict
 
     def _ts_parse(self, ts):
-        dt = parse(ts)
+        #FIXME: should return datetime
+        dt = ts
         return dt
 
     @property
