@@ -92,4 +92,3 @@ class Alert():
     def urgency(self):
         '''Alert urgency'''
         return self._raw['cap:urgency']
-

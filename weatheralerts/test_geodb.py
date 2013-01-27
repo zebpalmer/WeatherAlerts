@@ -3,6 +3,7 @@ import unittest
 from geo import GeoDB, SameCodes
 import os
 
+
 class Test_GeoDB(unittest.TestCase):
     def setUp(self):
         self.geo = GeoDB()
@@ -50,14 +51,10 @@ class Test_GeoDB(unittest.TestCase):
         else:
             raise Exception("that should have failed")
 
-
     def test_forced_reload_samecodes(self):
         sc = SameCodes()
         os.remove(sc._same_cache_file)
         sc._load_same_codes()
-
-
-
 
 
 if __name__ == '__main__':

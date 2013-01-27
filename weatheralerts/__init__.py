@@ -38,4 +38,3 @@ Code Documentation
 '''
 # pylint: disable=W0403
 from weather_alerts import WeatherAlerts
-
