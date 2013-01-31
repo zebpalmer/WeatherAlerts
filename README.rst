@@ -18,8 +18,6 @@ CURRENT BUILD STATUS:
 .. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 
 
-As of 0.5.0a2, the module has 100% test coverage. Each commit is built and tested in both python 2 and python 3.
-
 
 Documentation
 ==============
