@@ -12,8 +12,11 @@ class WeatherAlerts(object):
     '''
     def __init__(self, state=None, samecodes=None, load=True, cachetime=3):
         '''
-        init Alerts, default to National Feed, set state level samecodes or county codes the area in which you want to
-        load alerts.
+        WeatherAlerts Init
+        *Defaults to National Feed, it can be quite large at times, you probably don't want to parse it very often.
+        *Set a state to see all alerts on your state feed.
+        *For local alerts only, set samecodes to a single samecode string, or list of samecode strings. This will
+        pull your state feed automatically.
         '''
         self._alerts = None
         self._feed = None
@@ -59,6 +62,10 @@ class WeatherAlerts(object):
 
     @property
     def alerts(self):
+        '''returns the alerts list. If samecode(s) are specified when the WeatherAlerts object is created,
+        this will only return alerts for those samecodes. If no samecodes were given, it'll return all alerts for the
+        state if one was specified otherwise for the entire U.S.
+        '''
         if self.samecodes is not None:
             temp = []
             for alert in self._alerts:
@@ -69,13 +76,9 @@ class WeatherAlerts(object):
         else:
             return self._alerts
 
-    @property
-    def alert_count(self):
-        '''simple property for checking the number of alerts, mainly for debugging purposes'''
-        return len(self._alerts)
-
     def samecode_alerts(self, samecode):
-        '''Returns alerts for specified SAME geocodes'''
+        '''Returns alerts for a ()single) SAME geocode. Only useful if you didn't specify samecodes when the WeatherAlerts
+        object was created.'''
         return [x for x in self._alerts if samecode in x.samecodes]
 
     def county_state_alerts(self, county, state):

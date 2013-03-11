@@ -8,7 +8,7 @@ class Test_WeatherAlerts(unittest.TestCase):
         self.nws = WeatherAlerts()
 
     def test_almost_everything(self):
-        print "Alerts currently in feed {0}".format(self.nws.alert_count)
+        print "Alerts currently in feed {0}".format(len(self.nws.alerts)
 
     def test_event_state_counties(self):
         self.nws.event_state_counties()

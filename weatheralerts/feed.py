@@ -46,11 +46,15 @@ class AlertsFeed(object):
 
     def refresh(self):
         '''
-        Refresh the feed bypassing the cache
+        NOTE: You probably don't want to call this... This does not update the alerts loaded
+        in the WeatherAlerts object, only the underlying feed. This is only used internally now and as such,
+        will likely be deprecated soon. Please call WeatherAlerts.refresh() instead.
         '''
         raw = self._get_nws_feed()
         self._save_feed_cache(raw)
         return raw
+
+
 
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
