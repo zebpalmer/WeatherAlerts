@@ -5,7 +5,7 @@ Release Changes
 Current Development is on 5.x
 
 
-**0.5.0**
+**0.5.0rc**
 * 100% Test Coverage
 * building python3 version at install, no longer maintaining separate code
 * rewrite
