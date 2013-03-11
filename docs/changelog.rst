@@ -12,7 +12,7 @@ Current Development is on 5.x
 * improved API organization
 * improved documentation
 * relicensed under LGPLv3
-* reworked refresh logic so it'd actually work when running in a daemon. (thanks to Michael W. for bug report)
+* reworked refresh logic (thanks to Michael W. for bug report)
 
 
 Older Versions
