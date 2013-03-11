@@ -16,6 +16,7 @@ class WeatherAlerts(object):
         load alerts.
         '''
         self._alerts = None
+        self._feed = None
         self.geo = GeoDB()
         self.state = state
         self.scope = 'US'
@@ -56,7 +57,6 @@ class WeatherAlerts(object):
             self._feed.refresh()
         self._alerts = CapParser(self._feed.raw_cap(), geo=self.geo).get_alerts()
 
-
     @property
     def alerts(self):
         if self.samecodes is not None:
@@ -84,7 +84,7 @@ class WeatherAlerts(object):
         return self.samecode_alerts(samecode)
 
     def event_state_counties(self):
-        '''DEPRICATED: this will be moved elsewhere or dropped in the near future, stop using it.
+        '''DEPRECATED: this will be moved elsewhere or dropped in the near future, stop using it.
         Return an event type and it's state(s) and counties (consolidated)'''
         # FIXME: most of this logic should be moved to the alert instance and refactored
         for alert in self._alerts:
