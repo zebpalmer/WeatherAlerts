@@ -5,7 +5,7 @@ readme = open('README.rst', 'rt').read()
 import sys
 
 
-versionstr = '0.5.0rc2'
+versionstr = '0.5.0rc4'
 
 
 setup(
@@ -26,7 +26,7 @@ setup(
     install_requires=['requests'],
     use_2to3=True,
     classifiers=[
-              'Development Status :: 3 - Alpha',
+              'Development Status :: 4 - Beta',
               'Environment :: Console',
               'Environment :: Plugins',
               'Intended Audience :: Developers',
