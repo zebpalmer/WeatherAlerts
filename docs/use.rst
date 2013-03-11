@@ -5,8 +5,8 @@ Using WeatherAlerts
 
 Simple example
 ===============
-This are three examples of the simplest implementation, import the WeatherAlerts class, create an instance requesting alerts for
-an area based on one or more SAMECODES or bt requesting an entire State. 
+This are three examples of the simplest implementation, import the WeatherAlerts class, create an instance requesting
+alerts for an area based on one or more SAMECODES or bt requesting an entire State.
 
 .. code-block:: python
 
