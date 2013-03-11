@@ -13,8 +13,9 @@ class WeatherAlerts(object):
     * Defaults to National Feed, it can be quite large at times, you probably don't want to parse it very often.
 
     * Set `state` to see all alerts on your state feed.
-    * For local alerts only, set `samecodes` to a single samecode string, or list of samecode strings. This will
-    pull your state feed automatically.
+
+    * For local alerts only, set `samecodes` to a single samecode string, or list of samecode strings.
+    This will pull your state feed automatically.
 
     * `cachetime` is set in minutes, default is 3.
 
