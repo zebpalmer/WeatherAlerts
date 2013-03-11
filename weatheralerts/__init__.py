@@ -11,7 +11,8 @@ File Information
   http://github.com/zebpalmer/WeatherAlerts
 
 **Original Author:**
-  Zeb Palmer http://www.zebpalmer.com
+  Zeb Palmer
+  http://www.zebpalmer.com
 
 
 **Documentation:**
