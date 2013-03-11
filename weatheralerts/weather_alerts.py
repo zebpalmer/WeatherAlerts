@@ -17,6 +17,7 @@ class WeatherAlerts(object):
         *Set a state to see all alerts on your state feed.
         *For local alerts only, set samecodes to a single samecode string, or list of samecode strings. This will
         pull your state feed automatically.
+        *Cachetime is set in minutes, default is 3.
         '''
         self._alerts = None
         self._feed = None
