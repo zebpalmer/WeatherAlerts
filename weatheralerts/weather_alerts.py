@@ -55,7 +55,7 @@ class WeatherAlerts(object):
 
     def refresh(self, force=False):
         '''
-        Refresh the alerts list. set force=true to force pulling a new list from the NWS. if force=false (default)
+        Refresh the alerts list. set `force` to True to force pulling a new list from the NWS, otherwise
         it'll only pull a new list if the cached copy is expired. (see cachetime)
         '''
         if force is True:
