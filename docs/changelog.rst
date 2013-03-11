@@ -2,16 +2,17 @@
 Release Changes
 ===============
 
-Current Development is on the 5.0 version
+Current Development is on 5.x
 
-**0.5.0** (*Current Release*)
 
+**0.5.0**
 * 100% Test Coverage
 * building python3 version at install, no longer maintaining separate code
 * rewrite
 * improved API organization
 * improved documentation
 * relicensed under LGPLv3
+* reworked refresh logic so it'd actually work when running in a daemon. (thanks to Michael W. for bug report)
 
 
 Older Versions
@@ -21,7 +22,7 @@ Versions prior to 0.5.x are no longer supported. It is suggest you test and upgr
 
 
 
-**v0.4.9** 
+**v0.4.9**
 
 * Last of the 4.x branch
 * rather large changes to classes

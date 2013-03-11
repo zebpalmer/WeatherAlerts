@@ -37,6 +37,7 @@ class AlertsFeed(object):
         '''
         Raw xml(cap) of the the feed. If a valid cache is availible
         it is used, else a new copy of the feed is grabbed
+        Note: you can force refresh here, if you do, don't also manually call refresh
         '''
         raw = self._get_feed_cache()
         if raw is None or refresh is True:
