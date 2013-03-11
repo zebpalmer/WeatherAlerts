@@ -19,6 +19,7 @@ class GeoDB(object):
     def location_lookup(self, req_location):
         '''
         returns full location given samecode or county and state. Returns False if not valid.
+
         *currently locations are a dictionary, once other geo data is added, they will move to a location class/obj*
         '''
         location = False
@@ -62,6 +63,7 @@ class GeoDB(object):
 
     def _get_states_from_samecodes(self, geocodes):
         '''Returns all states for a given list of SAME codes
+
         *Shouldn't be used to determine feed scope, please use getfeedscope()*
         '''
         states = []
@@ -81,6 +83,7 @@ class GeoDB(object):
 class SameCodes(object):
     '''
     Is used to download, parse and cache the SAME codes data from the web.
+
     *All interaction with the SAME codes data should be done with the GeoGB object*
     '''
     def __init__(self):
