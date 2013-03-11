@@ -16,6 +16,12 @@ class Test_WeatherAlerts(unittest.TestCase):
     def test_samecode_alerts_method(self):
         self.nws.samecode_alerts('016027')
 
+    def test_refresh(self):
+        self.nws.refresh()
+
+    def test_refresh_forced(self):
+        self.nws.refresh(force=True)
+
     def test_county_state_alerts(self):
         self.nws.county_state_alerts('canyon', 'ID')
 
@@ -37,22 +43,26 @@ class Test_WeatherAlerts(unittest.TestCase):
 
     def test_passing_samecodes(self):
         # Alerts by a Samecode
-        nws = WeatherAlerts(samecodes='016027')
-        nws = WeatherAlerts(samecodes=['016027', '016001', '016073', '016075'])
-        for alert in nws.alerts:
-            x = alert.title
-            x = alert.summary
-            x = alert.areadesc
-            x = alert.event
-            x = alert.samecodes
-            x = alert.zonecodes
-            x = alert.expiration
-            x = alert.updated
-            x = alert.effective
-            x = alert.published
-            x = alert.severity
-            x = alert.category
-            x = alert.urgency
+        testobjs = []
+        testobjs.append(WeatherAlerts(samecodes='016027'))
+        testobjs.append(WeatherAlerts(samecodes=['016027', '016001', '016073', '016075']))
+        samecodes = self.nws.geo.samecodes.keys()  # get list of all known samecodes
+        testobjs.append(WeatherAlerts(samecodes=samecodes))  # use them for testing
+        for nws in testobjs:
+            for alert in nws.alerts:
+                x = alert.title
+                x = alert.summary
+                x = alert.areadesc
+                x = alert.event
+                x = alert.samecodes
+                x = alert.zonecodes
+                x = alert.expiration
+                x = alert.updated
+                x = alert.effective
+                x = alert.published
+                x = alert.severity
+                x = alert.category
+                x = alert.urgency
 
     def test_passing_state(self):
         nws = WeatherAlerts(state='ID')

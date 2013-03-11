@@ -8,7 +8,7 @@ class CapParser(object):
     '''
     Parses the xml from the alert feed, creates and returns a list of alert objects.
 
-    FIXME: This is slow, messy, and painful to look at.
+    FIXME: This is slow, messy, and painful to look at. I'll be totally rewriting it shortly.
 
     '''
     def __init__(self, raw_cap, geo=None):

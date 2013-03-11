@@ -10,15 +10,17 @@ class WeatherAlerts(object):
     Most interaction from users, scripts, etc will be through the api provided by this class. So, as we approach a
     more stable project, the API in this class will also become more stable and maintain backwards compatibility.
     '''
-    def __init__(self, state=None, samecodes=None, load=True):
+    def __init__(self, state=None, samecodes=None, load=True, cachetime=3):
         '''
         init Alerts, default to National Feed, set state level samecodes or county codes the area in which you want to
         load alerts.
         '''
         self._alerts = None
+        self._feed = None
         self.geo = GeoDB()
         self.state = state
         self.scope = 'US'
+        self.cachetime = cachetime
         if samecodes is None:
             self.samecodes = None
         elif isinstance(samecodes, str):
@@ -38,12 +40,22 @@ class WeatherAlerts(object):
 
     def load_alerts(self):
         '''
+        NOTE: use refresh() instead of this, if you are just needing to refresh the alerts list
         Gets raw xml (cap) from the Alerts feed, throws it into the parser
         and ends up with a list of alerts object, which it stores to self._alerts
         '''
-        cap = AlertsFeed(state=self.scope).raw_cap()
-        parser = CapParser(cap, geo=self.geo)
+        self._feed = AlertsFeed(state=self.scope, maxage=self.cachetime)
+        parser = CapParser(self._feed.raw_cap(), geo=self.geo)
         self._alerts = parser.get_alerts()
+
+    def refresh(self, force=False):
+        '''
+        Refresh the alerts list. set force=true to force pulling a new list from the NWS. if force=false (default)
+        it'll only pull a new list if the cached copy is expired. (see cachetime)
+        '''
+        if force is True:
+            self._feed.refresh()
+        self._alerts = CapParser(self._feed.raw_cap(), geo=self.geo).get_alerts()
 
     @property
     def alerts(self):
@@ -72,7 +84,8 @@ class WeatherAlerts(object):
         return self.samecode_alerts(samecode)
 
     def event_state_counties(self):
-        '''Return an event type and it's state(s) and counties (consolidated)'''
+        '''DEPRECATED: this will be moved elsewhere or dropped in the near future, stop using it.
+        Return an event type and it's state(s) and counties (consolidated)'''
         # FIXME: most of this logic should be moved to the alert instance and refactored
         for alert in self._alerts:
             locations = []
