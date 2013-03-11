@@ -9,15 +9,17 @@ class WeatherAlerts(object):
     WeatherAlerts object that controls interaction with the NWS CAP alerts feed as well and varios geo data sources.
     Most interaction from users, scripts, etc will be through the api provided by this class. So, as we approach a
     more stable project, the API in this class will also become more stable and maintain backwards compatibility.
+
+    *Defaults to National Feed, it can be quite large at times, you probably don't want to parse it very often.
+    *Set a state to see all alerts on your state feed.
+    *For local alerts only, set samecodes to a single samecode string, or list of samecode strings. This will
+    pull your state feed automatically.
+    *Cachetime is set in minutes, default is 3.
+
     '''
     def __init__(self, state=None, samecodes=None, load=True, cachetime=3):
         '''
         WeatherAlerts Init
-        *Defaults to National Feed, it can be quite large at times, you probably don't want to parse it very often.
-        *Set a state to see all alerts on your state feed.
-        *For local alerts only, set samecodes to a single samecode string, or list of samecode strings. This will
-        pull your state feed automatically.
-        *Cachetime is set in minutes, default is 3.
         '''
         self._alerts = None
         self._feed = None
