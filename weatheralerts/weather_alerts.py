@@ -6,7 +6,7 @@ from geo import GeoDB
 
 class WeatherAlerts(object):
     '''
-    WeatherAlerts object that controls interaction with the NWS CAP alerts feed as well and varios geo data sources.
+    WeatherAlerts object that controls interaction with the NWS CAP alerts feed as well as varios geo data sources.
     Most interaction from users, scripts, etc will be through the api provided by this `WeatherAlerts` class.
     So, as we approach a more stable project, the API in this class will also become more stable.
 
