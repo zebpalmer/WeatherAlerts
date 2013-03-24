@@ -13,7 +13,8 @@ branch is much improved.
 
 CURRENT BUILD STATUS:
 
-As of 0.5.x has 100% test coverage, every commit is built and tested in both python 2 and python 3.
+As of 0.5.x this package has 100% test coverage, every commit is built and tested in both python 2 and python 3.
+
 
 .. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 

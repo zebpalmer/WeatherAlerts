@@ -70,7 +70,7 @@ class CapParser(object):
                         n = n + 1
                 finally:
                     try:
-                        entry['samecodes'] = entry['FIPS6']  # backward compatibility till refactor complete
+                        entry['samecodes'] = [x for x in entry['FIPS6'] if str(x).isdigit()]  # handle bad nws data
                     except Exception:
                         entry['samecodes'] = []
             else:
