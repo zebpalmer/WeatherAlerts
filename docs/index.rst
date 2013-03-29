@@ -3,7 +3,7 @@ WeatherAlerts
 *********************
 
 
-**WeatherAlerts a python package that pulls in the National Weather Service (NWS) Common Alerting Protocol (CAP) Emergency Alerts index feed, parses it and provides interaction with currently active alerts.**
+**WeatherAlerts a python package that pulls in the National Weather Service (NWS) Common Alerting Protocol (CAP) Emergency / Severe Weather Alerts feed, parses it and provides interaction with currently active alerts.**
 
 Test/Build Status
 ------------------
