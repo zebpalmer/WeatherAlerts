@@ -24,7 +24,8 @@ class WebApp():
 
     @property
     def status(self):
-        return {'alive': True,}
+        return {'alive': True,
+                'disclaimer': "Don't rely on this for anything important, it's for experimentation purposes only.",}
 
     def _setup_logging(self):
         if gethostname() == 'mc117':
