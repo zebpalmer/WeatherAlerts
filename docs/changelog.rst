@@ -13,6 +13,7 @@ Current Development is on 5.x
 * improved documentation
 * relicensed under LGPLv3
 * reworked refresh logic (thanks to Michael W. for bug report)
+* force lower case url paramaters to avoid 301 redirect by nws
 
 
 Older Versions
