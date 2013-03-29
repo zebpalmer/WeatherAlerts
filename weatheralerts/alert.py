@@ -21,6 +21,26 @@ class Alert():
         return dt
 
     @property
+    def _serialized(self):
+        '''Provides a sanitized & serializeable dict of the alert mainly for forward & backwards compatability'''
+        return {'title': self.title,
+                'summary': self.summary,
+                'areadesc': self.areadesc,
+                'event': self.event,
+                'samecodes': self.samecodes,
+                'zonecodes': self.zonecodes,
+                'expiration': self.expiration,
+                'updated': self.updated,
+                'effective': self.effective,
+                'published': self.published,
+                'severity': self.severity,
+                'category': self.category,
+                'urgency': self.urgency,
+                'msgtype': self.msgtype,
+                'link': self.link,
+                }
+
+    @property
     def title(self):
         '''Alert title'''
         return self._raw['title']
@@ -92,3 +112,11 @@ class Alert():
     def urgency(self):
         '''Alert urgency'''
         return self._raw['cap:urgency']
+
+    @property
+    def msgtype(self):
+        return self._raw['cap:msgType']
+
+    @property
+    def link(self):
+        return self._raw['id']

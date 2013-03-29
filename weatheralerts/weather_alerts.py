@@ -78,6 +78,12 @@ class WeatherAlerts(object):
         else:
             return self._alerts
 
+    @property
+    def _serialized_alerts(self):
+        '''returns a list of alerts, jsonified'''
+        return [x._serialized for x in self.alerts]
+
+
     def samecode_alerts(self, samecode):
         '''Returns alerts for a ()single) SAME geocode. Only useful if you didn't specify samecodes when the WeatherAlerts
         object was created.'''
