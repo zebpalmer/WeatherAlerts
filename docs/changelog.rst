@@ -13,6 +13,7 @@ Current Development is on 5.x
 * improved documentation
 * relicensed under LGPLv3
 * reworked refresh logic (thanks to Michael W. for bug report)
+* Ingore eroneous data from NWS in the FIPS6 Fields
 
 
 Older Versions
