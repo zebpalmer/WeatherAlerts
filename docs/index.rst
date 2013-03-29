@@ -24,6 +24,7 @@ Documentation Contents
    about
    nwsdata
    use
+   webservice
    module
    changelog
 
