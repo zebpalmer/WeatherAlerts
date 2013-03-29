@@ -11,6 +11,11 @@ PROJECT STATUS
 This module is a mess, a functional mess, but still a mess.... As I have time, I'm rewriting it and the 0.5.x
 branch is much improved.
 
+
+I've been working on a REST JSON webservice powered by this package, its a working prototype at the moment
+but if you interested, let me know.
+
+
 CURRENT BUILD STATUS:
 
 As of 0.5.x this package has 100% test coverage, every commit is built and tested in both python 2 and python 3.
