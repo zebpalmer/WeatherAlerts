@@ -55,7 +55,6 @@ class AlertsFeed(object):
         return raw
 
 
-
     def _get_nws_feed(self):
         '''get nws alert feed, and cache it'''
         url = '''http://alerts.weather.gov/cap/%s.php?x=0''' % (str(self._state).lower())

@@ -14,8 +14,9 @@ except ImportError:
 
 
 class WebApp():
-    def __init__(self, state='US', disclaimer=None, debug=False):
+    def __init__(self, state='US', port=8080, disclaimer=None, debug=False):
         self._setup_logging(debug)
+        self.port = port
         self.nws = WeatherAlerts(state=state, daemononly=True, cachetime=0)
         self.scope = state
         self._alerts = self.nws._serialized_alerts
@@ -105,10 +106,7 @@ class WebService(threading.Thread):
                     'alerts': [x for x in self.webapp._alerts if list(set(x['samecodes']) & set(sc))]}
             return resuult
 
-
-
-        run(host='0.0.0.0', port=8080, quiet=True, server='paste')
-
+        run(host='0.0.0.0', port=self.port, quiet=True, server='paste')
 
 
 class AlertsLoader(threading.Thread):
@@ -130,9 +128,6 @@ class AlertsLoader(threading.Thread):
         t = datetime.utcnow()
         sleeptime = 60 - (t.second + t.microsecond/1000000.0)
         sleep(sleeptime)
-
-
-
 
 
 
