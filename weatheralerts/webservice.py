@@ -106,7 +106,7 @@ class WebService(threading.Thread):
                     'alerts': [x for x in self.webapp._alerts if list(set(x['samecodes']) & set(sc))]}
             return resuult
 
-        run(host='0.0.0.0', port=self.port, quiet=True, server='paste')
+        run(host='0.0.0.0', port=self.webapp.port, quiet=True, server='paste')
 
 
 class AlertsLoader(threading.Thread):
