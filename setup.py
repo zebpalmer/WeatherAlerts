@@ -23,7 +23,7 @@ setup(
     license='LGPLv3',
     description='Parse the National Weather Service Emergency Alerts Feed (NWS CAP format), do useful stuff with it',
     long_description=readme,
-    install_requires=['requests', 'sphinxcontrib-httpdomain', 'bottle', 'paste'],
+    install_requires=['requests', 'sphinxcontrib-httpdomain', 'bottle', 'waitress'],
     use_2to3=True,
     classifiers=[
               'Development Status :: 4 - Beta',
