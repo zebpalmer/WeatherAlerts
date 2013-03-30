@@ -31,7 +31,7 @@ class WebApp():
     @property
     def status(self):
         return {'alive': True,
-                'disclaimer': str(disclaimer)}
+                'disclaimer': str(self.disclaimer)}
 
     def _setup_logging(self, debug):
         if debug is True:
