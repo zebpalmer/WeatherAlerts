@@ -1,51 +1,45 @@
+import sys
 import threading
 from time import sleep
 from datetime import datetime
 import logging
 from socket import gethostname
 from weatheralerts import WeatherAlerts
-import graypy
 import paste
 import json
 try:
-    from bottle import route, run, get, post, error, debug  #, response, request
+    from bottle import route, run, get, post, error, debug
 except ImportError:
     logging.critical("Please install bottle")
 
 
-
 class WebApp():
-    def __init__(self):
-        self._setup_logging()
-        self.nws = WeatherAlerts(cachetime=5)
+    def __init__(self, state='US', disclaimer=None, debug=False):
+        self._setup_logging(debug)
+        self.nws = WeatherAlerts(state=state, daemononly=True, cachetime=0)
+        self.scope = state
         self._alerts = self.nws._serialized_alerts
         self._threads = []
         self.shutdown = False
+        if disclaimer is not None:
+            self.disclaimer = disclaimer
+        else:
+            self.disclaimer = """FOR EXPIRIMENTAL PURPOSES ONLY!
+            Data provided as-is, don't rely on it for safety."""
 
     @property
     def status(self):
         return {'alive': True,
-                'disclaimer': "Don't rely on this for anything important, it's for experimentation purposes only.",}
+                'disclaimer': str(disclaimer)}
 
-    def _setup_logging(self):
-        if gethostname() == 'mc117':
-            facilityname = "wxalertsws-dev"
-            loglvl = logging.DEBUG
-            logging.basicConfig(level=logging.DEBUG,
-                                format='%(asctime)s [%(levelname)s] (%(threadName)-10s) %(message)s',
-                                datefmt='%Y-%m-%d %H:%M:%S')
+    def _setup_logging(self, debug):
+        if debug is True:
+            loglevel = logging.DEBUG
         else:
-            facilityname = "wxalertsws"
-            loglvl = logging.DEBUG
-
-
-        handler = graypy.GELFHandler('logs', 12201)
-        logging.root.name = facilityname
-        logformat = logging.Formatter(fmt='%(asctime)s [%(levelname)s] (%(threadName)-10s) %(message)s',
-                                datefmt='%Y-%m-%d %H:%M:%S')
-        handler.setFormatter(logformat)
-        logging.root.addHandler(handler)
-        logging.root.setLevel(loglvl)
+            loglevel = logging.INFO
+        logging.basicConfig(level=loglevel,
+                            format='%(asctime)s [%(levelname)s] (%(threadName)-10s) %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S')
         logging.info("Logging Initialized")
 
 
@@ -94,36 +88,26 @@ class WebService(threading.Thread):
         def index():
             return ("NWS (CAP) WeatherAlerts JSON Webservice")
 
-        #@error(500)
-        #def errormsg():
-            #return "ERROR 500: Sorry, something broke"
-
-        #@error(404)
-        #def notfound():
-            #return "ERROR 404: These aren't the pages you're looking for"
-
-
         @route('/all')
         def all():
-            return {'status': self.webapp.status,
+            return {'webservice': self.webapp.status,
                     'alerts': self.webapp._alerts}
+
+        # FIXME: will need to revive the location object or such to filter based on state
+        #@route('/state/:state')
+        #def state(state):
+            #raise NotImplementedError
 
         @route('/samecodes/:sc')
         def samecodes(sc):
             sc = sc.split(',')
-            resuult = {'status': self.webapp.status,
+            resuult = {'webservice': self.webapp.status,
                     'alerts': [x for x in self.webapp._alerts if list(set(x['samecodes']) & set(sc))]}
             return resuult
 
 
 
         run(host='0.0.0.0', port=8080, quiet=True, server='paste')
-
-
-
-
-
-
 
 
 

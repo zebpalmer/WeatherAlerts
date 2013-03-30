@@ -16,12 +16,13 @@ class WeatherAlerts(object):
     * `cachetime` is set in minutes, default is 3.
 
     '''
-    def __init__(self, state=None, samecodes=None, load=True, cachetime=3):
+    def __init__(self, state=None, samecodes=None, load=True, cachetime=3, daemononly=True):
         '''
         WeatherAlerts Init
         '''
         self._alerts = None
         self._feed = None
+        self.daemononly = True
         self.geo = GeoDB()
         self.state = state
         self.scope = 'US'
