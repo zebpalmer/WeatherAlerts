@@ -18,6 +18,7 @@ class AlertsFeed(object):
         self._cachedir = str(tempfile.gettempdir()) + '/'
         self._feed_cache_file = self._cachedir + 'nws_alerts_py{0}_{1}.cache'.format(sys.version_info[0], self._state)
         self._cachetime = 3
+        self._raw = None
 
     def _get_feed_cache(self):
         '''If a recent cache exists, return it, else return None'''
@@ -39,10 +40,13 @@ class AlertsFeed(object):
         it is used, else a new copy of the feed is grabbed
         Note: you can force refresh here, if you do, don't also manually call refresh
         '''
-        raw = self._get_feed_cache()
-        if raw is None or refresh is True:
-            raw = self.refresh()
-        return raw
+        if refresh is True:
+            self._raw = self.refresh()
+        if self._raw is None:
+            self._raw = self._get_feed_cache()
+        if self._raw is None:
+            self._raw = self.refresh()
+        return self._raw
 
     def refresh(self):
         '''
@@ -50,9 +54,9 @@ class AlertsFeed(object):
         in the WeatherAlerts object, only the underlying feed. This is only used internally now and as such,
         will likely be deprecated soon. Please call `WeatherAlerts.refresh()` instead.
         '''
-        raw = self._get_nws_feed()
-        self._save_feed_cache(raw)
-        return raw
+        self._raw = self._get_nws_feed()
+        self._save_feed_cache(self._raw)
+        return self._raw
 
 
     def _get_nws_feed(self):

@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 from socket import gethostname
 from weatheralerts import WeatherAlerts
+import waitress
 import json
 try:
     from bottle import route, run, get, post, error, debug
@@ -105,7 +106,11 @@ class WebService(threading.Thread):
                     'alerts': [x for x in self.webapp._alerts if list(set(x['samecodes']) & set(sc))]}
             return resuult
 
-        run(host='0.0.0.0', port=self.webapp.port, quiet=True, server='waitress')
+        #try:
+            #run(host='0.0.0.0', port=self.webapp.port, quiet=True, server='waitress')
+        #except Exception:
+        run(host='0.0.0.0', port=self.webapp.port, quiet=True)
+
 
 
 class AlertsLoader(threading.Thread):
