@@ -5,7 +5,7 @@ readme = open('README.rst', 'rt').read()
 import sys
 
 
-versionstr = '0.5.0rc5'
+versionstr = '0.5.0rc6'
 
 
 setup(

@@ -17,7 +17,6 @@ Current Development is on 5.x
 * force lower case url paramaters to avoid 301 redirect by nws
 
 
-
 Older Versions
 ================
 
