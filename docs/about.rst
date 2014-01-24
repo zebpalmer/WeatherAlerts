@@ -38,7 +38,7 @@ Use cases that I am considering in the development of WeatherAlerts.
 - Daemon to run and notify alerts as they come in
 - Nagios monitoring pluging
 - A web service that given various paramaters will return json or raw text summaries of the requested data.
-- Would love to see someone a KDE plasmoid/widget that would pop up alerts
+- Would love to see someone write a KDE plasmoid/widget that would pop up alerts
 
 
 
