@@ -111,7 +111,7 @@ class SameCodes(object):
     def _get_same_codes(self):
         '''get SAME codes, load into a dict and cache'''
         same = {}
-        url = '''http://www.nws.noaa.gov/nwr/SameCode.txt'''
+        url = '''http://www.nws.noaa.gov/nwr/data/SameCode.txt'''
         # pylint: disable=E1103
         raw = requests.get(url).content.decode('utf-8')  # py3 compatibility
         for row in raw.split('\n'):
