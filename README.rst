@@ -10,22 +10,14 @@ WeatherAlerts README
 
 
 
-PROJECT STATUS
+2016 PROJECT STATUS
 ===================
-This module is a mess, a functional mess, but still a mess.... As I have time, I'm rewriting it and the 0.5.x
-branch is much improved.
+Wow, this project is a mess... Honestly, this was written several years ago as a quick and (very) dirty component for another project. 
+But, as there still seems to be some interest in this, and I'd like to use it for another project. I'm going to spend time over the next month or so and 
+do a complete rewrite. If you're interested in the future of this project, want to help, or want help, join the gitter.im chat via the link above. 
 
 
-I've been working on a REST JSON webservice powered by this package, its a working prototype at the moment
-but if you interested, let me know.
 
-
-CURRENT BUILD STATUS:
-
-As of 0.5.x this package has 100% test coverage, every commit is built and tested in both python 2 and python 3.
-
-
-.. image:: http://ci.hznet.us/job/WeatherAlertsMaster/badge/icon
 
 
 
@@ -38,7 +30,7 @@ This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zeb
 
 License
 ---------
-Version 0.5.x is being released under LGPLv3.
+GPLv3
 
 
 Install
@@ -48,7 +40,7 @@ You can download and install/upgrade via PIP by runing:  ``pip install -U weathe
 
 Author
 --------
-This module is maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play.
+This module is (occasionally) maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play.
 See my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
 
 
