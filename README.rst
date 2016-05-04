@@ -19,8 +19,6 @@ do a complete rewrite. If you're interested in the future of this project, want 
 
 
 
-
-
 Documentation
 ==============
 Please see http://weatheralerts.readthedocs.org for documentation
