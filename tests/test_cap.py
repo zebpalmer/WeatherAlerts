@@ -1,6 +1,9 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
+
 import unittest
-# pylint: disable=W0403,W0212,W0612
-from cap import CapParser
+from weatheralerts.cap import CapParser
 
 # some sample cap xml
 rc = """<?xml version = '1.0' encoding = 'UTF-8' standalone = 'yes'?>
