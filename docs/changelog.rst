@@ -11,7 +11,7 @@ Current Development is on 5.x
 * rewrite
 * improved API organization
 * improved documentation
-* relicensed under LGPLv3
+* relicensed under MIT
 * reworked refresh logic (thanks to Michael W. for bug report)
 * Ingore eroneous data from NWS in the FIPS6 Fields
 * force lower case url paramaters to avoid 301 redirect by nws
