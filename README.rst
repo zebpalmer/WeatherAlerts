@@ -10,13 +10,19 @@ WeatherAlerts README
 
 
 
-2016 PROJECT STATUS
+2017 PROJECT STATUS
 ===================
-Wow, this project is a mess... Honestly, this was written several years ago as a quick and (very) dirty component for another project. 
-But, as there still seems to be some interest in this, and I'd like to use it for another project. I'm going to spend time over the next month or so and 
-do a complete rewrite. If you're interested in the future of this project, want to help, or want help, join the gitter.im chat via the link above. 
+This package is old and in need of TLC but, surprisingly, I continue to get questions about it. So,
+I'm finally going to revamp it. I actually started that last year, but life (toddler) didn't seem to let me finish it.
+If you're interested in the future of this project, want to help, or have questions --
+join the gitter.im chat via the link above.
 
 
+Compatability Update
+---------------------
+If you are using this package currently, you'll want to pin the version you have in your project. Future versions will
+not work with the 0.4.x API (sorry). I'm also dropping support for python 2.6, or rather, I'm no longer testing for
+python versions prior to 2.7 (specifically 2.7.11).
 
 
 Documentation
@@ -28,17 +34,11 @@ This project lives at `github.com/zebpalmer/WeatherAlerts <http://github.com/zeb
 
 License
 ---------
-GPLv3
+MIT
 
 
 Install
 ---------
 You can download and install/upgrade via PIP by runing:  ``pip install -U weatheralerts``
-
-
-Author
---------
-This module is (occasionally) maintained by Zeb Palmer, a Linux Systems Engineer and Professional Photographer who writes a bit of python at work and play.
-See my other work at `ZebPalmer.com <http://www.zebpalmer.com>`_
 
 
