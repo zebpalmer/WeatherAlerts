@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-'''
+"""
 WeatherAlerts
 *******************
 
@@ -27,6 +27,6 @@ File Information
 Code Documentation
 ===================
 
-'''
+"""
 # pylint: disable=W0403
 from weatheralerts.weather_alerts import WeatherAlerts
