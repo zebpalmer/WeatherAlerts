@@ -5,7 +5,14 @@ readme = open('README.rst', 'rt').read()
 import sys
 
 
-versionstr = '0.5.0rc6'
+versionstr = '0.6.0a1'
+
+
+if os.path.exists('./requirements.txt'):
+    with open('./requirements.txt', 'r') as reqs:
+        __requirements__ = [x.strip() for x in reqs.readlines() if not x.startswith('--')]
+else:
+    raise Exception("Missing requirements.txt in top level of package!")
 
 
 setup(
@@ -35,7 +42,7 @@ setup(
               'Intended Audience :: Science/Research',
               'Intended Audience :: System Administrators',
               'Intended Audience :: Telecommunications Industry',
-              'License :: OSI Approved :: GNU General Public License (GPL)',
+              'License :: OSI Approved :: MIT License',
               'Natural Language :: English',
               'Operating System :: OS Independent',
               'Programming Language :: Python',
