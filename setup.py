@@ -20,7 +20,7 @@ setup(
               #"scripts/MonitorAlertsByCounty.py",
               #"scripts/NWS_Alerts.py"}
     url='http://github.com/zebpalmer/WeatherAlerts',
-    license='LGPLv3',
+    license='MIT',
     description='Parse the National Weather Service Emergency Alerts Feed (NWS CAP format), do useful stuff with it',
     long_description=readme,
     install_requires=['requests'],
@@ -43,6 +43,10 @@ setup(
               'Programming Language :: Python :: 2.7',
               'Programming Language :: Python :: 3',
               'Programming Language :: Python :: 3.2',
+              'Programming Language :: Python :: 3.3',
+              'Programming Language :: Python :: 3.4',
+              'Programming Language :: Python :: 3.5',
+              'Programming Language :: Python :: 3.6',
               'Topic :: Software Development :: Libraries :: Python Modules',
               'Topic :: Utilities'
               ],
