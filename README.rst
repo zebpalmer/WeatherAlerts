@@ -6,6 +6,9 @@ WeatherAlerts README
    :alt: Join the chat at https://gitter.im/zebpalmer/WeatherAlerts
    :target: https://gitter.im/zebpalmer/WeatherAlerts?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
+.. image:: https://travis-ci.org/zebpalmer/WeatherAlerts.svg?branch=master
+    :target: https://travis-ci.org/zebpalmer/WeatherAlerts
+
 
 
 
