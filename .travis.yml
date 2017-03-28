@@ -7,14 +7,12 @@ python:
 install: pip install -r requirements.txt
 script: nosetests
 deploy:
-  true:
-    condition: $TOXENV == py27
-    repo: zebpalmer/MongoElector
-    tags: true
-  distributions: sdist bdist_wheel
-  user: zebpalmer
   provider: pypi
+  user: zebpalmer
   password:
-    secure: !!binary |
-      lC1Zp265J/4OsOkrpL6Flg9/6G8tFpsCrinCQ0C0hPJwI2wA7FT4pK30LipWfG5XpM9pYTQRutb+DyUxJfKSYqyQu+gquFFRJ8IohOHh0VY1zYwdykNSku4fzLfC/H5yR1jSrz04z4nxOJBj6itpC1FbKGmtCLSjtHG6OdWNiNkF57I1WC/mXPPViRv5On1Eyk+ooLl2bxwJjRJqMptIOEWkVEt8hKsFO9VLBciH9LRGzBs6RmAJRTtt0CAuv4wU+b9OEkaYzG1QxNkIrMGs0K6SVFom8RDOxp6qucyKXIj1fs8I5bts5exj44xUw7tTnGoWRA/F1M1x7rPJ53lE8NL9BWQQrmYbThKSK+LAhyERCFrrfa8X30xKHN7+UEKfhi+te5CdFcWK1d/PFKu9vVydNmoGfGpZ4QrbbqaX2CXMq14y7ynZrwaxw4rSxJscj4Tl7QM1IbV7FLkVAGJdP+2ah7MGUvLPsFmSh6JpIZct8BssVbLNfT0LArXXglWCZwIbaJOvbKyZ9ovx3tXm3GLUtmDmCHZ5LjBsX1ouncGnyLxF7SgOkdPqvjcoRrHENewVNJoXXMFwZOqn8fDHx7QJpmR1Wgv2DySdDBsLmzVo2qbYxTJyxtAUt4j+u1EP+c4mUHrZnMcKeiTQs0efFrCkF8mftnIs9plUul9n0vI=
-
+    secure: GUSiAV94dpkdoBLRf5D5wGtqToX7O956eM5bbJFZ9PZT6UzihJEeUSxy+Hf7sikoBwo6iW6joe4f2vZlCyw4uzoqBNTP3ow80Rxm00D6weIxzY8nD/KIzVU7/zkujLOIjdHlKuiK2KQrKhL20wPyUhqqKh2p+YytrC/VXqHUEcEknzO53eOE5VzEsoOewGe7NKtKwbcbnuDiCEUf6nvFNqG/ySlpDvNuQcYOMreCQ8kFQCCdpNkDuICDJTL/m3E51ZoOR09xDoPpvKJTvKGZDTNvsjNKlBJcvg5CaC25DdhksfUJxm9LbS6kmpBSLrrJ2vGm29Wkd+pND6C1dx0ayQh20XUaleHc5lrxPZDDHCNhh+k1qSLPNvS6rNcwzhzWfsf+u2MZlwQ3LWUKzQrRT4N/e1rPCdjyX70XhvigWRR8aop1qtZQe5J9hfpjD+zflQHEymqA9UMxmhe6cXxmUjrqOzOjycCUtq+RRmcNW5wuUXZmA/I2E2NtFdfVxTT8FWaviZexs4JZ3DxOZtRduXV4vcdem1OOv1PLksDqDspurRZQjf0kOtM6eBo1xRIcJmpYDiGnPdfBlOyO4N2j7xWb+6Sn14Vs/e8rc1K71BzMJlIso46ftPInVLeTy77n0c93OiC222lDcT4a8NaEYReMOCRHYNOg38zOh8jMTqU=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: zebpalmer/WeatherAlerts
+    condition: $TOXENV == py27
