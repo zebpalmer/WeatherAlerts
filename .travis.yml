@@ -1,23 +1,20 @@
 language: python
 python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.5-dev" # 3.5 development branch
-  - "nightly" # currently points to 3.6-dev
-# command to install dependencies
-install: "pip install -r requirements.txt"
-# command to run tests
+- '2.7'
+- '3.5'
+- '3.6'
+- nightly
+install: pip install -r requirements.txt
 script: nosetests
-
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/a3418724a387d72a618f
-    on_success: always  # options: [always|never|change] default: always
-    on_failure: always
-    on_start: never
-
+deploy:
+  true:
+    condition: $TOXENV == py27
+    repo: zebpalmer/MongoElector
+    tags: true
+  distributions: sdist bdist_wheel
+  user: zebpalmer
+  provider: pypi
+  password:
+    secure: !!binary |
+      lC1Zp265J/4OsOkrpL6Flg9/6G8tFpsCrinCQ0C0hPJwI2wA7FT4pK30LipWfG5XpM9pYTQRutb+DyUxJfKSYqyQu+gquFFRJ8IohOHh0VY1zYwdykNSku4fzLfC/H5yR1jSrz04z4nxOJBj6itpC1FbKGmtCLSjtHG6OdWNiNkF57I1WC/mXPPViRv5On1Eyk+ooLl2bxwJjRJqMptIOEWkVEt8hKsFO9VLBciH9LRGzBs6RmAJRTtt0CAuv4wU+b9OEkaYzG1QxNkIrMGs0K6SVFom8RDOxp6qucyKXIj1fs8I5bts5exj44xUw7tTnGoWRA/F1M1x7rPJ53lE8NL9BWQQrmYbThKSK+LAhyERCFrrfa8X30xKHN7+UEKfhi+te5CdFcWK1d/PFKu9vVydNmoGfGpZ4QrbbqaX2CXMq14y7ynZrwaxw4rSxJscj4Tl7QM1IbV7FLkVAGJdP+2ah7MGUvLPsFmSh6JpIZct8BssVbLNfT0LArXXglWCZwIbaJOvbKyZ9ovx3tXm3GLUtmDmCHZ5LjBsX1ouncGnyLxF7SgOkdPqvjcoRrHENewVNJoXXMFwZOqn8fDHx7QJpmR1Wgv2DySdDBsLmzVo2qbYxTJyxtAUt4j+u1EP+c4mUHrZnMcKeiTQs0efFrCkF8mftnIs9plUul9n0vI=
 

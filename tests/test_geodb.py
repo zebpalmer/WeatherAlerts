@@ -1,7 +1,10 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
+
 import unittest
 # pylint: disable=W0403,W0212,W0612
-from geo import GeoDB, SameCodes
-import os
+from weatheralerts.geo import GeoDB, SameCodes
 
 
 class Test_GeoDB(unittest.TestCase):

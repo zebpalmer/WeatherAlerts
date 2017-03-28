@@ -1,16 +1,26 @@
 # pylint: disable=W0403
-from geo import GeoDB
-from alert import Alert
+from weatheralerts.geo import GeoDB
+from weatheralerts.alert import Alert
 from xml.dom import minidom
 
 
+def build_target_areas(entry):
+    """Cleanup the raw target areas description string"""
+    target_areas = []
+    areas = str(entry['cap:areaDesc']).split(';')
+    for area in areas:
+        target_areas.append(area.strip())
+    return target_areas
+
+
 class CapParser(object):
-    '''
+    """
     Parses the xml from the alert feed, creates and returns a list of alert objects.
 
     FIXME: This is slow, messy, and painful to look at. I'll be totally rewriting it shortly.
 
-    '''
+    """
+
     def __init__(self, raw_cap, geo=None):
         self._raw_cap = raw_cap
         if geo is not None:
@@ -23,9 +33,9 @@ class CapParser(object):
                           'cap:certainty', 'cap:areaDesc', 'cap:geocode']
 
     def get_alerts(self):
-        '''
+        """
         Public method that parses
-        '''
+        """
         emptyfeed = "There are no active watches, warnings or advisories"
         alerts = []
         if emptyfeed in str(self._raw_cap):
@@ -36,12 +46,12 @@ class CapParser(object):
             # title is currently first so we can detect an empty cap feed
 
             for dom in xml_entries:
-                #parse the entry to a temp 'entry' dict
+                # parse the entry to a temp 'entry' dict
                 entry = self._parse_entry(dom)
 
                 # perform some cleanup before creating an object
-                #entry['locations'] = self.build_locations(entry) # FIXME: remove?
-                entry['target_areas'] = self.build_target_areas(entry)
+                # entry['locations'] = self.build_locations(entry) # FIXME: remove?
+                entry['target_areas'] = build_target_areas(entry)
 
                 alert = Alert(entry)
                 alerts.append(alert)
@@ -51,7 +61,7 @@ class CapParser(object):
         return alerts
 
     def _parse_entry(self, dom):
-        '''Sigh....'''
+        """Sigh...."""
         entry = {}
         for tag in self._cap_tags:
             # we need to handle the geocodes a bit differently
@@ -79,11 +89,3 @@ class CapParser(object):
                 except AttributeError:
                     entry[tag] = ''
         return entry
-
-    def build_target_areas(self, entry):
-        '''Cleanup the raw target areas description string'''
-        target_areas = []
-        areas = str(entry['cap:areaDesc']).split(';')
-        for area in areas:
-            target_areas.append(area.strip())
-        return target_areas

@@ -1,6 +1,10 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
+
 import unittest
 # pylint: disable=W0403,W0212,W0612
-from weather_alerts import WeatherAlerts
+from weatheralerts import WeatherAlerts
 
 
 class Test_WeatherAlerts(unittest.TestCase):
@@ -8,7 +12,7 @@ class Test_WeatherAlerts(unittest.TestCase):
         self.nws = WeatherAlerts()
 
     def test_almost_everything(self):
-        print "Alerts currently in feed {0}".format(len(self.nws.alerts))
+        print("Alerts currently in feed {0}".format(len(self.nws.alerts)))
 
     def test_event_state_counties(self):
         self.nws.event_state_counties()
@@ -46,7 +50,7 @@ class Test_WeatherAlerts(unittest.TestCase):
         testobjs = []
         testobjs.append(WeatherAlerts(samecodes='016027'))
         testobjs.append(WeatherAlerts(samecodes=['016027', '016001', '016073', '016075']))
-        samecodes = self.nws.geo.samecodes.keys()  # get list of all known samecodes
+        samecodes = list(self.nws.geo.samecodes.keys())  # will return dict_keys obj in py3
         testobjs.append(WeatherAlerts(samecodes=samecodes))  # use them for testing
         for nws in testobjs:
             for alert in nws.alerts:
