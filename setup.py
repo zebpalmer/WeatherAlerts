@@ -7,7 +7,7 @@ readme = open('README.rst', 'rt').read()
 import sys
 
 
-versionstr = '0.6.0a1'
+versionstr = '0.5.0'
 
 
 if os.path.exists('./requirements.txt'):
