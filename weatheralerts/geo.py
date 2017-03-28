@@ -3,7 +3,7 @@ import sys
 import os
 import requests
 import tempfile
-import cPickle as pickle
+from six.moves import cPickle as pickle
 from datetime import datetime, timedelta
 
 

@@ -1,6 +1,6 @@
 # pylint: disable=W0403
-from geo import GeoDB
-from alert import Alert
+from weatheralerts.geo import GeoDB
+from weatheralerts.alert import Alert
 from xml.dom import minidom
 
 

@@ -1,7 +1,7 @@
 # pylint: disable=W0403
-from feed import AlertsFeed
-from cap import CapParser
-from geo import GeoDB
+from weatheralerts.feed import AlertsFeed
+from weatheralerts.cap import CapParser
+from weatheralerts.geo import GeoDB
 
 
 class WeatherAlerts(object):
@@ -110,4 +110,4 @@ class WeatherAlerts(object):
             for state in states:
                 counties = [x for x, y in locations if y == state]
             counties_clean = str(counties).strip("[']")
-            print "{0}: {1} - {2}".format(alert.event, state, counties_clean)
+            print("{0}: {1} - {2}".format(alert.event, state, counties_clean))
