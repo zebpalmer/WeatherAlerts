@@ -1,10 +1,7 @@
 # ignore settings so we don't accidently commit an API key
 settings.cfg
-# don't need to commit any cache files or compiled files either
 *.cache
 *.pyc
-# other files, we don't need
-*~
 .directory
 *.wpr
 *.wpu
@@ -18,3 +15,5 @@ _build
 .coverage
 .orig
 .idea
+tests/__pycache__/
+weatheralerts/__pycache__/
