@@ -1,4 +1,6 @@
+import os
 from setuptools import setup, find_packages
+
 
 readme = open('README.rst', 'rt').read()
 
@@ -30,7 +32,7 @@ setup(
     license='MIT',
     description='Parse the National Weather Service Emergency Alerts Feed (NWS CAP format), do useful stuff with it',
     long_description=readme,
-    install_requires=['requests', 'sphinxcontrib-httpdomain', 'bottle', 'waitress'],
+    install_requires=__requirements__,
     use_2to3=True,
     classifiers=[
               'Development Status :: 4 - Beta',
