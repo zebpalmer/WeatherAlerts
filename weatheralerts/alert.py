@@ -1,8 +1,8 @@
-def _ts_parse(ts):
-    # TODO: should always return datetime
-    dt = ts
-    return dt
+from datetime import datetime
 
+def _ts_parse(ts):
+    dt = datetime.strptime(ts[:22] + ts[23:],"%Y-%m-%dT%H:%M:%S%z")
+    return dt
 
 class Alert(object):
     """
