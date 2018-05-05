@@ -1,8 +1,14 @@
-from datetime import datetime
+import pytz
+from datetime import datetime, timedelta
 
 def _ts_parse(ts):
-    dt = datetime.strptime(ts[:22] + ts[23:],"%Y-%m-%dT%H:%M:%S%z")
-    return dt
+    """Parse alert timestamp, return UTC datetime object to maintain Python 2 compatibility."""
+    dt = datetime.strptime(ts[:19],"%Y-%m-%dT%H:%M:%S")
+    if ts[19] == '+':
+        dt -= timedelta(hours=int(ts[20:22]),minutes=int(ts[23:]))
+    elif ts[19] == '-':
+        dt += timedelta(hours=int(ts[20:22]),minutes=int(ts[23:]))
+    return dt.replace(tzinfo=pytz.UTC)
 
 class Alert(object):
     """
