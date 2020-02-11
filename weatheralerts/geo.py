@@ -113,10 +113,10 @@ class SameCodes(object):
     def _get_same_codes(self):
         """get SAME codes, load into a dict and cache"""
         same = {}
-        url = '''http://www.nws.noaa.gov/nwr/data/SameCode.txt'''
+        url = '''https://www.weather.gov/source/nwr/SameCode.txt'''
         # pylint: disable=E1103
         raw = requests.get(url).content.decode('utf-8')  # py3 compatibility
-        for row in raw.split('\n'):
+        for row in raw.strip().split('\n'):
             try:
                 code, local, state = str(row).strip().split(',')
                 location = {'code': code, 'local': local, 'state': state.strip()}
